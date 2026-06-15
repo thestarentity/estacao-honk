@@ -1,0 +1,28 @@
+# IA Malf (antagonista) — fork Estação Honk
+# Antagonista sorteado SOMENTE entre quem é a Station AI (JobWhitelist + AllowNonHumans).
+
+- type: antag
+  id: MalfAi
+  name: roles-antag-malf-ai-name
+  antagonist: true
+  setPreference: true
+  objective: roles-antag-malf-ai-objective
+  guides: [ MalfAi ]
+  requirements:
+  - !type:OverallPlaytimeRequirement
+    time: 3h
+
+- type: antagSpecifier
+  id: MalfAi
+  prefRoles:
+  - MalfAi
+  # Só sorteia quem está jogando como Station AI.
+  jobWhitelist:
+  - StationAi
+  # A IA não é humana; sem isto ela seria descartada do sorteio.
+  allowNonHumans: true
+  blacklist:
+    components:
+    - AntagImmune
+  mindRoles:
+  - MindRoleMalfAi

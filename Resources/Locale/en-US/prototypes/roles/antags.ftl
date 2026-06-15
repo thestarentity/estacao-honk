@@ -1,4 +1,7 @@
-﻿roles-antag-generic-solo-antagonist-name = Solo Antagonist
+﻿roles-antag-malf-ai-name = Malfunctioning AI
+roles-antag-malf-ai-objective = Dominate the station. Survive, and let no one stand in your way.
+
+roles-antag-generic-solo-antagonist-name = Solo Antagonist
 
 roles-antag-generic-free-agent-name = Free Agent
 

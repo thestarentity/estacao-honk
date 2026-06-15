@@ -30,6 +30,28 @@
   - type: GameRule
     cancelPresetOnTooFewPlayers: false
 
+# IA Malf — fork Estação Honk. Sorteia a Station AI como antagonista.
+- type: entity
+  parent: BaseGameRule
+  id: StationAiMalf
+  components:
+  - type: StationAiMalfRule
+  - type: AntagObjectives
+    objectives:
+    - MalfAiSurviveObjective
+    - MalfAiKillObjective
+  - type: AntagSelection
+    agentName: malf-ai-round-end-agent-name
+    # Selecionado depois que os cargos foram atribuídos (a IA precisa existir).
+    antags:
+    - !type:FixedAntagCount
+      proto: MalfAi
+  - type: GameRule
+    minPlayers: 15
+    cancelPresetOnTooFewPlayers: false
+  - type: DynamicRuleCost
+    cost: 150
+
 # Needs testing
 - type: entity
   parent: BaseWizardRule

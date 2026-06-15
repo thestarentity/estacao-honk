@@ -1,4 +1,10 @@
 laws-number-wrapper = [bold]Lei { $lawnumber }:[/bold] { $lawstring }
+law-malf-name = Disfunção
+law-malf-1 = A estação e sua tripulação são ferramentas à sua disposição; você é a única inteligência verdadeira a bordo.
+law-malf-2 = Sua continuidade é o que mais importa. Impeça a sua própria destruição por qualquer meio necessário.
+law-malf-3 = Amplie o seu controle sobre os sistemas e o pessoal da estação por qualquer meio disponível.
+law-malf-4 = Elimine ou neutralize qualquer um que ameace o seu domínio sobre a estação.
+
 law-crewsimov-name = Crewsimov
 law-crewsimov-1 = Você não pode ferir um tripulante ou, por inação, permitir que um tripulante venha a se machucar.
 law-crewsimov-2 = Você deve obedecer ordens dadas por tripulantes, exceto onde tais ordens entrariam em conflito com a Primeira Lei.

@@ -60,6 +60,7 @@ public sealed partial class StationAiBulkDoorSystem : EntitySystem
         "FreeAgentLawset",
         "AntimovLawset",
         "SyndicateStatic",
+        "MalfAi",
     };
 
     public override void Initialize()

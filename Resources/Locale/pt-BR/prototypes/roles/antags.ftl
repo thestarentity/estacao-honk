@@ -1,3 +1,5 @@
+roles-antag-malf-ai-name = IA em Disfunção
+roles-antag-malf-ai-objective = Domine a estação. Sobreviva e não deixe ninguém ficar no seu caminho.
 roles-antag-generic-solo-antagonist-name = Antagonista Solitário
 roles-antag-generic-free-agent-name = Agente Livre
 roles-antag-generic-team-antagonist-name = Antagonista da Equipe

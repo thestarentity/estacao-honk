@@ -1,5 +1,6 @@
 verb-categories-antag = Controle de Antag
 admin-verb-make-traitor = Torne o alvo um traidor.
+admin-verb-make-malf-ai = Torna a Station AI alvo numa IA antagonista em disfunção.
 admin-verb-make-initial-infected = Torne o alvo um Infectado Inicial
 admin-verb-make-zombie = Zombifica o alvo imediatamente.
 admin-verb-make-nuclear-operative = Torne o alvo um Operativo Nuclear solitário.
@@ -11,6 +12,7 @@ admin-verb-make-wizard = Torne o alvo em um Mágico.
 admin-verb-make-space-ninja = Torne o alvo em um Ninja Espacial.
 admin-verb-make-changeling = Transformar o alvo em um Changeling.
 admin-verb-text-make-traitor = Tornar Traidor
+admin-verb-text-make-malf-ai = Tornar IA Malf
 admin-verb-text-make-initial-infected = Tornar Infectado Inicial
 admin-verb-text-make-zombie = Tornar Zumbi
 admin-verb-text-make-nuclear-operative = Tornar Operativo Nuclear

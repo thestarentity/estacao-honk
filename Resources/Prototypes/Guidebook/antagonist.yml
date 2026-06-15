@@ -11,12 +11,18 @@
   - Wizard
   - Zombies
   - Xenoborgs
+  - MalfAi
   - MinorAntagonists
 
 - type: guideEntry
   id: Traitors
   name: guide-entry-traitors
   text: "/ServerInfo/Guidebook/Antagonist/Traitors.xml"
+
+- type: guideEntry
+  id: MalfAi
+  name: guide-entry-malf-ai
+  text: "/ServerInfo/Guidebook/Antagonist/MalfAI.xml"
 
 - type: guideEntry
   id: NuclearOperatives

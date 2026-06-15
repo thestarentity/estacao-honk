@@ -13,6 +13,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared.Roles.Components;
+using Content.Shared.Silicons.StationAi;
 
 namespace Content.Server.Administration.Systems;
 
@@ -22,6 +23,7 @@ public sealed partial class AdminVerbSystem
     [Dependency] private ZombieSystem _zombie = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private OutfitSystem _outfit = default!;
+    [Dependency] private SharedStationAiSystem _stationAi = default!;
 
     private static readonly EntProtoId DefaultTraitorRule = "Traitor";
     private static readonly EntProtoId DefaultInitialInfectedRule = "Zombie";
@@ -32,6 +34,7 @@ public sealed partial class AdminVerbSystem
     private static readonly EntProtoId ParadoxCloneRuleId = "ParadoxCloneSpawn";
     private static readonly EntProtoId DefaultWizardRule = "Wizard";
     private static readonly EntProtoId DefaultNinjaRule = "NinjaSpawn";
+    private static readonly EntProtoId DefaultMalfAiRule = "StationAiMalf";
     private static readonly ProtoId<StartingGearPrototype> PirateGearId = "PirateGear";
 
     // All antag verbs have names so invokeverb works.
@@ -44,6 +47,36 @@ public sealed partial class AdminVerbSystem
 
         if (!_adminManager.HasAdminFlag(player, AdminFlags.Fun))
             return;
+
+        // IA Malf — fork Estação Honk. Verbo "Tornar IA Malf" reusável (ForceMakeAntag ignora prefs/playtime/bans).
+        void AddMalfAiVerb(ICommonSession malfTarget)
+        {
+            var malfAiName = Loc.GetString("admin-verb-text-make-malf-ai");
+            Verb malfAi = new()
+            {
+                Text = malfAiName,
+                Category = VerbCategory.Antag,
+                Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/Interface/Misc/job_icons.rsi"), "StationAi"),
+                Act = () =>
+                {
+                    _antag.ForceMakeAntag<StationAiMalfRuleComponent>(malfTarget, DefaultMalfAiRule);
+                },
+                Impact = LogImpact.High,
+                Message = string.Join(": ", malfAiName, Loc.GetString("admin-verb-make-malf-ai")),
+            };
+            args.Verbs.Add(malfAi);
+        }
+
+        // O jogador da IA fica no olho/holograma, não no núcleo físico. Para o admin poder clicar no
+        // NÚCLEO da IA e ainda assim atribuir a IA Malf, resolvemos a sessão pelo cérebro contido nele.
+        if (TryComp<StationAiCoreComponent>(args.Target, out var aiCore)
+            && _stationAi.TryGetHeld((args.Target, aiCore), out var aiHeld)
+            && _mindSystem.TryGetMind(aiHeld.Value, out _, out var aiMind)
+            && aiMind.UserId is { } aiUserId
+            && _playerManager.TryGetSessionById(aiUserId, out var aiSession))
+        {
+            AddMalfAiVerb(aiSession);
+        }
 
         if (!HasComp<MindContainerComponent>(args.Target) || !TryComp<ActorComponent>(args.Target, out var targetActor))
             return;
@@ -64,6 +97,9 @@ public sealed partial class AdminVerbSystem
             Message = string.Join(": ", traitorName, Loc.GetString("admin-verb-make-traitor")),
         };
         args.Verbs.Add(traitor);
+
+        // IA Malf — fork Estação Honk (também disponível ao clicar no núcleo, acima).
+        AddMalfAiVerb(targetPlayer);
 
         var initialInfectedName = Loc.GetString("admin-verb-text-make-initial-infected");
         Verb initialInfected = new()

@@ -250,6 +250,18 @@
     subtype: role-subtype-thief
   - type: ThiefRole
 
+# IA Malf — fork Estação Honk
+- type: entity
+  parent: BaseMindRoleAntag
+  id: MindRoleMalfAi
+  name: Malf AI Role
+  components:
+  - type: MindRole
+    antagPrototype: MalfAi
+    exclusiveAntag: true
+    roleType: SiliconAntagonist
+  - type: MalfAiRole
+
 # Traitors
 - type: entity
   parent: BaseMindRoleAntag

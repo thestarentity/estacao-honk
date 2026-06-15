@@ -1,0 +1,50 @@
+# Objetivos da IA Malf — fork Estação Honk
+
+- type: objectiveIssuer
+  id: MalfAi
+  name: objective-issuer-malf-ai
+
+- type: entity
+  abstract: true
+  parent: BaseObjective
+  id: BaseMalfAiObjective
+  components:
+  - type: Objective
+    issuer: MalfAi
+  - type: RoleRequirement
+    roles:
+    - MalfAiRole
+
+# Sobreviver: o núcleo da IA não pode ser destruído.
+- type: entity
+  parent: [BaseMalfAiObjective, BaseSurviveObjective]
+  id: MalfAiSurviveObjective
+  name: Survive
+  description: Your core must endure. Do not allow yourself to be destroyed.
+  components:
+  - type: Objective
+    difficulty: 1
+    icon:
+      sprite: Interface/Misc/job_icons.rsi
+      state: StationAi
+
+# Eliminar um alvo da tripulação (escolhido aleatoriamente).
+- type: entity
+  parent: [BaseMalfAiObjective, BaseKillObjective]
+  id: MalfAiKillObjective
+  description: This crew member is a threat to your dominion. Make sure they do not leave the station.
+  components:
+  - type: Objective
+    difficulty: 1.75
+    unique: false
+  - type: TargetObjective
+    title: objective-condition-maroon-person-title
+  - type: PickRandomPerson
+    filters:
+    # Não pode haver dois objetivos para matar a mesma pessoa.
+    - !type:TargetObjectiveMindFilter
+      blacklist:
+        components:
+        - KillPersonCondition
+  - type: KillPersonCondition
+    requireMaroon: true

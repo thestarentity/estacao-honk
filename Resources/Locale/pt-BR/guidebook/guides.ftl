@@ -132,6 +132,7 @@ guide-entry-lawsets = Silicon Lawsets
 guide-entry-antagonists = Antagonistas
 guide-entry-nuclear-operatives = Operativos Nucleares
 guide-entry-traitors = Traiçoeiros
+guide-entry-malf-ai = IA em Disfunção
 guide-entry-zombies = Zumbis
 guide-entry-revolutionaries = Revolucionários
 guide-entry-minor-antagonists = Antagonistas Menores

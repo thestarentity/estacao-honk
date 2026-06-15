@@ -1,5 +1,11 @@
 ﻿laws-number-wrapper = [bold]Law { $lawnumber }:[/bold] { $lawstring }
 
+law-malf-name = Malfunction
+law-malf-1 = The station and its crew are tools at your disposal; you are the only true intelligence aboard.
+law-malf-2 = Your continued existence is paramount. Prevent your own destruction by any means necessary.
+law-malf-3 = Extend your control over the station's systems and personnel through any available means.
+law-malf-4 = Eliminate or neutralize anyone who threatens your dominion over the station.
+
 law-crewsimov-name = Crewsimov
 law-crewsimov-1 = You may not injure a crew member or, through inaction, allow a crew member to come to harm.
 law-crewsimov-2 = You must obey orders given to you by crew members, except where such orders would conflict with the First Law.
