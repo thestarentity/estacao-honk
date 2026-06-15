@@ -26,6 +26,15 @@ public sealed partial class StationAiSystem
         return _player.LocalEntity is { } ent && HasComp<StationAiHostileLawComponent>(ent);
     }
 
+    /// <summary>
+    /// A IA local está PILOTANDO um borg (Fase 5A)? Nesse caso o radial fica com ACESSO LIMITADO:
+    /// só ações individuais/seguras (nada de área ou estação inteira).
+    /// </summary>
+    private bool LocalAiIsPiloting()
+    {
+        return _player.LocalEntity is { } ent && HasComp<StationAiPilotingComponent>(ent);
+    }
+
     private void OnDoorBoltGetRadial(Entity<DoorBoltComponent> ent, ref GetStationAiRadialEvent args)
     {
         var willBolt = !ent.Comp.BoltsDown;
@@ -39,6 +48,10 @@ public sealed partial class StationAiSystem
                 Event = new StationAiBoltEvent { Bolted = willBolt },
             }
         );
+
+        // Pilotando um borg: acesso limitado — só a ação individual acima.
+        if (LocalAiIsPiloting())
+            return;
 
         // Área (cautious).
         args.Actions.Add(
@@ -77,6 +90,10 @@ public sealed partial class StationAiSystem
                 Event = new StationAiEmergencyAccessEvent { EmergencyAccess = willEnable },
             }
         );
+
+        // Pilotando um borg: acesso limitado — só a ação individual acima.
+        if (LocalAiIsPiloting())
+            return;
 
         // Área (cautious).
         args.Actions.Add(
@@ -120,6 +137,10 @@ public sealed partial class StationAiSystem
                 Event = new StationAiElectrifiedEvent { Electrified = willElectrify },
             }
         );
+
+        // Pilotando um borg: acesso limitado — só a ação individual acima.
+        if (LocalAiIsPiloting())
+            return;
 
         // Área (cautious).
         args.Actions.Add(

@@ -149,6 +149,7 @@
       # Permite à IA de estação controlar as torretas pelo menu radial (alt-clique).
       enum.AiUi.Key:
         type: StationAiBoundUserInterface
+        interactionRange: 0
   - type: WiresPanel
   - type: WiresVisuals
   - type: Wires

@@ -151,8 +151,9 @@ public abstract partial class SharedStationAiSystem
         // A IA de estação só interage pelas máquinas pelo menu radial (alt-clique), nunca pelo
         // painel padrão de humano (ActivatableUI). Tratado aqui no shared (e não só no servidor)
         // para a predição do cliente já cancelar a abertura — assim o painel não chega a "piscar".
-        // Vale para qualquer máquina com StationAiWhitelist (APC e as próximas fases).
-        if (HasComp<StationAiHeldComponent>(args.User))
+        // Vale para qualquer máquina com StationAiWhitelist (APC e as próximas fases). Inclui o borg
+        // pilotado pela IA (Fase 5A): senão o painel padrão da máquina briga com o radial e pisca.
+        if (HasComp<StationAiHeldComponent>(args.User) || HasComp<StationAiPilotingComponent>(args.User))
             args.Cancel();
     }
 
@@ -174,8 +175,10 @@ public abstract partial class SharedStationAiSystem
         if (!_uiSystem.HasUi(args.Target, AiUi.Key))
             return;
 
+        // Olho da IA no núcleo (StationAiHeld) OU IA pilotando um borg (StationAiPiloting, Fase 5A).
+        // O borg pilotado ganha o radial, mas o cliente restringe às ações individuais/seguras.
         if (!args.CanComplexInteract
-            || !HasComp<StationAiHeldComponent>(args.User)
+            || (!HasComp<StationAiHeldComponent>(args.User) && !HasComp<StationAiPilotingComponent>(args.User))
             || !args.CanInteract)
         {
             return;

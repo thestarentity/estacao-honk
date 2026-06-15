@@ -87,6 +87,12 @@
     },
     {
       "name": "turnoffborg"
+    },
+    {
+      "name": "aicontrol_enable"
+    },
+    {
+      "name": "aicontrol_disable"
     }
   ]
 }

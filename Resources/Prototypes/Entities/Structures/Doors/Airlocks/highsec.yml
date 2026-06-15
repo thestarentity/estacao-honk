@@ -109,6 +109,7 @@
     interfaces:
       enum.AiUi.Key:
         type: StationAiBoundUserInterface
+        interactionRange: 0
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
   - type: Airtight

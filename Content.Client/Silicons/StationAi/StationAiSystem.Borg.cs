@@ -1,6 +1,7 @@
 using Content.Shared.Emag.Components;
 using Content.Shared.Emag.Systems;
 using Content.Shared.Lock;
+using Content.Shared.Mind.Components;
 using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.Silicons.StationAi;
 using Robust.Shared.Utility;
@@ -21,6 +22,19 @@ public sealed partial class StationAiSystem
 
     private void OnBorgGetRadial(Entity<BorgChassisComponent> ent, ref GetStationAiRadialEvent args)
     {
+        // Controlar borg (Fase 5A): só borg VAZIO (sem jogador). Qualquer lei. A IA passa a pilotar
+        // o borg e ganha uma ação de "Voltar ao núcleo". O servidor reconfirma que está vazio.
+        var empty = !TryComp<MindContainerComponent>(ent.Owner, out var mind) || !mind.HasMind;
+        if (empty)
+        {
+            args.Actions.Add(new StationAiRadial
+            {
+                Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, "aicontrol_enable"),
+                Tooltip = Loc.GetString("ai-borg-control"),
+                Event = new StationAiControlBorgEvent(),
+            });
+        }
+
         // Trancar/Destrancar painel: disponível sob QUALQUER lei (defensivo ou ofensivo). Toggle.
         var locked = HasComp<StationAiBorgPanelLockComponent>(ent.Owner);
         args.Actions.Add(new StationAiRadial

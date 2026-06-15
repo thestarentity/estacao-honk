@@ -1,14 +1,24 @@
+using Content.Server.Mind;
 using Content.Server.Silicons.Borgs;
+using Content.Shared.Access;
+using Content.Shared.Access.Components;
+using Content.Shared.Access.Systems;
+using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Emag.Components;
 using Content.Shared.Emag.Systems;
 using Content.Shared.Lock;
+using Content.Shared.Mind;
+using Content.Shared.Mind.Components;
+using Content.Shared.Mobs;
 using Content.Shared.Popups;
 using Content.Shared.Movement.Systems;
+using Content.Shared.Trigger;
 using Content.Shared.Silicons.Borgs.Components;
 using Content.Shared.Silicons.StationAi;
 using Content.Shared.Wires;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server.Silicons.StationAi;
@@ -30,12 +40,31 @@ public sealed partial class StationAiBorgSystem : EntitySystem
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private LockSystem _lock = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private StationAiSystem _stationAi = default!;
+    [Dependency] private SharedAccessSystem _access = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+
+    /// <summary>
+    /// Grupo de acesso concedido ao borg enquanto a IA o pilota (abre tudo, como a IA).
+    /// </summary>
+    private static readonly ProtoId<AccessGroupPrototype> AllAccessGroup = "AllAccess";
 
     /// <summary>
     /// Janela (em segundos) para confirmar a detonação após o primeiro clique.
     /// </summary>
     private const double DetonateConfirmWindow = 5.0;
+
+    /// <summary>
+    /// Cooldown (em segundos) entre a IA largar um borg e poder assumir outro (Fase 5A).
+    /// </summary>
+    private const double ControlCooldown = 30.0;
+
+    /// <summary>
+    /// Ação "Voltar ao núcleo" concedida ao borg enquanto a IA o pilota.
+    /// </summary>
+    private static readonly EntProtoId ActionLeaveBorg = "ActionStationAiLeaveBorg";
 
     public override void Initialize()
     {
@@ -47,7 +76,168 @@ public sealed partial class StationAiBorgSystem : EntitySystem
         SubscribeLocalEvent<BorgChassisComponent, StationAiTogglePanelLockEvent>(OnTogglePanelLock);
         SubscribeLocalEvent<BorgChassisComponent, StationAiToggleImmobilizeEvent>(OnToggleImmobilize);
         SubscribeLocalEvent<BorgChassisComponent, StationAiToggleBorgLockEvent>(OnToggleBorgLock);
+        SubscribeLocalEvent<BorgChassisComponent, StationAiControlBorgEvent>(OnControlBorg);
+
+        // Fim do controle: ação de voltar, morte do borg ou deleção do borg.
+        SubscribeLocalEvent<StationAiPilotedBorgComponent, StationAiLeaveBorgEvent>(OnLeaveBorg);
+        SubscribeLocalEvent<StationAiPilotedBorgComponent, MobStateChangedEvent>(OnPilotedBorgMobState);
+        // Borg prestes a explodir/disparar (ex.: detonação da IA): devolve a IA ANTES da explosão, com
+        // o borg ainda vivo (caminho limpo, igual ao crítico). A explosão por dano massivo pode pular o
+        // estado crítico e deletar o borg no mesmo tick, deixando a IA presa no cérebro; o trigger é o
+        // momento certo de sair.
+        SubscribeLocalEvent<StationAiPilotedBorgComponent, TriggerEvent>(OnPilotedBorgTrigger);
+        // before MindSystem: ao deletar o borg, precisamos tirar a mente da IA (UnVisit) ANTES do
+        // OnMindContainerTerminating do motor — senão ele trata a mente VISITANTE como se fosse do
+        // borg, faz TransferTo(null) e a IA vira fantasma em vez de voltar ao núcleo.
+        SubscribeLocalEvent<StationAiPilotedBorgComponent, EntityTerminatingEvent>(OnPilotedBorgTerminating,
+            before: new[] { typeof(MindSystem) });
     }
+
+    #region Fase 5A — IA controla borg vazio
+
+    private void OnControlBorg(EntityUid uid, BorgChassisComponent comp, StationAiControlBorgEvent args)
+    {
+        // Fase 5A: só borg VAZIO (sem jogador). Borg com jogador é a Fase 5B (ainda não feita).
+        if (TryComp<MindContainerComponent>(uid, out var container) && container.HasMind)
+        {
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-occupied"), args.User, args.User, PopupType.MediumCaution);
+            return;
+        }
+
+        // Já está sendo pilotado por uma IA?
+        if (HasComp<VisitingMindComponent>(uid) || HasComp<StationAiPilotedBorgComponent>(uid))
+        {
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-busy"), args.User, args.User, PopupType.MediumCaution);
+            return;
+        }
+
+        // Acha a mente da IA (dona do cérebro, que é o args.User = StationAiHeld).
+        if (!_mind.TryGetMind(args.User, out var mindId, out var mind))
+            return;
+
+        // A mente já está visitando outra coisa? (proteção; o Visit também recusa)
+        if (mind.VisitingEntity != null)
+        {
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-busy"), args.User, args.User, PopupType.MediumCaution);
+            return;
+        }
+
+        // Cooldown (fica no cérebro da IA p/ persistir entre controles).
+        var now = _timing.CurTime;
+        var cd = EnsureComp<StationAiBorgControlComponent>(args.User);
+        if (now < cd.NextControl)
+        {
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-cooldown"), args.User, args.User, PopupType.MediumCaution);
+            return;
+        }
+
+        // Liga o chassi se estiver desligado: um borg vazio fica inerte e o Visit NÃO dispara o
+        // MindAddedMessage que normalmente ativa o borg. Sem isso a IA não conseguiria se mover.
+        var weActivated = false;
+        if (!comp.Active)
+        {
+            _borg.SetActive((uid, comp), true);
+            weActivated = true;
+        }
+
+        // A IA passa a pilotar o borg; a mente continua DONA do cérebro no núcleo (núcleo fica exposto).
+        _mind.Visit(mindId, uid, mind);
+
+        // Concede a ação de voltar ao núcleo (InstantAction funciona pilotando o borg).
+        EntityUid? leaveAction = null;
+        _actions.AddAction(uid, ref leaveAction, ActionLeaveBorg);
+
+        var piloted = EnsureComp<StationAiPilotedBorgComponent>(uid);
+        piloted.MindId = mindId;
+        piloted.LeaveAction = leaveAction;
+        piloted.WeActivated = weActivated;
+
+        // Marcador shared: libera o menu radial (acesso limitado) enquanto a IA pilota o borg.
+        EnsureComp<StationAiPilotingComponent>(uid);
+
+        // Acesso geral enquanto pilota: habilita o acesso (borg vazio vem desligado) e dá AllAccess.
+        // Isso abre portas/etc como a IA E faz a tag "Borg" voltar a existir — então as torretas da IA
+        // (que exemptam Borg/BasicSilicon) deixam de mirar o borg controlado. Restaurado ao largar.
+        if (TryComp<AccessComponent>(uid, out var access))
+        {
+            piloted.SavedAccessEnabled = access.Enabled;
+            piloted.SavedAccessTags = new HashSet<ProtoId<AccessLevelPrototype>>(access.Tags);
+            _access.SetAccessEnabled(uid, true, access);
+            _access.TryAddGroups(uid, new[] { AllAccessGroup }, access);
+        }
+
+        cd.NextControl = now + TimeSpan.FromSeconds(ControlCooldown);
+
+        _adminLogger.Add(LogType.Mind, LogImpact.High,
+            $"{ToPrettyString(args.User):user} assumiu o controle do borg {ToPrettyString(uid):target} pela IA de estação.");
+        _popup.PopupEntity(Loc.GetString("station-ai-borg-control-success", ("name", Name(uid))), uid, uid, PopupType.Medium);
+    }
+
+    private void OnLeaveBorg(EntityUid uid, StationAiPilotedBorgComponent comp, StationAiLeaveBorgEvent args)
+    {
+        args.Handled = true;
+        StopPiloting(uid, comp);
+    }
+
+    private void OnPilotedBorgTrigger(EntityUid uid, StationAiPilotedBorgComponent comp, ref TriggerEvent args)
+    {
+        // NÃO marca Handled: deixa a explosão acontecer normalmente — só tiramos a IA antes.
+        StopPiloting(uid, comp);
+    }
+
+    private void OnPilotedBorgMobState(EntityUid uid, StationAiPilotedBorgComponent comp, MobStateChangedEvent args)
+    {
+        // Borg incapacitado (crítico OU morto) → devolve a IA ao núcleo ENQUANTO o borg ainda existe.
+        // Crítico (100 de dano) acontece antes da destruição (300), então o UnVisit roda nas MESMAS
+        // condições limpas da ação "Voltar ao núcleo" (que funciona) — em vez de tentar retornar com o
+        // borg já em deleção, o que deixava a IA presa no cérebro sem o olho funcionando.
+        if (args.NewMobState is MobState.Critical or MobState.Dead)
+            StopPiloting(uid, comp);
+    }
+
+    private void OnPilotedBorgTerminating(EntityUid uid, StationAiPilotedBorgComponent comp, ref EntityTerminatingEvent args)
+    {
+        // Borg sendo deletado (detonado/destruído) pilotando → devolve a IA ao núcleo antes de sumir.
+        StopPiloting(uid, comp, terminating: true);
+    }
+
+    /// <summary>
+    /// Encerra o controle do borg pela IA: remove a ação de voltar, devolve a mente ao núcleo
+    /// (UnVisit — se o núcleo foi destruído nesse meio-tempo, a IA vira fantasma) e desliga o chassi
+    /// de volta se fomos nós que o ligamos.
+    /// </summary>
+    private void StopPiloting(EntityUid borg, StationAiPilotedBorgComponent comp, bool terminating = false)
+    {
+        if (!terminating && comp.LeaveAction != null)
+            _actions.RemoveAction(comp.LeaveAction.Value);
+
+        _mind.UnVisit(comp.MindId);
+
+        // Reanexa o olho ao núcleo: se o retorno aconteceu durante a morte/destruição do borg, o relay
+        // de movimento e a câmera podiam ter ficado quebrados (IA "presa no cérebro"). Reanexar conserta.
+        if (TryComp<MindComponent>(comp.MindId, out var mindComp)
+            && mindComp.OwnedEntity is { } brain
+            && _stationAi.TryGetCore(brain, out var core)
+            && core.Comp != null)
+        {
+            _stationAi.RefreshAiEye(core);
+        }
+
+        // Restaura o acesso original do borg (tira o AllAccess; volta a desligado se era um borg vazio).
+        if (comp.SavedAccessTags != null && TryComp<AccessComponent>(borg, out var access))
+        {
+            _access.TrySetTags(borg, comp.SavedAccessTags, access);
+            _access.SetAccessEnabled(borg, comp.SavedAccessEnabled, access);
+        }
+
+        if (!terminating && comp.WeActivated && TryComp<BorgChassisComponent>(borg, out var chassis))
+            _borg.SetActive((borg, chassis), false);
+
+        RemComp<StationAiPilotingComponent>(borg);
+        RemComp<StationAiPilotedBorgComponent>(borg);
+    }
+
+    #endregion
 
     private void OnToggleBorgLock(EntityUid uid, BorgChassisComponent comp, StationAiToggleBorgLockEvent args)
     {

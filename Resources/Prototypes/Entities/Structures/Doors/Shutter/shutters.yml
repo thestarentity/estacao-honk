@@ -69,6 +69,7 @@
         type: WiresBoundUserInterface
       enum.AiUi.Key:
         type: StationAiBoundUserInterface
+        interactionRange: 0
   # Permite à IA de estação abrir/fechar a comporta pelo menu radial (alt-clique). Fase 4 — estruturas.
   - type: StationAiWhitelist
   - type: StationAiBlastDoorControllable

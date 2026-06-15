@@ -96,6 +96,7 @@
         type: WiresBoundUserInterface
       enum.AiUi.Key:
         type: StationAiBoundUserInterface
+        interactionRange: 0
   - type: ActivatableUI
     inHandsOnly: false
     key: enum.ApcUiKey.Key

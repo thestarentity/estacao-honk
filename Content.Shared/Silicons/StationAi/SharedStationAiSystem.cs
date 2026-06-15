@@ -170,6 +170,16 @@ public abstract partial class SharedStationAiSystem : EntitySystem
 
     private void OnAiBuiCheck(Entity<StationAiWhitelistComponent> ent, ref BoundUserInterfaceCheckRangeEvent args)
     {
+        // Borg pilotado pela IA (Fase 5A): pode abrir o painel/radial a QUALQUER distância, desde que
+        // consiga mirar (na visão do borg). Sem isto, o check de alcance padrão fechava a BUI quando o
+        // borg estava longe da máquina → o radial piscava (abria e fechava). O olho da IA já ignora
+        // alcance pela lógica de visão abaixo; aqui damos ao borg o mesmo "sem limite de distância".
+        if (HasComp<StationAiPilotingComponent>(args.Actor))
+        {
+            args.Result = BoundUserInterfaceRangeResult.Pass;
+            return;
+        }
+
         if (!HasComp<StationAiHeldComponent>(args.Actor))
             return;
 
@@ -491,6 +501,20 @@ public abstract partial class SharedStationAiSystem : EntitySystem
 
         var eyeName = Loc.GetString("station-ai-eye-name", ("name", Name(user)));
         _metadata.SetEntityName(ent.Comp.RemoteEntity.Value, eyeName);
+    }
+
+    /// <summary>
+    /// Reanexa o olho (holo/RemoteEntity) ao cérebro da IA no núcleo. Usado ao DEVOLVER a IA de um borg
+    /// pilotado (Fase 5A): se o retorno aconteceu num momento ruim — como o borg sendo destruído —, a
+    /// câmera (eye target) e o relay de movimento podem ter ficado quebrados, deixando a IA "presa no
+    /// cérebro" sem ver nem se mover. Reanexar restabelece os dois. No-op seguro se já estiver tudo certo.
+    /// </summary>
+    public void RefreshAiEye(Entity<StationAiCoreComponent?> core)
+    {
+        if (!Resolve(core.Owner, ref core.Comp, false))
+            return;
+
+        AttachEye((core.Owner, core.Comp));
     }
 
     private EntityUid? GetInsertedAI(Entity<StationAiCoreComponent> ent)

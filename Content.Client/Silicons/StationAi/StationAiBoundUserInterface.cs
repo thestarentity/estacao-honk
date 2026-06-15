@@ -1,6 +1,8 @@
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Silicons.StationAi;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
+using Robust.Shared.IoC;
 
 namespace Content.Client.Silicons.StationAi;
 
@@ -16,11 +18,22 @@ public sealed class StationAiBoundUserInterface(EntityUid owner, Enum uiKey) : B
         EntMan.EventBus.RaiseLocalEvent(Owner, ref ev);
 
         _menu = this.CreateWindow<SimpleRadialMenu>();
-        _menu.Track(Owner);
         var buttonModels = ConvertToButtons(ev.Actions);
         _menu.SetButtons(buttonModels);
-        
-        _menu.Open();
+
+        // Pilotando um borg (Fase 5A): a IA fica LONGE da máquina, então seguir a máquina (Track) faria
+        // o menu se fechar sozinho quando ela sai da tela (o flicker que o usuário via de longe). Nesse
+        // caso abrimos numa posição fixa (do mouse), estável. A IA no núcleo segue a máquina como antes.
+        var player = IoCManager.Resolve<IPlayerManager>().LocalEntity;
+        if (player != null && EntMan.HasComponent<StationAiPilotingComponent>(player.Value))
+        {
+            _menu.OpenOverMouseScreenPosition();
+        }
+        else
+        {
+            _menu.Track(Owner);
+            _menu.Open();
+        }
     }
 
     private IEnumerable<RadialMenuActionOptionBase> ConvertToButtons(IReadOnlyList<StationAiRadial> actions)

@@ -14,6 +14,22 @@
   - type: InstantAction
     event: !type:JumpToCoreEvent
 
+# Concedida ao borg enquanto a IA o pilota (Fase 5A). Devolve a mente da IA ao núcleo.
+- type: entity
+  parent: BaseAction
+  id: ActionStationAiLeaveBorg
+  name: Voltar ao núcleo
+  description: Devolve sua mente ao núcleo da IA, largando este borg.
+  components:
+  - type: Action
+    priority: -10
+    itemIconStyle: BigAction
+    icon:
+      sprite: Interface/Actions/actions_ai_custom.rsi
+      state: aicontrol_disable
+  - type: InstantAction
+    event: !type:StationAiLeaveBorgEvent
+
 - type: entity
   parent: BaseMentalAction
   id: ActionAIViewLaws

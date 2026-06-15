@@ -67,6 +67,7 @@
       # Permite à IA de estação disparar/resetar os firelocks pelo menu radial (alt-clique).
       enum.AiUi.Key:
         type: StationAiBoundUserInterface
+        interactionRange: 0
   - type: WiresPanel
   - type: Wires
     boardName: wires-board-name-firealarm

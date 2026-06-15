@@ -1,3 +1,4 @@
+using Content.Shared.Actions;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Silicons.StationAi;
@@ -65,4 +66,25 @@ public sealed class StationAiToggleImmobilizeEvent : BaseStationAiAction
 public sealed class StationAiToggleBorgLockEvent : BaseStationAiAction
 {
     public bool Lock;
+}
+
+/// <summary>
+/// Ação da IA para ASSUMIR o controle de um borg VAZIO pelo menu radial (Fase 5A). A mente da IA
+/// continua DONA do cérebro no núcleo e passa a VISITAR o borg (<c>MindSystem.Visit</c>) — a IA vira
+/// um borg comum, perde a câmera de estação e usa os módulos do borg. Disponível sob qualquer lei
+/// (borg vazio). Só funciona em borg SEM jogador; o servidor reconfirma. Para voltar ao núcleo, a IA
+/// usa a ação <c>ActionStationAiLeaveBorg</c> (<see cref="StationAiLeaveBorgEvent"/>).
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class StationAiControlBorgEvent : BaseStationAiAction
+{
+}
+
+/// <summary>
+/// Ação instantânea concedida ao borg enquanto a IA o pilota (Fase 5A): devolve a mente da IA ao
+/// núcleo (<c>MindSystem.UnVisit</c>). É um <see cref="InstantActionEvent"/> (funciona porque,
+/// pilotando o borg, a IA é um mob comum — diferente do olho-holo, onde InstantAction não dispara).
+/// </summary>
+public sealed partial class StationAiLeaveBorgEvent : InstantActionEvent
+{
 }
