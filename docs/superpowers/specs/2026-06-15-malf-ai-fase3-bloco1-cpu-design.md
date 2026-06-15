@@ -94,20 +94,25 @@ adicional, não substitui `DenyIfNotHostile`).
 
 Tabela de custos inicial (ajustável no staging antes de produção):
 
-| Ação | Custo CPU |
-|---|---|
-| Ferrolho / eletrificar / emergência — porta única ou área | 3 |
-| Lockdown estação inteira (cada categoria: bolt/electrify/emergência) | 30 |
-| Torretas → modo letal | 10 |
-| Subverter borg | 30 |
-| Desligar / imobilizar borg | 10 |
-| Detonar borg | 50 |
-| Pânico atmos (estação) | 50 |
-| Hackear APC | 0 (é a renda) |
-| Cortar / restaurar energia (pós-hack) | 0 |
+As ações de **ESTAÇÃO INTEIRA** são deliberadamente caras (um grande naco do `MaxCpu`):
+são as mais fortes, então têm que ser uma decisão pesada e não algo spammável. Ações de
+área/porta única e as letais "locais" custam pouco.
 
-Os custos ficam em constantes nomeadas no(s) sistema(s) (ou num pequeno mapa central),
-não espalhados como literais, pra facilitar o tuning.
+| Ação | Custo CPU | Alcance |
+|---|---|---|
+| Ferrolho / eletrificar / emergência — porta única ou área | 3 | local |
+| Torretas → modo letal | 10 | local |
+| Desligar / imobilizar borg | 10 | local |
+| Subverter borg | 30 | local |
+| Detonar borg | 50 | local |
+| **Lockdown estação inteira (cada categoria: bolt/electrify/emergência)** | **75** | **estação** |
+| **Pânico atmos (estação inteira)** | **75** | **estação** |
+| Hackear APC | 0 (é a renda) | — |
+| Cortar / restaurar energia (pós-hack) | 0 | local |
+
+Com `MaxCpu = 200`, uma ação de estação custa ~38% do teto: cabem ~2 com o pote cheio,
+forçando a IA a escolher a hora. Os custos ficam em constantes nomeadas no(s) sistema(s)
+(ou num pequeno mapa central), não espalhados como literais, pra facilitar o tuning.
 
 ### UI de CPU
 
@@ -125,6 +130,8 @@ não espalhados como literais, pra facilitar o tuning.
 - Sem APC hackeada, a IA quase não progride (`BaseRegen` baixo) — força o jogo de
   hackear, que tem o custo do tell visível.
 - Teto `MaxCpu` evita banking infinito.
+- **Ações de estação inteira são as mais fortes → custo alto (~38% do teto cada).** Devem
+  ser jogadas decisivas e raras, nunca spam. Esse é o principal eixo de tuning no staging.
 - Curva (regen + custos) é ponto de partida; **validar no staging (porta 1213) antes de
   produção**, por ser mudança forte de gameplay (`ss14-staging-server`).
 
