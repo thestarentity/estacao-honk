@@ -111,6 +111,8 @@ public abstract partial class SharedStationAiSystem
 [Serializable, NetSerializable]
 public sealed class StationAiBoltEvent : BaseStationAiAction
 {
+    public override float CpuCost => 3f;
+
     /// <summary> Marker, should be door bolted or unbolted. </summary>
     public bool Bolted;
 }
@@ -119,6 +121,8 @@ public sealed class StationAiBoltEvent : BaseStationAiAction
 [Serializable, NetSerializable]
 public sealed class StationAiEmergencyAccessEvent : BaseStationAiAction
 {
+    public override float CpuCost => 3f;
+
     /// <summary> Marker, should door have emergency access on or off. </summary>
     public bool EmergencyAccess;
 }
@@ -127,6 +131,8 @@ public sealed class StationAiEmergencyAccessEvent : BaseStationAiAction
 [Serializable, NetSerializable]
 public sealed class StationAiElectrifiedEvent : BaseStationAiAction
 {
+    public override float CpuCost => 3f;
+
     /// <summary> Marker, should door be electrified or no. </summary>
     public bool Electrified;
 }

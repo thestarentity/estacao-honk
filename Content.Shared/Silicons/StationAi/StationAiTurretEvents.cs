@@ -11,6 +11,9 @@ namespace Content.Shared.Silicons.StationAi;
 public sealed class StationAiTurretArmamentEvent : BaseStationAiAction
 {
     public int Armament;
+
+    // Armamento >= 1 é o modo letal (ver LethalArmament no StationAiTurretSystem).
+    public override float CpuCost => Armament >= 1 ? 10f : 0f;
 }
 
 /// <summary>

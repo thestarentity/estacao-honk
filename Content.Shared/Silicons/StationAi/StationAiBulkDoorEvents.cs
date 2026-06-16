@@ -16,6 +16,7 @@ namespace Content.Shared.Silicons.StationAi;
 [Serializable, NetSerializable]
 public sealed class StationAiBoltAreaEvent : BaseStationAiAction
 {
+    public override float CpuCost => 3f;
     public bool Bolted;
 }
 
@@ -26,6 +27,7 @@ public sealed class StationAiBoltAreaEvent : BaseStationAiAction
 [Serializable, NetSerializable]
 public sealed class StationAiBoltStationEvent : BaseStationAiAction
 {
+    public override float CpuCost => 75f;
     public bool Bolted;
 }
 
@@ -36,6 +38,7 @@ public sealed class StationAiBoltStationEvent : BaseStationAiAction
 [Serializable, NetSerializable]
 public sealed class StationAiElectrifyAreaEvent : BaseStationAiAction
 {
+    public override float CpuCost => 3f;
     public bool Electrified;
 }
 
@@ -46,6 +49,7 @@ public sealed class StationAiElectrifyAreaEvent : BaseStationAiAction
 [Serializable, NetSerializable]
 public sealed class StationAiElectrifyStationEvent : BaseStationAiAction
 {
+    public override float CpuCost => 75f;
     public bool Electrified;
 }
 
@@ -56,6 +60,7 @@ public sealed class StationAiElectrifyStationEvent : BaseStationAiAction
 [Serializable, NetSerializable]
 public sealed class StationAiEmergencyAccessAreaEvent : BaseStationAiAction
 {
+    public override float CpuCost => 3f;
     public bool EmergencyAccess;
 }
 
@@ -66,5 +71,6 @@ public sealed class StationAiEmergencyAccessAreaEvent : BaseStationAiAction
 [Serializable, NetSerializable]
 public sealed class StationAiEmergencyAccessStationEvent : BaseStationAiAction
 {
+    public override float CpuCost => 75f;
     public bool EmergencyAccess;
 }

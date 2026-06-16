@@ -12,6 +12,7 @@ namespace Content.Shared.Silicons.StationAi;
 public sealed class StationAiAirAlarmModeEvent : BaseStationAiAction
 {
     public AirAlarmMode Mode;
+    public override float CpuCost => Mode == AirAlarmMode.Panic ? 75f : 0f;
 }
 
 /// <summary>

@@ -12,6 +12,7 @@ namespace Content.Shared.Silicons.StationAi;
 [Serializable, NetSerializable]
 public sealed class StationAiSubvertBorgEvent : BaseStationAiAction
 {
+    public override float CpuCost => 30f;
 }
 
 /// <summary>
@@ -22,6 +23,7 @@ public sealed class StationAiSubvertBorgEvent : BaseStationAiAction
 [Serializable, NetSerializable]
 public sealed class StationAiDisableBorgEvent : BaseStationAiAction
 {
+    public override float CpuCost => 10f;
 }
 
 /// <summary>
@@ -32,6 +34,7 @@ public sealed class StationAiDisableBorgEvent : BaseStationAiAction
 [Serializable, NetSerializable]
 public sealed class StationAiDetonateBorgEvent : BaseStationAiAction
 {
+    public override float CpuCost => 50f;
 }
 
 /// <summary>
@@ -53,6 +56,7 @@ public sealed class StationAiTogglePanelLockEvent : BaseStationAiAction
 [Serializable, NetSerializable]
 public sealed class StationAiToggleImmobilizeEvent : BaseStationAiAction
 {
+    public override float CpuCost => 10f;
     public bool Immobilize;
 }
 
