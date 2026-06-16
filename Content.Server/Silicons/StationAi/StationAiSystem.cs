@@ -60,6 +60,7 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private StationAiCpuSystem _cpu = default!;
 
     private readonly HashSet<Entity<StationAiCoreComponent>> _stationAiCores = new();
 
@@ -463,6 +464,11 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         // When these systems are added, add the appropriate checks here.
 
         return false;
+    }
+
+    protected override bool TrySpendActionCpu(EntityUid ai, BaseStationAiAction action)
+    {
+        return _cpu.TryConsume(ai, action.CpuCost);
     }
 
     public HashSet<EntityUid> GetStationAIs(EntityUid gridUid)

@@ -117,8 +117,19 @@ public abstract partial class SharedStationAiSystem
             return;
 
         ev.Event.User = ev.Actor;
+
+        // Gasto de CPU (autoritativo no servidor; no cliente o gancho base deixa passar).
+        if (!TrySpendActionCpu(ev.Actor, ev.Event))
+            return;
+
         RaiseLocalEvent(target.Value, (object) ev.Event);
     }
+
+    /// <summary>
+    /// Gancho de gasto de CPU. Base (cliente) sempre deixa passar; o servidor sobrescreve
+    /// para debitar do <see cref="StationAiCpuComponent"/> e negar se faltar saldo.
+    /// </summary>
+    protected virtual bool TrySpendActionCpu(EntityUid ai, BaseStationAiAction action) => true;
 
     private void OnMessageAttempt(Entity<StationAiWhitelistComponent> ent, ref BoundUserInterfaceMessageAttempt ev)
     {
@@ -251,6 +262,12 @@ public abstract class BaseStationAiAction
 {
     [field:NonSerialized]
     public EntityUid User { get; set; }
+
+    /// <summary>
+    /// Custo de CPU desta ação para a IA Malf. 0 = grátis (padrão). Cada ação paga
+    /// sobrescreve. Debitado de forma autoritativa no servidor em OnRadialMessage.
+    /// </summary>
+    public virtual float CpuCost => 0f;
 }
 
 // No idea if there's a better way to do this.
