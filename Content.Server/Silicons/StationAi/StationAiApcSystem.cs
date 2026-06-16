@@ -67,8 +67,8 @@ public sealed partial class StationAiApcSystem : EntitySystem
             return;
 
         comp.Hacked = true;
-        comp.HackedBy = args.User;
-        Dirty(uid, comp);
+        comp.HackedBy = args.User; // server-only; não precisa de Dirty
+        Dirty(uid, comp);          // sincroniza Hacked para o cliente
 
         // Aumenta a taxa de CPU da IA que hackeou.
         if (TryComp<StationAiCpuComponent>(args.User, out var cpu))
@@ -93,14 +93,14 @@ public sealed partial class StationAiApcSystem : EntitySystem
 
     private void OnApcTerminating(EntityUid uid, StationAiApcControllableComponent comp, ref EntityTerminatingEvent args)
     {
-        if (!comp.Hacked)
+        if (!comp.Hacked || comp.HackedBy == null)
             return;
 
         // A APC sumiu: a IA perde essa fonte de taxa (mas mantém a CPU já acumulada).
-        if (TryComp<StationAiCpuComponent>(comp.HackedBy, out var cpu) && cpu.HackedApcCount > 0)
+        if (TryComp<StationAiCpuComponent>(comp.HackedBy.Value, out var cpu) && cpu.HackedApcCount > 0)
         {
             cpu.HackedApcCount--;
-            Dirty(comp.HackedBy, cpu);
+            Dirty(comp.HackedBy.Value, cpu);
         }
     }
 

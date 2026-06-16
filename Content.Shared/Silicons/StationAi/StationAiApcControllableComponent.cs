@@ -27,7 +27,7 @@ public sealed partial class StationAiApcControllableComponent : Component
     /// Qual IA (cérebro) hackeou esta APC. Só servidor — usado para decrementar a taxa de CPU
     /// quando a APC é destruída. Não networked de propósito.
     /// </summary>
-    public EntityUid HackedBy;
+    public EntityUid? HackedBy;
 }
 
 [Serializable, NetSerializable]
