@@ -135,3 +135,5 @@ station-ai-apc-hacked = APC hackeada. Agora ela alimenta sua CPU.
 station-ai-apc-not-hacked = Você precisa hackear esta APC primeiro.
 station-ai-apc-compromised = O interior parece [color=red]comprometido[/color] — adulterado.
 ai-apc-hack = Hackear APC
+
+station-ai-cpu-low = CPU insuficiente

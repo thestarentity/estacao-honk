@@ -38,14 +38,36 @@ public sealed class StationAiBoundUserInterface(EntityUid owner, Enum uiKey) : B
 
     private IEnumerable<RadialMenuActionOptionBase> ConvertToButtons(IReadOnlyList<StationAiRadial> actions)
     {
+        // CPU atual da IA local (se for Malf). Usada para anotar custo e cinzar o que não dá pra pagar.
+        float? cpu = null;
+        var player = IoCManager.Resolve<IPlayerManager>().LocalEntity;
+        if (player != null && EntMan.TryGetComponent<StationAiCpuComponent>(player.Value, out var cpuComp))
+            cpu = cpuComp.Cpu;
+
         var models = new RadialMenuActionOptionBase[actions.Count];
         for (int i = 0; i < actions.Count; i++)
         {
             var action = actions[i];
+            var cost = action.Event.CpuCost;
+
+            var tooltip = action.Tooltip;
+            Color? bg = null;
+            if (cost > 0f && cpu != null)
+            {
+                var afford = cpu.Value >= cost;
+                tooltip = $"{action.Tooltip} ({(int) cost} CPU)";
+                if (!afford)
+                {
+                    tooltip = $"{action.Tooltip} ({(int) cost} CPU — {Loc.GetString("station-ai-cpu-low")})";
+                    bg = new Color(0.25f, 0.25f, 0.25f); // cinza: sem saldo (servidor nega ao clicar)
+                }
+            }
+
             models[i] = new RadialMenuActionOption<BaseStationAiAction>(HandleRadialMenuClick, action.Event)
             {
                 IconSpecifier = RadialMenuIconSpecifier.With(action.Sprite),
-                ToolTip = action.Tooltip
+                ToolTip = tooltip,
+                BackgroundColor = bg,
             };
         }
 
