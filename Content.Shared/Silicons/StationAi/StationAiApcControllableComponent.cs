@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Serialization;
 
 namespace Content.Shared.Silicons.StationAi;
 
@@ -15,4 +16,22 @@ public sealed partial class StationAiApcControllableComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool PowerOn = true;
+
+    /// <summary>
+    /// APC hackeada pela IA Malf? Networked para o cliente mostrar o tell visual e o radial.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Hacked;
+
+    /// <summary>
+    /// Qual IA (cérebro) hackeou esta APC. Só servidor — usado para decrementar a taxa de CPU
+    /// quando a APC é destruída. Não networked de propósito.
+    /// </summary>
+    public EntityUid HackedBy;
+}
+
+[Serializable, NetSerializable]
+public enum StationAiApcVisuals : byte
+{
+    Hacked,
 }

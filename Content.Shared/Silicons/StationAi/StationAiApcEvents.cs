@@ -12,3 +12,12 @@ namespace Content.Shared.Silicons.StationAi;
 public sealed class StationAiApcToggleEvent : BaseStationAiAction
 {
 }
+
+/// <summary>
+/// Ação da IA Malf para hackear uma APC pelo menu radial: vira fonte de CPU e fica visível.
+/// É pré-requisito para as ações de cortar/restaurar energia daquela APC.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class StationAiApcHackEvent : BaseStationAiAction
+{
+}

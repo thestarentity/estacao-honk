@@ -129,3 +129,9 @@ alerts-station-ai-cpu-desc = Sua CPU disponível. Hackear APCs aumenta a velocid
 
 station-ai-cpu-examine = Poder de processamento: [color=cyan]{ $cpu }/{ $max } CPU[/color].
 station-ai-cpu-insufficient = CPU insuficiente (precisa de { $cost }).
+
+# Hack de APC (IA Malf)
+station-ai-apc-hacked = APC hackeada. Agora ela alimenta sua CPU.
+station-ai-apc-not-hacked = Você precisa hackear esta APC primeiro.
+station-ai-apc-compromised = O interior parece [color=red]comprometido[/color] — adulterado.
+ai-apc-hack = Hackear APC

@@ -1,6 +1,10 @@
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
+using Content.Shared.Administration.Logs;
 using Content.Shared.APC;
+using Content.Shared.Database;
+using Content.Shared.Examine;
+using Content.Shared.Popups;
 using Content.Shared.Silicons.StationAi;
 
 namespace Content.Server.Silicons.StationAi;
@@ -11,10 +15,16 @@ namespace Content.Server.Silicons.StationAi;
 /// (como no SS13) — o whitelist do menu radial já garante que só uma IA válida chega aqui.
 /// Mantém <see cref="StationAiApcControllableComponent.PowerOn"/> em sincronia para o cliente
 /// rotular o botão corretamente.
+///
+/// Ação de hackear (IA Malf): transforma a APC em fonte de CPU e exibe um tell visual.
+/// O toggle de energia fica bloqueado até que a APC tenha sido hackeada.
 /// </summary>
 public sealed partial class StationAiApcSystem : EntitySystem
 {
     [Dependency] private ApcSystem _apc = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
 
     public override void Initialize()
     {
@@ -23,6 +33,9 @@ public sealed partial class StationAiApcSystem : EntitySystem
         SubscribeLocalEvent<StationAiApcControllableComponent, MapInitEvent>(OnMapInit);
         SubscribeLocalEvent<StationAiApcControllableComponent, StationAiApcToggleEvent>(OnToggle);
         SubscribeLocalEvent<StationAiApcControllableComponent, ApcMainBreakerChangedEvent>(OnBreakerChanged);
+        SubscribeLocalEvent<StationAiApcControllableComponent, StationAiApcHackEvent>(OnHack);
+        SubscribeLocalEvent<StationAiApcControllableComponent, ExaminedEvent>(OnApcExamined);
+        SubscribeLocalEvent<StationAiApcControllableComponent, EntityTerminatingEvent>(OnApcTerminating);
     }
 
     private void OnMapInit(EntityUid uid, StationAiApcControllableComponent comp, MapInitEvent args)
@@ -33,6 +46,12 @@ public sealed partial class StationAiApcSystem : EntitySystem
 
     private void OnToggle(EntityUid uid, StationAiApcControllableComponent comp, StationAiApcToggleEvent args)
     {
+        if (!comp.Hacked)
+        {
+            _popup.PopupEntity(Loc.GetString("station-ai-apc-not-hacked"), args.User, args.User, PopupType.MediumCaution);
+            return;
+        }
+
         // Toggle puro do estado real; o espelhamento de PowerOn vem do ApcMainBreakerChangedEvent.
         _apc.ApcToggleBreaker(uid, user: args.User);
     }
@@ -40,6 +59,49 @@ public sealed partial class StationAiApcSystem : EntitySystem
     private void OnBreakerChanged(EntityUid uid, StationAiApcControllableComponent comp, ref ApcMainBreakerChangedEvent args)
     {
         SetPowerOn((uid, comp), args.On);
+    }
+
+    private void OnHack(EntityUid uid, StationAiApcControllableComponent comp, StationAiApcHackEvent args)
+    {
+        if (comp.Hacked)
+            return;
+
+        comp.Hacked = true;
+        comp.HackedBy = args.User;
+        Dirty(uid, comp);
+
+        // Aumenta a taxa de CPU da IA que hackeou.
+        if (TryComp<StationAiCpuComponent>(args.User, out var cpu))
+        {
+            cpu.HackedApcCount++;
+            Dirty(args.User, cpu);
+        }
+
+        // Tell visual.
+        _appearance.SetData(uid, StationAiApcVisuals.Hacked, true);
+
+        _adminLogger.Add(LogType.Action, LogImpact.High,
+            $"{ToPrettyString(args.User):user} hackeou a APC {ToPrettyString(uid):target} (fonte de CPU da IA Malf).");
+        _popup.PopupEntity(Loc.GetString("station-ai-apc-hacked"), args.User, args.User, PopupType.Medium);
+    }
+
+    private void OnApcExamined(EntityUid uid, StationAiApcControllableComponent comp, ref ExaminedEvent args)
+    {
+        if (comp.Hacked && args.IsInDetailsRange)
+            args.PushMarkup(Loc.GetString("station-ai-apc-compromised"));
+    }
+
+    private void OnApcTerminating(EntityUid uid, StationAiApcControllableComponent comp, ref EntityTerminatingEvent args)
+    {
+        if (!comp.Hacked)
+            return;
+
+        // A APC sumiu: a IA perde essa fonte de taxa (mas mantém a CPU já acumulada).
+        if (TryComp<StationAiCpuComponent>(comp.HackedBy, out var cpu) && cpu.HackedApcCount > 0)
+        {
+            cpu.HackedApcCount--;
+            Dirty(comp.HackedBy, cpu);
+        }
     }
 
     private void SetPowerOn(Entity<StationAiApcControllableComponent> ent, bool on)
