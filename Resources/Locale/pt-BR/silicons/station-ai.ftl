@@ -126,3 +126,6 @@ station-ai-hologram-dog = Forma Corgi
 # CPU alert (IA Malf)
 alerts-station-ai-cpu-name = Poder de processamento
 alerts-station-ai-cpu-desc = Sua CPU disponível. Hackear APCs aumenta a velocidade de regeneração. Ações pesadas gastam CPU.
+
+station-ai-cpu-examine = Poder de processamento: [color=cyan]{ $cpu }/{ $max } CPU[/color].
+station-ai-cpu-insufficient = CPU insuficiente (precisa de { $cost }).
