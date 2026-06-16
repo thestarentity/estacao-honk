@@ -31,6 +31,7 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         SubscribeLocalEvent<StationAiOverlayComponent, ComponentInit>(OnAiOverlayInit);
         SubscribeLocalEvent<StationAiOverlayComponent, ComponentRemove>(OnAiOverlayRemove);
         SubscribeLocalEvent<StationAiCoreComponent, AppearanceChangeEvent>(OnAppearanceChange);
+        SubscribeLocalEvent<StationAiApcControllableComponent, AppearanceChangeEvent>(OnApcAppearanceChange);
     }
 
     private void OnAiOverlayInit(Entity<StationAiOverlayComponent> ent, ref ComponentInit args)
@@ -90,6 +91,17 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
             _sprite.LayerSetData((entity.Owner, args.Sprite), StationAiVisualLayers.Icon, layerData);
 
         _sprite.LayerSetVisible((entity.Owner, args.Sprite), StationAiVisualLayers.Icon, layerData != null);
+    }
+
+    private void OnApcAppearanceChange(Entity<StationAiApcControllableComponent> ent, ref AppearanceChangeEvent args)
+    {
+        if (args.Sprite == null)
+            return;
+
+        // Tell visual placeholder: tinge a APC hackeada de azul-claro até a arte dedicada.
+        // O usuário pode trocar por um layer/estado próprio na RSI da APC.
+        var hacked = _appearance.TryGetData<bool>(ent.Owner, StationAiApcVisuals.Hacked, out var v, args.Component) && v;
+        args.Sprite.Color = hacked ? new Color(0.6f, 0.7f, 1f) : Color.White;
     }
 
     public override void Shutdown()

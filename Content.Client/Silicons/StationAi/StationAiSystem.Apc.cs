@@ -12,9 +12,20 @@ public sealed partial class StationAiSystem
 
     private void OnApcGetRadial(Entity<StationAiApcControllableComponent> ent, ref GetStationAiRadialEvent args)
     {
-        var powerOn = ent.Comp.PowerOn;
+        // Sob lei hostil e ainda não hackeada: a única opção é Hackear.
+        if (LocalAiIsHostile() && !ent.Comp.Hacked)
+        {
+            args.Actions.Add(new StationAiRadial
+            {
+                Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, "turn_off"),
+                Tooltip = Loc.GetString("ai-apc-hack"),
+                Event = new StationAiApcHackEvent(),
+            });
+            return;
+        }
 
-        // Categoria APC: um único botão limpo — cortar ou restaurar a energia da área.
+        // Hackeada (ou IA leal, que nunca hackeia): cortar/restaurar energia.
+        var powerOn = ent.Comp.PowerOn;
         args.Actions.Add(new StationAiRadial
         {
             Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, powerOn ? "turn_off" : "turn_on"),
