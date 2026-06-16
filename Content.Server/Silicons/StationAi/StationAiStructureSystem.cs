@@ -36,6 +36,6 @@ public sealed partial class StationAiStructureSystem : EntitySystem
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
             $"{ToPrettyString(args.User):user} {(args.Close ? "fechou" : "abriu")} a comporta {ToPrettyString(uid):target} pela IA de estação.");
-        _popup.PopupEntity(Loc.GetString(args.Close ? "station-ai-blastdoor-closed" : "station-ai-blastdoor-opened"), args.User, args.User, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString(args.Close ? "station-ai-blastdoor-closed" : "station-ai-blastdoor-opened"), uid, args.User, PopupType.Medium);
     }
 }

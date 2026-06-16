@@ -36,6 +36,19 @@ public abstract partial class SharedDeployableTurretSystem : EntitySystem
         SubscribeLocalEvent<DeployableTurretComponent, GetVerbsEvent<Verb>>(OnGetVerb);
     }
 
+    /// <summary>
+    /// Liga/desliga a referência ao painel de controle desta torreta (usado pela IA p/ abrir o radial
+    /// direto na torreta). Mantido pelo <c>DeployableTurretControllerSystem</c>. (Fork Estação Honk.)
+    /// </summary>
+    public void SetAiController(Entity<DeployableTurretComponent> turret, EntityUid? controller)
+    {
+        if (turret.Comp.AiController == controller)
+            return;
+
+        turret.Comp.AiController = controller;
+        Dirty(turret);
+    }
+
     private void OnGetVerb(Entity<DeployableTurretComponent> ent, ref GetVerbsEvent<Verb> args)
     {
         if (!args.CanAccess || !args.CanInteract || !args.CanComplexInteract)

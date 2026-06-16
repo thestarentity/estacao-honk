@@ -52,7 +52,7 @@ public sealed partial class StationAiAtmosSystem : EntitySystem
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
             $"{ToPrettyString(args.User):user} {(args.Alert ? "disparou" : "resetou")} o alarme de incêndio {ToPrettyString(uid):target} (firelocks) pela IA de estação.");
-        _popup.PopupEntity(Loc.GetString(args.Alert ? "station-ai-firelocks-triggered" : "station-ai-firelocks-reset"), args.User, args.User, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString(args.Alert ? "station-ai-firelocks-triggered" : "station-ai-firelocks-reset"), uid, args.User, PopupType.Medium);
     }
 
     private void OnFirelock(EntityUid uid, FirelockComponent comp, StationAiFirelockEvent args)
@@ -73,7 +73,7 @@ public sealed partial class StationAiAtmosSystem : EntitySystem
         // Pânico (esvaziar o ar) só sob lawset hostil. O cliente já esconde, mas o servidor reconfirma.
         if (args.Mode == AirAlarmMode.Panic && !_hostile.IsUserUnderHostileLaw(args.User))
         {
-            _popup.PopupEntity(Loc.GetString("station-ai-atmos-denied"), args.User, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("station-ai-atmos-denied"), uid, args.User, PopupType.MediumCaution);
             return;
         }
 
@@ -105,6 +105,6 @@ public sealed partial class StationAiAtmosSystem : EntitySystem
 
         _adminLogger.Add(LogType.AtmosDeviceSetting, LogImpact.Medium,
             $"{ToPrettyString(args.User):user} definiu o alarme de ar {ToPrettyString(uid):target} para o modo {args.Mode} pela IA de estação.");
-        _popup.PopupEntity(Loc.GetString("station-ai-atmos-mode-set"), args.User, args.User, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("station-ai-atmos-mode-set"), uid, args.User, PopupType.Medium);
     }
 }

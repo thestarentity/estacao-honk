@@ -1,11 +1,9 @@
-# Alert de "processing power" (CPU) da IA Malf. 5 níveis: cpu0 (vazio) → cpu4 (cheio).
-# O sprite é placeholder; o usuário fornece a arte final em station_ai_cpu.rsi.
+# Alert de "processing power" (CPU) da IA. 10 níveis: cpu1 (vazio) → cpu10 (cheio).
+# SEM category: Health — ter categoria própria evita que ele SUBSTITUA o alert de vida da IA
+# (mesma categoria = um sobrescreve o outro). Sem categoria, o alert é ADICIONADO, não troca.
 - type: alert
   id: StationAiCpu
-  category: Health
   icons:
-  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
-    state: cpu0
   - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
     state: cpu1
   - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
@@ -14,7 +12,19 @@
     state: cpu3
   - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
     state: cpu4
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu5
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu6
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu7
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu8
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu9
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu10
   minSeverity: 0
-  maxSeverity: 4
+  maxSeverity: 9
   name: alerts-station-ai-cpu-name
   description: alerts-station-ai-cpu-desc

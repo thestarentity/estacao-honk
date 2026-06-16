@@ -16,10 +16,10 @@ public sealed partial class StationAiSystem
         // Abrir/fechar comporta (toggle pelo estado da porta) — qualquer lei. Botão único.
         var open = !TryComp<DoorComponent>(ent.Owner, out var door) || door.State != DoorState.Closed;
 
-        // Ícone PLACEHOLDER: reusa o on/off genérico (mesmo do APC). O usuário vai refazer os ícones depois.
+        // Ícones próprios de porta: aberta → ação de fechar (general_close); fechada → abrir (general_open).
         args.Actions.Add(new StationAiRadial
         {
-            Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, open ? "turn_off" : "turn_on"),
+            Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, open ? "general_close" : "general_open"),
             Tooltip = Loc.GetString(open ? "ai-blastdoor-close" : "ai-blastdoor-open"),
             Event = new StationAiBlastDoorEvent { Close = open },
         });

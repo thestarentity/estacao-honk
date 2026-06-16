@@ -39,7 +39,7 @@ public sealed partial class StationAiSystem
         var locked = HasComp<StationAiBorgPanelLockComponent>(ent.Owner);
         args.Actions.Add(new StationAiRadial
         {
-            Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, locked ? "lockborgpanel_on" : "lockborgpanel_off"),
+            Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, locked ? "lockborgpanel_off" : "lockborgpanel_on"),
             Tooltip = Loc.GetString(locked ? "ai-borg-panel-unlock" : "ai-borg-panel-lock"),
             Event = new StationAiTogglePanelLockEvent { Lock = !locked },
         });
@@ -48,7 +48,7 @@ public sealed partial class StationAiSystem
         var immobilized = HasComp<StationAiBorgImmobilizedComponent>(ent.Owner);
         args.Actions.Add(new StationAiRadial
         {
-            Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, immobilized ? "freezeborg_on" : "freezeborg_off"),
+            Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, immobilized ? "freezeborg_off" : "freezeborg_on"),
             Tooltip = Loc.GetString(immobilized ? "ai-borg-release" : "ai-borg-immobilize"),
             Event = new StationAiToggleImmobilizeEvent { Immobilize = !immobilized },
         });

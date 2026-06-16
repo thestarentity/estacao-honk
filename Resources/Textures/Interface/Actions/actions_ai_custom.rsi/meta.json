@@ -7,92 +7,38 @@
     "y": 32
   },
   "states": [
-    {
-      "name": "airadd_off"
-    },
-    {
-      "name": "airadd_on"
-    },
-    {
-      "name": "airdepravation_off"
-    },
-    {
-      "name": "airdepravation_on"
-    },
-    {
-      "name": "airfilter_off"
-    },
-    {
-      "name": "airfilter_on"
-    },
-    {
-      "name": "detonateborg"
-    },
-    {
-      "name": "freezeborg_off"
-    },
-    {
-      "name": "freezeborg_on"
-    },
-    {
-      "name": "hackborg"
-    },
-    {
-      "name": "lockborg_off"
-    },
-    {
-      "name": "lockborg_on"
-    },
-    {
-      "name": "lockborgpanel_off"
-    },
-    {
-      "name": "lockborgpanel_on"
-    },
-    {
-      "name": "sentry_harmless_off"
-    },
-    {
-      "name": "sentry_harmless_on"
-    },
-    {
-      "name": "sentry_lethal_off"
-    },
-    {
-      "name": "sentry_lethal_on"
-    },
-    {
-      "name": "sentry_panellock_off"
-    },
-    {
-      "name": "sentry_panellock_on"
-    },
-    {
-      "name": "sentry_stun_off"
-    },
-    {
-      "name": "sentry_stun_on"
-    },
-    {
-      "name": "turn_off"
-    },
-    {
-      "name": "turn_off_firealarm"
-    },
-    {
-      "name": "turn_on"
-    },
-    {
-      "name": "turn_on_firealarm"
-    },
-    {
-      "name": "turnoffborg"
-    },
-    {
-      "name": "aicontrol_enable"
-    },
-    {
-      "name": "aicontrol_disable"
-    }
+    { "name": "airadd_on" },
+    { "name": "airadd_off" },
+    { "name": "airdepravation_on" },
+    { "name": "airdepravation_off" },
+    { "name": "airfilter_on" },
+    { "name": "airfilter_off" },
+    { "name": "detonateborg" },
+    { "name": "freezeborg_on" },
+    { "name": "freezeborg_off" },
+    { "name": "hackborg" },
+    { "name": "hackapc" },
+    { "name": "lockborg_on" },
+    { "name": "lockborg_off" },
+    { "name": "lockborgpanel_on" },
+    { "name": "lockborgpanel_off" },
+    { "name": "general_lock" },
+    { "name": "general_unlock" },
+    { "name": "turn_on" },
+    { "name": "turn_off" },
+    { "name": "turnoffborg" },
+    { "name": "turn_on_firealarm" },
+    { "name": "turn_off_firealarm" },
+    { "name": "general_light_on" },
+    { "name": "general_light_off" },
+    { "name": "aicontrol_enable" },
+    { "name": "aicontrol_disable" },
+    { "name": "current_sentry_mode" },
+    { "name": "not_being_utilized_sentry_mode" },
+    { "name": "enable_sentry" },
+    { "name": "generalhack" },
+    { "name": "generalovercharge" },
+    { "name": "general_close" },
+    { "name": "general_open" }
   ]
 }

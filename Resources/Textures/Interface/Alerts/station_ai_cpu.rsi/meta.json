@@ -1,13 +1,18 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Placeholder para Estacao Honk; arte final a fornecer pelo usuario.",
+  "copyright": "Made by juliocesarmendesrod for Estacao Honk",
   "size": { "x": 32, "y": 32 },
   "states": [
-    { "name": "cpu0" },
     { "name": "cpu1" },
     { "name": "cpu2" },
     { "name": "cpu3" },
-    { "name": "cpu4" }
+    { "name": "cpu4" },
+    { "name": "cpu5" },
+    { "name": "cpu6" },
+    { "name": "cpu7" },
+    { "name": "cpu8" },
+    { "name": "cpu9" },
+    { "name": "cpu10" }
   ]
 }

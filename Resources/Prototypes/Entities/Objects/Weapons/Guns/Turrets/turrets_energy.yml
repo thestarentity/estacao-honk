@@ -129,6 +129,10 @@
     interfaces:
       enum.WiresUiKey.Key:
         type: WiresBoundUserInterface
+      # Permite à IA de estação abrir o radial direto na torreta (delega ao painel ligado).
+      enum.AiUi.Key:
+        type: StationAiBoundUserInterface
+        interactionRange: 0
   - type: WiresPanel
   - type: WiresVisuals
   - type: Wires

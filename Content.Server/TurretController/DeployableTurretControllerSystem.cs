@@ -20,6 +20,7 @@ public sealed partial class DeployableTurretControllerSystem : SharedDeployableT
     [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!;
     [Dependency] private DeviceNetworkSystem _deviceNetwork = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedDeployableTurretSystem _deployableTurret = default!;
 
     /// Keys for the device network. See <see cref="DeviceNetworkConstants"/> for further examples.
     public const string CmdSetArmamemtState = "set_armament_state";
@@ -55,8 +56,11 @@ public sealed partial class DeployableTurretControllerSystem : SharedDeployableT
 
         foreach (var turretUid in turretsToAdd)
         {
-            if (!HasComp<DeployableTurretComponent>(turretUid))
+            if (!TryComp<DeployableTurretComponent>(turretUid, out var turretComp))
                 continue;
+
+            // Liga a torreta a este painel (a IA usa isso p/ abrir o radial direto na torreta).
+            _deployableTurret.SetAiController((turretUid, turretComp), ent);
 
             if (!TryComp<DeviceNetworkComponent>(turretUid, out var turretDeviceNetwork))
                 continue;
@@ -70,6 +74,10 @@ public sealed partial class DeployableTurretControllerSystem : SharedDeployableT
 
         foreach (var turretUid in turretsToRemove)
         {
+            // Desfaz o link torreta→painel.
+            if (TryComp<DeployableTurretComponent>(turretUid, out var turretComp))
+                _deployableTurret.SetAiController((turretUid, turretComp), null);
+
             if (!TryComp<DeviceNetworkComponent>(turretUid, out var turretDeviceNetwork))
                 continue;
 

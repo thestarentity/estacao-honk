@@ -34,12 +34,12 @@ public sealed partial class StationAiSystem
 
     private void OnFirelockGetRadial(Entity<FirelockComponent> ent, ref GetStationAiRadialEvent args)
     {
-        // Fechar/abrir firelock (toggle pelo estado da porta) — qualquer lei. Reusa os ícones do alarme de fogo.
+        // Fechar/abrir firelock (toggle pelo estado da porta) — qualquer lei. Ícones próprios de porta.
         var open = !TryComp<DoorComponent>(ent.Owner, out var door) || door.State != DoorState.Closed;
 
         args.Actions.Add(new StationAiRadial
         {
-            Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, open ? "turn_on_firealarm" : "turn_off_firealarm"),
+            Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, open ? "general_close" : "general_open"),
             Tooltip = Loc.GetString(open ? "ai-firelock-close" : "ai-firelock-open"),
             Event = new StationAiFirelockEvent { Close = open },
         });

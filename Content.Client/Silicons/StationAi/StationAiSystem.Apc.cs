@@ -17,7 +17,7 @@ public sealed partial class StationAiSystem
         {
             args.Actions.Add(new StationAiRadial
             {
-                Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, "turn_off"),
+                Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, "hackapc"),
                 Tooltip = Loc.GetString("ai-apc-hack"),
                 Event = new StationAiApcHackEvent(),
             });
@@ -28,7 +28,7 @@ public sealed partial class StationAiSystem
         var powerOn = ent.Comp.PowerOn;
         args.Actions.Add(new StationAiRadial
         {
-            Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, powerOn ? "turn_off" : "turn_on"),
+            Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, powerOn ? "turn_on" : "turn_off"),
             Tooltip = Loc.GetString(powerOn ? "ai-apc-power-off" : "ai-apc-power-on"),
             Event = new StationAiApcToggleEvent(),
         });

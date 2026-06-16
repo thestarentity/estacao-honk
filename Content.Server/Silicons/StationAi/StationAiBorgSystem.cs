@@ -100,14 +100,14 @@ public sealed partial class StationAiBorgSystem : EntitySystem
         // Fase 5A: só borg VAZIO (sem jogador). Borg com jogador é a Fase 5B (ainda não feita).
         if (TryComp<MindContainerComponent>(uid, out var container) && container.HasMind)
         {
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-occupied"), args.User, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-occupied"), uid, args.User, PopupType.MediumCaution);
             return;
         }
 
         // Já está sendo pilotado por uma IA?
         if (HasComp<VisitingMindComponent>(uid) || HasComp<StationAiPilotedBorgComponent>(uid))
         {
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-busy"), args.User, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-busy"), uid, args.User, PopupType.MediumCaution);
             return;
         }
 
@@ -118,7 +118,7 @@ public sealed partial class StationAiBorgSystem : EntitySystem
         // A mente já está visitando outra coisa? (proteção; o Visit também recusa)
         if (mind.VisitingEntity != null)
         {
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-busy"), args.User, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-busy"), uid, args.User, PopupType.MediumCaution);
             return;
         }
 
@@ -127,7 +127,7 @@ public sealed partial class StationAiBorgSystem : EntitySystem
         var cd = EnsureComp<StationAiBorgControlComponent>(args.User);
         if (now < cd.NextControl)
         {
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-cooldown"), args.User, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-control-cooldown"), uid, args.User, PopupType.MediumCaution);
             return;
         }
 
@@ -261,12 +261,12 @@ public sealed partial class StationAiBorgSystem : EntitySystem
         if (args.Immobilize)
         {
             EnsureComp<StationAiBorgImmobilizedComponent>(uid);
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-immobilize-on", ("name", Name(uid))), args.User, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-immobilize-on", ("name", Name(uid))), uid, args.User, PopupType.Medium);
         }
         else
         {
             RemComp<StationAiBorgImmobilizedComponent>(uid);
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-immobilize-off", ("name", Name(uid))), args.User, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-immobilize-off", ("name", Name(uid))), uid, args.User, PopupType.Medium);
         }
 
         // Reaplica os modificadores → a velocidade passa a contar (ou não) o zero do marcador.
@@ -287,12 +287,12 @@ public sealed partial class StationAiBorgSystem : EntitySystem
                 _wires.TogglePanel(uid, panel, false, args.User);
 
             EnsureComp<StationAiBorgPanelLockComponent>(uid);
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-panel-lock-on", ("name", Name(uid))), args.User, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-panel-lock-on", ("name", Name(uid))), uid, args.User, PopupType.Medium);
         }
         else
         {
             RemComp<StationAiBorgPanelLockComponent>(uid);
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-panel-lock-off", ("name", Name(uid))), args.User, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-panel-lock-off", ("name", Name(uid))), uid, args.User, PopupType.Medium);
         }
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
@@ -303,7 +303,7 @@ public sealed partial class StationAiBorgSystem : EntitySystem
     {
         if (!_hostile.IsUserUnderHostileLaw(args.User))
         {
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-action-denied"), args.User, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-action-denied"), uid, args.User, PopupType.MediumCaution);
             return;
         }
 
@@ -315,14 +315,14 @@ public sealed partial class StationAiBorgSystem : EntitySystem
 
         _adminLogger.Add(LogType.Action, LogImpact.High,
             $"{ToPrettyString(args.User):user} desligou o borg {ToPrettyString(uid):target} pela IA de estação.");
-        _popup.PopupEntity(Loc.GetString("station-ai-borg-disable-success", ("name", Name(uid))), args.User, args.User, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("station-ai-borg-disable-success", ("name", Name(uid))), uid, args.User, PopupType.Medium);
     }
 
     private void OnDetonate(EntityUid uid, BorgChassisComponent comp, StationAiDetonateBorgEvent args)
     {
         if (!_hostile.IsUserUnderHostileLaw(args.User))
         {
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-action-denied"), args.User, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-action-denied"), uid, args.User, PopupType.MediumCaution);
             return;
         }
 
@@ -335,7 +335,7 @@ public sealed partial class StationAiBorgSystem : EntitySystem
             armed = EnsureComp<StationAiDetonateArmedComponent>(uid);
             armed.Armer = args.User;
             armed.Until = now + TimeSpan.FromSeconds(DetonateConfirmWindow);
-            _popup.PopupEntity(Loc.GetString("station-ai-borg-detonate-arm", ("name", Name(uid))), args.User, args.User, PopupType.LargeCaution);
+            _popup.PopupEntity(Loc.GetString("station-ai-borg-detonate-arm", ("name", Name(uid))), uid, args.User, PopupType.LargeCaution);
             return;
         }
 
@@ -352,14 +352,14 @@ public sealed partial class StationAiBorgSystem : EntitySystem
         // Só sob lawset hostil. O cliente já esconde o botão, mas o servidor reconfirma (não confiar no cliente).
         if (!_hostile.IsUserUnderHostileLaw(args.User))
         {
-            _popup.PopupEntity(Loc.GetString("station-ai-subvert-denied"), args.User, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("station-ai-subvert-denied"), uid, args.User, PopupType.MediumCaution);
             return;
         }
 
         // Já subvertido/emagado? não empilhar leis "obedeça".
         if (_emag.CheckFlag(uid, EmagType.Interaction))
         {
-            _popup.PopupEntity(Loc.GetString("station-ai-subvert-already"), args.User, args.User, PopupType.Medium);
+            _popup.PopupEntity(Loc.GetString("station-ai-subvert-already"), uid, args.User, PopupType.Medium);
             return;
         }
 
@@ -378,6 +378,6 @@ public sealed partial class StationAiBorgSystem : EntitySystem
 
         _adminLogger.Add(LogType.Action, LogImpact.High,
             $"{ToPrettyString(args.User):user} subverteu o borg {ToPrettyString(uid):target} pela IA de estação.");
-        _popup.PopupEntity(Loc.GetString("station-ai-subvert-success", ("name", Name(uid))), args.User, args.User, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("station-ai-subvert-success", ("name", Name(uid))), uid, args.User, PopupType.Medium);
     }
 }

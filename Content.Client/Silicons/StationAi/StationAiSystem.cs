@@ -98,10 +98,11 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         if (args.Sprite == null)
             return;
 
-        // Tell visual placeholder: tinge a APC hackeada de azul-claro até a arte dedicada.
-        // O usuário pode trocar por um layer/estado próprio na RSI da APC.
+        // Tell visual: tinge a APC hackeada de VERMELHO forte (antes era um azul-claro fraco, quase
+        // imperceptível). O tint pega TODOS os layers, inclusive a tela/display da APC.
+        // O usuário pode trocar por um layer/estado dedicado na RSI da APC depois.
         var hacked = _appearance.TryGetData<bool>(ent.Owner, StationAiApcVisuals.Hacked, out var v, args.Component) && v;
-        args.Sprite.Color = hacked ? new Color(0.6f, 0.7f, 1f) : Color.White;
+        args.Sprite.Color = hacked ? new Color(1f, 0.2f, 0.2f) : Color.White;
     }
 
     public override void Shutdown()

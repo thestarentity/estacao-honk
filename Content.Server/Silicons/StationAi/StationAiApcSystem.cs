@@ -48,7 +48,7 @@ public sealed partial class StationAiApcSystem : EntitySystem
     {
         if (!comp.Hacked)
         {
-            _popup.PopupEntity(Loc.GetString("station-ai-apc-not-hacked"), args.User, args.User, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("station-ai-apc-not-hacked"), uid, args.User, PopupType.MediumCaution);
             return;
         }
 
@@ -82,7 +82,7 @@ public sealed partial class StationAiApcSystem : EntitySystem
 
         _adminLogger.Add(LogType.Action, LogImpact.High,
             $"{ToPrettyString(args.User):user} hackeou a APC {ToPrettyString(uid):target} (fonte de CPU da IA Malf).");
-        _popup.PopupEntity(Loc.GetString("station-ai-apc-hacked"), args.User, args.User, PopupType.Medium);
+        _popup.PopupEntity(Loc.GetString("station-ai-apc-hacked"), uid, args.User, PopupType.Medium);
     }
 
     private void OnApcExamined(EntityUid uid, StationAiApcControllableComponent comp, ref ExaminedEvent args)

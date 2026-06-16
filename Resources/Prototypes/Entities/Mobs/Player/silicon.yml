@@ -30,6 +30,9 @@
   - type: IgnoreUIRange
   - type: StationAiHeld
   - type: StationAiOverlay
+  # CPU ("processing power"): toda IA tem. Config LEAL aplicada no ComponentStartup
+  # (StationAiCpuSystem); a IA Malf é reconfigurada ao receber a lei hostil.
+  - type: StationAiCpu
   - type: ShowElectrocutionHUD
   - type: ActionGrant
     actions:

@@ -20,6 +20,14 @@ public sealed partial class DeployableTurretComponent : Component
     public bool Enabled = false;
 
     /// <summary>
+    /// Painel de controle (<c>DeployableTurretController</c>) ao qual esta torreta está ligada, se
+    /// houver. Mantido pelo servidor quando o controlador liga/desliga a torreta. Permite à IA de
+    /// estação abrir o radial direto na torreta e delegar a ação ao painel. (Fork Estação Honk.)
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? AiController;
+
+    /// <summary>
     /// The current state of the turret. Used to inform the device network. 
     /// </summary>
     [DataField, AutoNetworkedField]
