@@ -31,8 +31,9 @@ public sealed partial class StationAiCpuSystem : EntitySystem
     private void OnHostileInit(Entity<StationAiHostileLawComponent> ent, ref ComponentInit args)
     {
         var cpu = EnsureComp<StationAiCpuComponent>(ent.Owner);
+        // ShowAlert silenciosamente não faz nada sem AlertsComponent; garante que exista.
         EnsureComp<AlertsComponent>(ent.Owner);
-        UpdateAlert((ent.Owner, cpu));
+        RefreshCpuAlert((ent.Owner, cpu));
     }
 
     private void OnHostileShutdown(Entity<StationAiHostileLawComponent> ent, ref ComponentShutdown args)
@@ -45,7 +46,8 @@ public sealed partial class StationAiCpuSystem : EntitySystem
 
     private void OnExamined(Entity<StationAiCpuComponent> ent, ref ExaminedEvent args)
     {
-        if (!args.IsInDetailsRange)
+        // Só a própria IA enxerga sua CPU.
+        if (args.Examiner != args.Examined || !args.IsInDetailsRange)
             return;
 
         args.PushMarkup(Loc.GetString("station-ai-cpu-examine",
@@ -74,16 +76,17 @@ public sealed partial class StationAiCpuSystem : EntitySystem
 
         cpu.Cpu -= cost;
         Dirty(ai, cpu);
-        UpdateAlert((ai, cpu));
+        RefreshCpuAlert((ai, cpu));
         return true;
     }
 
     /// <summary>Recalcula o alert de HUD a partir da % atual.</summary>
-    private void UpdateAlert(Entity<StationAiCpuComponent> ent)
+    private void RefreshCpuAlert(Entity<StationAiCpuComponent> ent)
     {
         var max = ent.Comp.MaxCpu <= 0f ? 1f : ent.Comp.MaxCpu;
         var ratio = Math.Clamp(ent.Comp.Cpu / max, 0f, 1f);
-        var severity = (short) Math.Clamp((int) (ratio * (ent.Comp.AlertLevels - 1)), 0, ent.Comp.AlertLevels - 1);
+        var maxSeverity = ent.Comp.AlertLevels - 1;
+        var severity = (short) Math.Clamp((int) (ratio * maxSeverity), 0, maxSeverity);
         _alerts.ShowAlert(ent.Owner, ent.Comp.CpuAlert, severity);
     }
 
@@ -105,7 +108,7 @@ public sealed partial class StationAiCpuSystem : EntitySystem
             if ((int) cpu.Cpu != before)
             {
                 Dirty(uid, cpu);
-                UpdateAlert((uid, cpu));
+                RefreshCpuAlert((uid, cpu));
             }
         }
     }
