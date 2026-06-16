@@ -1,0 +1,20 @@
+# Alert de "processing power" (CPU) da IA Malf. 5 níveis: cpu0 (vazio) → cpu4 (cheio).
+# O sprite é placeholder; o usuário fornece a arte final em station_ai_cpu.rsi.
+- type: alert
+  id: StationAiCpu
+  category: Health
+  icons:
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu0
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu1
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu2
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu3
+  - sprite: /Textures/Interface/Alerts/station_ai_cpu.rsi
+    state: cpu4
+  minSeverity: 0
+  maxSeverity: 4
+  name: alerts-station-ai-cpu-name
+  description: alerts-station-ai-cpu-desc

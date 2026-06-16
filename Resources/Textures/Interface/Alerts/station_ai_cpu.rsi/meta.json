@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Placeholder para Estacao Honk; arte final a fornecer pelo usuario.",
+  "size": { "x": 32, "y": 32 },
+  "states": [
+    { "name": "cpu0" },
+    { "name": "cpu1" },
+    { "name": "cpu2" },
+    { "name": "cpu3" },
+    { "name": "cpu4" }
+  ]
+}

@@ -122,3 +122,7 @@ station-ai-hologram-male = Aparência masculina
 station-ai-hologram-face = Cabeça flutuante
 station-ai-hologram-cat = Forma felina
 station-ai-hologram-dog = Forma Corgi
+
+# CPU alert (IA Malf)
+alerts-station-ai-cpu-name = Poder de processamento
+alerts-station-ai-cpu-desc = Sua CPU disponível. Hackear APCs aumenta a velocidade de regeneração. Ações pesadas gastam CPU.
