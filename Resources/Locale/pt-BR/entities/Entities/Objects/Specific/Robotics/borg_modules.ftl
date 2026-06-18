@@ -2,10 +2,10 @@ ent-ActionBorgSwapModule = Módulo de Troca
     .desc = Selecione este módulo, permitindo que você use as ferramentas que ele fornece.
 
 ent-BorgModulePrying = módulo de força
-    .desc = Um módulo universal de ciborgue que permite ao unit abrir portas com força.
+    .desc = Um módulo universal de ciborgue que permite à unidade abrir portas à força.
 
 ent-BorgModuleCable = módulo ciborgue de cabo
-    .desc = Um módulo ciborgue universal que permite ao unit instalar e manipular sistemas elétricos.
+    .desc = Um módulo ciborgue universal que permite à unidade instalar e mexer em sistemas elétricos.
 
 ent-BorgModuleArtistry = módulo ciborgue artístico
     .desc = Um módulo para artes e artesanato enquanto a estação queima!

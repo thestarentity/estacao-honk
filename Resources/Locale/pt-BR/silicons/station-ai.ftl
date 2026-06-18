@@ -3,11 +3,11 @@ ai-wire-snipped = Um dos fios do seu sistema foi cortado em { $source }.
 wire-name-ai-vision-light = AIV
 wire-name-ai-act-light = AIA
 station-ai-takeover = Tomada de controle pela IA
-station-ai-eye-name = Olho de IA - { $name }
-station-ai-has-no-power-for-upload = Falha no upload - o núcleo da IA está sem energia.
-station-ai-is-too-damaged-for-upload = Falha no upload - o núcleo da IA precisa ser reparado.
-station-ai-core-losing-power = O núcleo da sua IA agora está sendo alimentado pela energia da bateria de emergência.
-station-ai-core-critical-power = O núcleo da sua IA está criticamente baixo em energia. A energia externa deve ser reestabelecida ou podem ocorrer graves corrupções de dados!
+station-ai-eye-name = Olho da IA ({ $name })
+station-ai-has-no-power-for-upload = Falha no upload: o núcleo da IA está sem energia.
+station-ai-is-too-damaged-for-upload = Falha no upload: o núcleo da IA precisa ser reparado.
+station-ai-core-losing-power = O núcleo da sua IA está rodando na bateria de emergência agora.
+station-ai-core-critical-power = A energia do núcleo da sua IA está em nível crítico. Restabeleça a energia externa, ou os dados podem se corromper de vez!
 station-ai-core-taking-damage = O núcleo da sua IA está sofrendo danos físicos.
 # Ghost role
 station-ai-ghost-role-name = IA da Estação
@@ -125,7 +125,7 @@ station-ai-hologram-dog = Forma Corgi
 
 # CPU alert (IA Malf)
 alerts-station-ai-cpu-name = Poder de processamento
-alerts-station-ai-cpu-desc = Sua CPU disponível. Hackear APCs aumenta a velocidade de regeneração. Ações pesadas gastam CPU.
+alerts-station-ai-cpu-desc = A CPU que você tem disponível. Hackear APCs faz ela regenerar mais rápido; ações pesadas gastam CPU.
 
 station-ai-cpu-examine = Poder de processamento: [color=cyan]{ $cpu }/{ $max } CPU[/color].
 station-ai-cpu-insufficient = CPU insuficiente (precisa de { $cost }).
@@ -133,7 +133,7 @@ station-ai-cpu-insufficient = CPU insuficiente (precisa de { $cost }).
 # Hack de APC (IA Malf)
 station-ai-apc-hacked = APC hackeada. Agora ela alimenta sua CPU.
 station-ai-apc-not-hacked = Você precisa hackear esta APC primeiro.
-station-ai-apc-compromised = O interior parece [color=red]comprometido[/color] — adulterado.
+station-ai-apc-compromised = O interior parece [color=red]comprometido[/color]. Mexeram aqui dentro.
 ai-apc-hack = Hackear APC
 
 station-ai-cpu-low = CPU insuficiente

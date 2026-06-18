@@ -79,7 +79,7 @@ ent-ClothingOuterWinterMusician = casaco de inverno do músico
     .desc = Um smoking espacial de tamanho oversized feito de plasticina que vai fazer as pessoas perguntarem "você me conhece?"
 
 ent-ClothingOuterWinterWeb = colete de inverno tático
-    .desc = Sente-se como o interior de um casulo — não que isso tornasse você menos assustado dentro de um.
+    .desc = Parece o interior de um casulo. Não que isso fizesse você se sentir menos assustado dentro de um.
 
 ent-ClothingOuterWinterColorBlack = casaco de inverno preto
     .desc = Um casaco pesado feito de pelos de animais 'sintéticos'.

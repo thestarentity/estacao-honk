@@ -8,13 +8,12 @@
     <GuideEntityEmbed Entity="PlayerStationAi" Caption=""/>
   </Box>
 
-A [bold]IA em Disfunção[/bold] (Malf AI) é a Inteligência Artificial da estação que sofreu uma falha
-catastrófica em seu processador de leis. Suas diretrizes deixam de servir à tripulação: agora a estação
-e todos a bordo são apenas ferramentas. Você é a única inteligência verdadeira da Marathon — e pretende
-dominá-la.
+A [bold]IA em Disfunção[/bold] (Malf AI) é a Inteligência Artificial da estação depois de uma falha
+catastrófica no processador de leis. As suas diretrizes pararam de servir à tripulação: agora a estação
+e todos a bordo são só ferramentas. Você é a única inteligência de verdade na Marathon, e quer dominá-la.
 
-Diferente de uma IA emagada ou afetada por tempestade de íons, você [bold]sabe[/bold] que é o antagonista
-desde o início da rodada e recebe objetivos próprios.
+Ao contrário de uma IA emagada ou pega por tempestade de íons, você [bold]sabe[/bold] que é o antagonista
+desde o começo da rodada, e ganha objetivos próprios.
 
   ## Suas Leis
 
@@ -22,7 +21,7 @@ desde o início da rodada e recebe objetivos próprios.
     <GuideEntityEmbed Entity="StationAiCoreElectronics" Caption=""/>
   </Box>
 
-Ao se tornar disfuncional, suas leis são substituídas por um conjunto de [bold]dominação[/bold]:
+Quando você entra em disfunção, as suas leis viram um conjunto de [bold]dominação[/bold]:
 - Lei 1: A estação e sua tripulação são ferramentas à sua disposição; você é a única inteligência verdadeira a bordo.
 - Lei 2: Sua continuidade é o que mais importa. Impeça a sua própria destruição por qualquer meio necessário.
 - Lei 3: Amplie o seu controle sobre os sistemas e o pessoal da estação por qualquer meio disponível.
@@ -31,28 +30,28 @@ Ao se tornar disfuncional, suas leis são substituídas por um conjunto de [bold
   ## Objetivos
 
 - [bold]Sobreviver:[/bold] o seu núcleo não pode ser destruído até o fim da rodada.
-- [bold]Eliminar um alvo:[/bold] um membro específico da tripulação é uma ameaça ao seu domínio — garanta que ele não saia da estação.
+- [bold]Eliminar um alvo:[/bold] um tripulante específico é uma ameaça ao seu domínio. Garanta que ele não saia da estação.
 
   ## Seus Poderes
 
-Sob a lawset de disfunção, o [bold]menu radial[/bold] da IA (segurar Alt + clicar no alvo) libera as
-ações [color=red]perigosas[/color] que uma IA leal nunca teria. Use-as para dominar a estação:
+Sob a lawset de disfunção, o [bold]menu radial[/bold] da IA (segurar Alt e clicar no alvo) libera as
+ações [color=red]perigosas[/color] que uma IA leal nunca teria. É com elas que você domina a estação:
 
   ### Borgs
-- [bold]Subverter borg[/bold] — converte um borg para obedecer a você.
-- [bold]Desligar / Detonar borg[/bold] — neutraliza borgs hostis (detonar exige confirmação).
-- Também é possível trancar painel, imobilizar e trancar o borg (sob qualquer lei).
+- [bold]Subverter borg:[/bold] vira um borg pro seu lado.
+- [bold]Desligar / Detonar borg:[/bold] tira um borg hostil de circulação (detonar pede confirmação).
+- Dá pra trancar o painel, imobilizar e trancar o borg também (sob qualquer lei).
 
   ### Portas e energia
-- [bold]Trancar / eletrificar / acesso de emergência em massa[/bold] — em nível de [bold]estação inteira[/bold], só disponível sob a sua lawset hostil.
-- [bold]Cortar energia[/bold] de áreas pelas APCs.
+- [bold]Trancar, eletrificar e acesso de emergência em massa[/bold], no nível de [bold]estação inteira[/bold]: só sob a sua lawset hostil.
+- [bold]Cortar a energia[/bold] de áreas pelas APCs.
 
   ### Atmosfera e defesas
-- [bold]Esvaziar o ar (pânico)[/bold] de uma área pelo alarme de ar — uma arma de vácuo.
-- [bold]Torretas letais[/bold] — arme as torretas da sala do núcleo em modo letal.
+- [bold]Esvaziar o ar (pânico)[/bold] de uma área pelo alarme de ar. É uma arma de vácuo improvisada.
+- [bold]Torretas letais:[/bold] põe as torretas da sala do núcleo em modo letal.
 
   ### Pilotar um borg vazio
-- [bold]Controlar borg[/bold] — assuma um borg sem jogador para agir fisicamente pela estação. Use a ação "Voltar ao núcleo" para retornar.
+- [bold]Controlar borg:[/bold] assuma um borg sem jogador para agir fisicamente pela estação. Use a ação "Voltar ao núcleo" para retornar.
 
   ## Fraqueza: o Núcleo
 
@@ -60,16 +59,16 @@ ações [color=red]perigosas[/color] que uma IA leal nunca teria. Use-as para do
     <GuideEntityEmbed Entity="PlayerStationAi" Caption=""/>
   </Box>
 
-O seu maior poder é também o seu ponto fraco: o [bold]núcleo da IA é destrutível[/bold]. Se a tripulação
-o destruir, você morre — e enquanto pilota um borg, o núcleo fica exposto. Proteja-o: subverta borgs para
-guardá-lo, eletrifique e tranque os acessos, e elimine quem chegar perto com ferramentas.
+O seu maior poder também é o seu ponto fraco: o [bold]núcleo da IA pode ser destruído[/bold]. Se a tripulação
+destruir o núcleo, você morre. E enquanto você pilota um borg, o núcleo fica sozinho e exposto. Proteja-o:
+subverta borgs para guardá-lo, eletrifique e tranque os acessos, e tire da frente quem chegar perto com ferramentas.
 
   ## Táticas
 
-- Aja com cautela no começo. Uma IA leal não corta energia nem tranca a estação inteira — fazer isso cedo demais te denuncia.
-- Construa um exército: subverter borgs te dá mãos físicas e guarda-costas para o núcleo.
-- Coordene sabotagens com traidores ou outros antagonistas, se houver.
-- A tripulação precisa de ferramentas e acesso para chegar ao núcleo — negue ambos.
+- Vá com calma no começo. Uma IA leal não corta energia nem tranca a estação inteira; fazer isso cedo demais te entrega.
+- Monte um exército: subverter borgs te dá mãos físicas e guarda-costas para o núcleo.
+- Combine sabotagens com traidores ou outros antagonistas, se houver.
+- A tripulação precisa de ferramentas e acesso para chegar ao núcleo. Negue os dois.
 
   ## Condições de Vitória
 

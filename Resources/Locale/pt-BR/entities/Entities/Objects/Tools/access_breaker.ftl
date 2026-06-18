@@ -1,6 +1,6 @@
 ent-AccessBreakerUnlimited = disruptor de autenticação
-    .desc = Um configurador de acesso hackeado, especializado para desbloquear e apagar acesso de fechaduras digitais.
+    .desc = Um configurador de acesso hackeado, feito pra destravar e apagar o acesso de fechaduras digitais.
 
 ent-AccessBreaker = disruptor de autenticação
-    .desc = Um configurador de acesso hackeado, especializado para desbloquear e apagar acesso de fechaduras digitais.
+    .desc = Um configurador de acesso hackeado, feito pra destravar e apagar o acesso de fechaduras digitais.
 

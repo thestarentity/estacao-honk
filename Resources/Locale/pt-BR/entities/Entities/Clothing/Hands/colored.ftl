@@ -35,7 +35,7 @@ ent-ClothingHandsGlovesColorYellow = luvas isolantes
     .desc = Essas luvas protegerão o usuário de choques elétricos.
 
 ent-ClothingHandsGlovesColorYellowBudget = luvas isolantes baratas
-    .desc = Essas luvas são cópias baratas das desejadas — não há como isso terminar bem.
+    .desc = Essas luvas são cópias baratas das de verdade. Não tem como isso acabar bem.
 
 
 ent-ThievingGloves = luvas pretas
