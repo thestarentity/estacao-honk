@@ -1,5 +1,7 @@
+using System.Linq;
 using Content.Server.Mind;
 using Content.Server.Silicons.Borgs;
+using Content.Server.Silicons.Laws;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
@@ -45,6 +47,7 @@ public sealed partial class StationAiBorgSystem : EntitySystem
     [Dependency] private StationAiSystem _stationAi = default!;
     [Dependency] private SharedAccessSystem _access = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SiliconLawSystem _laws = default!;
 
     /// <summary>
     /// Grupo de acesso concedido ao borg enquanto a IA o pilota (abre tudo, como a IA).
@@ -166,6 +169,14 @@ public sealed partial class StationAiBorgSystem : EntitySystem
             _access.TryAddGroups(uid, new[] { AllAccessGroup }, access);
         }
 
+        // Item 8: enquanto pilotado, o borg opera sob as leis ATUAIS da IA. Salva as leis originais do
+        // borg para restaurar ao largar; aplica uma CÓPIA independente (ShallowClone) das leis da IA
+        // (=args.User, o cérebro) para o borg e a IA não compartilharem a mesma lista. Silencioso
+        // (notify:false): a IA já conhece as próprias leis — o aviso a cada entrada/saída seria ruído.
+        piloted.SavedLaws = _laws.GetLaws(uid).Laws;
+        var aiLaws = _laws.GetLaws(args.User).Laws.Select(law => law.ShallowClone()).ToList();
+        _laws.SetLaws(aiLaws, uid, notify: false);
+
         cd.NextControl = now + TimeSpan.FromSeconds(ControlCooldown);
 
         _adminLogger.Add(LogType.Mind, LogImpact.High,
@@ -229,6 +240,10 @@ public sealed partial class StationAiBorgSystem : EntitySystem
             _access.TrySetTags(borg, comp.SavedAccessTags, access);
             _access.SetAccessEnabled(borg, comp.SavedAccessEnabled, access);
         }
+
+        // Item 8: restaura as leis originais do borg (silencioso).
+        if (comp.SavedLaws != null)
+            _laws.SetLaws(comp.SavedLaws, borg, notify: false);
 
         if (!terminating && comp.WeActivated && TryComp<BorgChassisComponent>(borg, out var chassis))
             _borg.SetActive((borg, chassis), false);

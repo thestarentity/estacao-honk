@@ -1,4 +1,5 @@
 using Content.Shared.Access;
+using Content.Shared.Silicons.Laws;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Silicons.StationAi;
@@ -44,4 +45,11 @@ public sealed partial class StationAiPilotedBorgComponent : Component
     /// </summary>
     [DataField]
     public bool SavedAccessEnabled;
+
+    /// <summary>
+    /// Leis originais do borg, salvas ao assumir, para restaurar ao largar (Item 8). Enquanto a IA
+    /// pilota, o borg passa a operar sob as leis ATUAIS da IA (snapshot no momento do controle).
+    /// </summary>
+    [DataField]
+    public List<SiliconLaw>? SavedLaws;
 }

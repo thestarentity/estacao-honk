@@ -282,7 +282,12 @@ public sealed partial class SiliconLawSystem : SharedSiliconLawSystem
     /// <summary>
     /// Set the laws of a silicon entity while notifying the player.
     /// </summary>
-    public void SetLaws(List<SiliconLaw> newLaws, EntityUid target, SoundSpecifier? cue = null)
+    /// <param name="notify">
+    /// Quando false, grava as leis SEM o aviso de "leis alteradas" (usado quando a IA assume/larga um
+    /// borg — Item 8: a própria IA já conhece suas leis, o aviso vermelho a cada entrada/saída seria ruído).
+    /// A tela de leis lê as leis vivas em OnBoundUIOpened/GetLaws, então segue correta mesmo silenciosa.
+    /// </param>
+    public void SetLaws(List<SiliconLaw> newLaws, EntityUid target, SoundSpecifier? cue = null, bool notify = true)
     {
         if (!TryComp<SiliconLawProviderComponent>(target, out var component))
             return;
@@ -291,7 +296,9 @@ public sealed partial class SiliconLawSystem : SharedSiliconLawSystem
             component.Lawset = new SiliconLawset();
 
         component.Lawset.Laws = newLaws;
-        NotifyLawsChanged(target, cue);
+
+        if (notify)
+            NotifyLawsChanged(target, cue);
     }
 
     protected override void OnUpdaterInsert(Entity<SiliconLawUpdaterComponent> ent, ref EntInsertedIntoContainerMessage args)
