@@ -90,7 +90,7 @@ public sealed partial class StationAiCpuSystem : EntitySystem
     private void ConfigureLoyal(StationAiCpuComponent cpu)
     {
         cpu.MaxCpu = 100f;
-        cpu.BaseRegen = 0.3f;
+        cpu.BaseRegen = 0.5f; // aumento minimal (era 0.3): geração da IA leal estava lenta demais
         cpu.RegenPerApc = 0f;
         cpu.CostMultiplier = 1.5f;
         cpu.HackedApcCount = 0;
