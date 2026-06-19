@@ -145,7 +145,10 @@ public sealed partial class StationAiShuntSystem : EntitySystem
 
             // Remove a ação de voltar pelo UID guardado no componente (mesmo padrão de CleanupShunt).
             if (ret.ReturnAction != null)
+            {
                 _actions.RemoveAction(ret.ReturnAction.Value);
+                ret.ReturnAction = null;
+            }
 
             _popup.PopupEntity(Loc.GetString("station-ai-shunt-core-lost"), brain, brain, PopupType.LargeCaution);
         }
