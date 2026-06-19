@@ -144,7 +144,7 @@ station-ai-apc-not-hacked = Você precisa hackear esta APC primeiro.
 station-ai-apc-compromised = O interior parece [color=red]comprometido[/color]. Mexeram aqui dentro.
 ai-apc-hack = Hackear APC
 
-station-ai-cpu-low = sem saldo
+station-ai-cpu-low = sem processamento suficiente
 
 # Transferência de núcleo (IA Malf)
 ai-apc-shunt = Transferir núcleo para cá
