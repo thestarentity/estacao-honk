@@ -159,3 +159,11 @@ station-ai-apc-compromised = Its internals look [color=red]compromised[/color] â
 ai-apc-hack = Hack APC
 
 station-ai-cpu-low = not enough CPU
+
+# Core shunting (Malf AI)
+ai-apc-shunt = Shunt core here
+station-ai-shunt-apc-not-hacked = This APC isn't hacked.
+station-ai-shunt-done = You shunt your core into the APC. You're hidden, but dormant.
+station-ai-shunt-return = You pull your process back to the core.
+station-ai-shunt-core-lost = Your core is gone. You're stuck in this APC.
+station-ai-apc-anomalous = Something inside is humming in ways it shouldn't.

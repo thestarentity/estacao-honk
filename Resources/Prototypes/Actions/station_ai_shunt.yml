@@ -1,0 +1,15 @@
+# Ação concedida à IA Malf enquanto está shuntada numa APC. Retorna ao núcleo.
+- type: entity
+  parent: BaseAction
+  id: ActionStationAiReturnFromShunt
+  name: Voltar ao núcleo
+  description: Retorna seu processo da APC para o núcleo da IA.
+  components:
+  - type: Action
+    priority: -10
+    itemIconStyle: BigAction
+    icon:
+      sprite: Interface/Actions/actions_ai.rsi
+      state: ai_core
+  - type: InstantAction
+    event: !type:StationAiReturnFromShuntEvent
