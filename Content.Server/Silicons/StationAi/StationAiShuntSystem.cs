@@ -36,6 +36,10 @@ public sealed partial class StationAiShuntSystem : EntitySystem
         SubscribeLocalEvent<StationAiApcControllableComponent, StationAiApcShuntEvent>(OnShuntRequest);
         // Ação instantânea concedida ao cérebro: voltar ao núcleo.
         SubscribeLocalEvent<StationAiShuntedComponent, StationAiReturnFromShuntEvent>(OnReturnRequest);
+        // Destruição do núcleo de origem: IA fica presa na APC (CoreLost).
+        SubscribeLocalEvent<StationAiCoreComponent, EntityTerminatingEvent>(OnCoreTerminating);
+        // Destruição da APC enquanto ocupada: IA morre.
+        SubscribeLocalEvent<StationAiApcControllableComponent, EntityTerminatingEvent>(OnHostApcTerminating);
     }
 
     private void OnShuntRequest(EntityUid apc, StationAiApcControllableComponent comp, StationAiApcShuntEvent args)
@@ -122,6 +126,50 @@ public sealed partial class StationAiShuntSystem : EntitySystem
 
         CleanupShunt(brain, apc);
         _popup.PopupEntity(Loc.GetString("station-ai-shunt-return"), brain, brain, PopupType.Medium);
+    }
+
+    /// <summary>
+    /// Núcleo de origem destruído enquanto a IA está shuntada: marca CoreLost e remove a ação de retorno.
+    /// A IA permanece na APC — não há mais para onde voltar.
+    /// </summary>
+    private void OnCoreTerminating(Entity<StationAiCoreComponent> core, ref EntityTerminatingEvent args)
+    {
+        var query = EntityQueryEnumerator<StationAiShuntedComponent, StationAiShuntReturnComponent>();
+        while (query.MoveNext(out var brain, out var shunted, out var ret))
+        {
+            if (ret.Core != core.Owner || shunted.CoreLost)
+                continue;
+
+            shunted.CoreLost = true;
+            Dirty(brain, shunted);
+
+            // Remove a ação de voltar pelo UID guardado no componente (mesmo padrão de CleanupShunt).
+            if (ret.ReturnAction != null)
+                _actions.RemoveAction(ret.ReturnAction.Value);
+
+            _popup.PopupEntity(Loc.GetString("station-ai-shunt-core-lost"), brain, brain, PopupType.LargeCaution);
+        }
+    }
+
+    /// <summary>
+    /// APC destruída enquanto ocupada pela IA: limpa o estado de shunt e deleta o cérebro.
+    /// Deletar a entidade-cérebro dispara o fluxo padrão de morte/fantasma do engine.
+    /// </summary>
+    private void OnHostApcTerminating(Entity<StationAiApcControllableComponent> apc, ref EntityTerminatingEvent args)
+    {
+        if (!apc.Comp.Occupied)
+            return;
+
+        var query = EntityQueryEnumerator<StationAiShuntedComponent>();
+        while (query.MoveNext(out var brain, out var shunted))
+        {
+            if (shunted.HostApc != apc.Owner)
+                continue;
+
+            // Limpa flags da APC e remove componentes de shunt antes de deletar o cérebro.
+            CleanupShunt(brain, apc.Owner);
+            QueueDel(brain);
+        }
     }
 
     /// <summary>Remove o estado de shunt do cérebro e da APC. NÃO move o cérebro (quem move é o chamador).</summary>
