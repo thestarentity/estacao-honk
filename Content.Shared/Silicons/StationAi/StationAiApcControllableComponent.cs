@@ -24,6 +24,13 @@ public sealed partial class StationAiApcControllableComponent : Component
     public bool Hacked;
 
     /// <summary>
+    /// APC que está hospedando uma IA shuntada (Bloco 2). Networked para o tell visual sutil
+    /// e para o radial esconder "Shuntar" numa APC já ocupada.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Occupied;
+
+    /// <summary>
     /// Qual IA (cérebro) hackeou esta APC. Só servidor — usado para decrementar a taxa de CPU
     /// quando a APC é destruída. Não networked de propósito.
     /// </summary>
@@ -34,4 +41,5 @@ public sealed partial class StationAiApcControllableComponent : Component
 public enum StationAiApcVisuals : byte
 {
     Hacked,
+    Occupied,
 }
