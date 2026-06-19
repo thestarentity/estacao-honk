@@ -46,6 +46,11 @@ public sealed partial class StationAiCpuSystem : EntitySystem
         else
             ConfigureLoyal(ent.Comp);
 
+        // Recupera a contagem de APCs hackeadas a partir da VERDADE (as próprias APCs). Este componente
+        // mora no protótipo do cérebro e RE-INICIALIZA quando a IA volta de um shunt (ComponentStartup
+        // dispara de novo), zerando o contador — sem isso, as APCs já hackeadas parariam de gerar CPU.
+        RecomputeHackedApcCount(ent);
+
         RefreshCpuAlert(ent);
     }
 
@@ -89,6 +94,25 @@ public sealed partial class StationAiCpuSystem : EntitySystem
         cpu.RegenPerApc = 0f;
         cpu.CostMultiplier = 1.5f;
         cpu.HackedApcCount = 0;
+    }
+
+    /// <summary>
+    /// Reconta as APCs hackeadas por esta IA varrendo as próprias APCs (fonte da verdade: o campo
+    /// HackedBy de cada APC aponta para o cérebro, cujo UID é estável). Usado para recuperar a contagem
+    /// quando o StationAiCpuComponent re-inicializa no ciclo de shunt — assim as APCs já hackeadas
+    /// continuam gerando CPU depois que a IA volta ao núcleo.
+    /// </summary>
+    private void RecomputeHackedApcCount(Entity<StationAiCpuComponent> ent)
+    {
+        var count = 0;
+        var query = EntityQueryEnumerator<StationAiApcControllableComponent>();
+        while (query.MoveNext(out _, out var apc))
+        {
+            if (apc.Hacked && apc.HackedBy == ent.Owner)
+                count++;
+        }
+
+        ent.Comp.HackedApcCount = count;
     }
 
     private void OnExamined(Entity<StationAiCpuComponent> ent, ref ExaminedEvent args)
