@@ -72,7 +72,7 @@ public sealed partial class StationAiShuntSystem : EntitySystem
 
         // Tira o cérebro do container do núcleo (dispara OnAiRemove: olho some, núcleo "vazio").
         // TryGetCore só retorna true quando o cérebro está DENTRO do núcleo (container station_ai_mind_slot).
-        if (!_stationAi.TryGetCore(brain, out var core) || core.Comp == null)
+        if (!_stationAi.TryGetCore(brain, out var core))
             return false;
 
         // Grava o núcleo de origem antes de mover o cérebro (após o Insert, TryGetCore retorna false).
@@ -86,7 +86,7 @@ public sealed partial class StationAiShuntSystem : EntitySystem
             return false;
         }
 
-        var shunted = EnsureComp<StationAiShuntedComponent>(brain);
+        var shunted = AddComp<StationAiShuntedComponent>(brain);
         shunted.HostApc = apc;
         Dirty(brain, shunted);
 
@@ -152,6 +152,5 @@ public sealed partial class StationAiShuntReturnComponent : Component
     public EntityUid? Core;
 
     /// <summary>A entidade da ação "Voltar ao núcleo", para poder remover depois.</summary>
-    [DataField]
     public EntityUid? ReturnAction;
 }
