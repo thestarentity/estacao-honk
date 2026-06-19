@@ -89,6 +89,14 @@ ai-turret-lock = Trancar painel
 ai-turret-unlock = Destrancar painel
 station-ai-turret-denied = Suas leis não permitem armar as torretas como letais.
 station-ai-turret-set = Armamento das torretas alterado.
+
+# Controle de torreta (uma torreta só)
+ai-turret-single-off = Esta torreta: desligar
+ai-turret-single-stun = Esta torreta: atordoar
+ai-turret-single-lethal = Esta torreta: hostil (letal)
+ai-turret-single-lock = Trancar torreta
+ai-turret-single-unlock = Destrancar torreta
+station-ai-turret-single-set = Armamento da torreta alterado.
 ai-firelock-close = Fechar firelock
 ai-firelock-open = Abrir firelock
 ai-firelocks-trigger = Disparar firelocks (área)

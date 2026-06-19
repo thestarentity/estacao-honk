@@ -20,7 +20,6 @@ public sealed partial class DeployableTurretControllerSystem : SharedDeployableT
     [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!;
     [Dependency] private DeviceNetworkSystem _deviceNetwork = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
-    [Dependency] private SharedDeployableTurretSystem _deployableTurret = default!;
 
     /// Keys for the device network. See <see cref="DeviceNetworkConstants"/> for further examples.
     public const string CmdSetArmamemtState = "set_armament_state";
@@ -30,29 +29,9 @@ public sealed partial class DeployableTurretControllerSystem : SharedDeployableT
     {
         base.Initialize();
 
-        SubscribeLocalEvent<DeployableTurretControllerComponent, MapInitEvent>(OnControllerMapInit);
         SubscribeLocalEvent<DeployableTurretControllerComponent, BoundUIOpenedEvent>(OnBUIOpened);
         SubscribeLocalEvent<DeployableTurretControllerComponent, DeviceListUpdateEvent>(OnDeviceListUpdate);
         SubscribeLocalEvent<DeployableTurretControllerComponent, DeviceNetworkPacketEvent>(OnPacketReceived);
-    }
-
-    /// <summary>
-    /// Os links torreta↔painel salvos no MAPA não disparam <see cref="DeviceListUpdateEvent"/> (esse só
-    /// dispara na religação manual via configurador de rede). Sem isto, o <see cref="DeployableTurretComponent.AiController"/>
-    /// ficaria nulo numa rodada normal e o menu radial da IA aberto direto na torreta sairia VAZIO. Aqui,
-    /// no MapInit do painel, gravamos o link em cada torreta já ligada (mesma lógica do laço de "add" do
-    /// <see cref="OnDeviceListUpdate"/>). (Fork Estação Honk.)
-    /// </summary>
-    private void OnControllerMapInit(Entity<DeployableTurretControllerComponent> ent, ref MapInitEvent args)
-    {
-        if (!TryComp<DeviceListComponent>(ent, out var deviceList))
-            return;
-
-        foreach (var turretUid in deviceList.Devices)
-        {
-            if (TryComp<DeployableTurretComponent>(turretUid, out var turretComp))
-                _deployableTurret.SetAiController((turretUid, turretComp), ent);
-        }
     }
 
     private void OnBUIOpened(Entity<DeployableTurretControllerComponent> ent, ref BoundUIOpenedEvent args)
@@ -76,12 +55,6 @@ public sealed partial class DeployableTurretControllerSystem : SharedDeployableT
 
         foreach (var turretUid in turretsToAdd)
         {
-            if (!TryComp<DeployableTurretComponent>(turretUid, out var turretComp))
-                continue;
-
-            // Liga a torreta a este painel (a IA usa isso p/ abrir o radial direto na torreta).
-            _deployableTurret.SetAiController((turretUid, turretComp), ent);
-
             if (!TryComp<DeviceNetworkComponent>(turretUid, out var turretDeviceNetwork))
                 continue;
 
@@ -94,10 +67,6 @@ public sealed partial class DeployableTurretControllerSystem : SharedDeployableT
 
         foreach (var turretUid in turretsToRemove)
         {
-            // Desfaz o link torreta→painel.
-            if (TryComp<DeployableTurretComponent>(turretUid, out var turretComp))
-                _deployableTurret.SetAiController((turretUid, turretComp), null);
-
             if (!TryComp<DeviceNetworkComponent>(turretUid, out var turretDeviceNetwork))
                 continue;
 

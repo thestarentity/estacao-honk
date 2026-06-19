@@ -83,10 +83,7 @@ public sealed partial class DeployableTurretSystem : SharedDeployableTurretSyste
         if (command == DeployableTurretControllerSystem.CmdSetArmamemtState &&
             args.Data.TryGetValue(command, out int? armamentState))
         {
-            if (TryComp<BatteryWeaponFireModesComponent>(ent, out var batteryWeaponFireModes))
-                _fireModes.TrySetFireMode((ent, batteryWeaponFireModes), armamentState.Value);
-
-            TrySetState(ent, armamentState.Value >= 0);
+            SetArmament(ent, armamentState.Value);
             return;
         }
 
@@ -105,6 +102,19 @@ public sealed partial class DeployableTurretSystem : SharedDeployableTurretSyste
             SendStateUpdateToDeviceNetwork(ent);
             return;
         }
+    }
+
+    /// <summary>
+    /// Aplica um armamento (desligar = -1 / atordoar = 0 / letal = 1) DIRETO nesta torreta, sem passar
+    /// pelo painel de controle. Mesma lógica do pacote de rede vindo do painel, mas no escopo de UMA
+    /// torreta — usado pela IA de estação ao abrir o radial direto numa torreta específica. (Fork Estação Honk.)
+    /// </summary>
+    public void SetArmament(Entity<DeployableTurretComponent> ent, int armament)
+    {
+        if (TryComp<BatteryWeaponFireModesComponent>(ent, out var batteryWeaponFireModes))
+            _fireModes.TrySetFireMode((ent, batteryWeaponFireModes), armament);
+
+        TrySetState(ent, armament >= 0);
     }
 
     private void OnBeforeBroadcast(Entity<DeployableTurretComponent> ent, ref BeforeBroadcastAttemptEvent args)

@@ -1,4 +1,5 @@
 using Content.Server.TurretController;
+using Content.Server.Turrets;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Lock;
@@ -10,12 +11,15 @@ using Content.Shared.TurretController;
 namespace Content.Server.Silicons.StationAi;
 
 /// <summary>
-/// Ações da IA de estação sobre torretas pelo MENU RADIAL (alt-clique). Funciona tanto no PAINEL de
-/// controle (<see cref="DeployableTurretControllerComponent"/>) quanto na TORRETA em si
-/// (<see cref="DeployableTurretComponent"/>) — neste caso a ação é delegada ao painel ao qual a
-/// torreta está ligada (<see cref="DeployableTurretComponent.AiController"/>). Define o armamento de
-/// todas as torretas ligadas (desligar/atordoar/letal) e tranca/destranca o painel. A IA fura a
-/// checagem de acesso. Letal (hostil) só sob lawset hostil — gate reusa
+/// Ações da IA de estação sobre torretas pelo MENU RADIAL (alt-clique). Funciona em dois alvos com
+/// ESCOPOS DIFERENTES:
+/// <list type="bullet">
+/// <item>No PAINEL de controle (<see cref="DeployableTurretControllerComponent"/>): age sobre o GRUPO
+/// inteiro de torretas ligadas — define o armamento de todas e tranca/destranca o painel.</item>
+/// <item>Na TORRETA em si (<see cref="DeployableTurretComponent"/>): age SÓ naquela torreta — define o
+/// armamento dela e tranca/destranca o <see cref="LockComponent"/> dela própria.</item>
+/// </list>
+/// A IA fura a checagem de acesso. Letal (hostil) só sob lawset hostil — gate reusa
 /// <see cref="StationAiBulkDoorSystem.IsUserUnderHostileLaw"/>.
 /// </summary>
 public sealed partial class StationAiTurretSystem : EntitySystem
@@ -23,6 +27,7 @@ public sealed partial class StationAiTurretSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private StationAiBulkDoorSystem _hostile = default!;
     [Dependency] private DeployableTurretControllerSystem _turretController = default!;
+    [Dependency] private DeployableTurretSystem _turret = default!;
     [Dependency] private LockSystem _lock = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
 
@@ -37,7 +42,7 @@ public sealed partial class StationAiTurretSystem : EntitySystem
         SubscribeLocalEvent<DeployableTurretControllerComponent, StationAiTurretArmamentEvent>(OnArmament);
         SubscribeLocalEvent<DeployableTurretControllerComponent, StationAiTurretLockEvent>(OnLock);
 
-        // Clicando na TORRETA em si: delega ao painel ligado.
+        // Clicando na TORRETA em si: age SÓ naquela torreta.
         SubscribeLocalEvent<DeployableTurretComponent, StationAiTurretArmamentEvent>(OnTurretArmament);
         SubscribeLocalEvent<DeployableTurretComponent, StationAiTurretLockEvent>(OnTurretLock);
     }
@@ -52,21 +57,27 @@ public sealed partial class StationAiTurretSystem : EntitySystem
         HandleLock(uid, args, popupTarget: uid);
     }
 
+    /// <summary>Armamento clicado NA torreta: age SÓ naquela torreta (não no grupo do painel).</summary>
     private void OnTurretArmament(EntityUid uid, DeployableTurretComponent comp, StationAiTurretArmamentEvent args)
     {
-        if (comp.AiController is not { } controller || !TryComp<DeployableTurretControllerComponent>(controller, out var ctrl))
+        // Armamento letal (hostil) só sob lawset hostil. O cliente já esconde, o servidor reconfirma.
+        if (args.Armament >= LethalArmament && !_hostile.IsUserUnderHostileLaw(args.User))
+        {
+            _popup.PopupEntity(Loc.GetString("station-ai-turret-denied"), uid, args.User, PopupType.MediumCaution);
             return;
+        }
 
-        // Popup aparece NA torreta clicada (onde a IA olhou), mas a ação age no painel/grupo todo.
-        HandleArmament((controller, ctrl), args, popupTarget: uid);
+        _turret.SetArmament((uid, comp), args.Armament);
+
+        _adminLogger.Add(LogType.ItemConfigure, LogImpact.Medium,
+            $"{ToPrettyString(args.User):user} definiu o armamento da torreta {ToPrettyString(uid):target} para {args.Armament} pela IA de estação.");
+        _popup.PopupEntity(Loc.GetString("station-ai-turret-single-set"), uid, args.User, PopupType.Medium);
     }
 
+    /// <summary>Trancar/destrancar clicado NA torreta: age no <see cref="LockComponent"/> dela própria.</summary>
     private void OnTurretLock(EntityUid uid, DeployableTurretComponent comp, StationAiTurretLockEvent args)
     {
-        if (comp.AiController is not { } controller)
-            return;
-
-        HandleLock(controller, args, popupTarget: uid);
+        HandleLock(uid, args, popupTarget: uid);
     }
 
     private void HandleArmament(Entity<DeployableTurretControllerComponent> ent, StationAiTurretArmamentEvent args, EntityUid popupTarget)
@@ -85,18 +96,21 @@ public sealed partial class StationAiTurretSystem : EntitySystem
         _popup.PopupEntity(Loc.GetString("station-ai-turret-set"), popupTarget, args.User, PopupType.Medium);
     }
 
-    private void HandleLock(EntityUid controller, StationAiTurretLockEvent args, EntityUid popupTarget)
+    /// <summary>
+    /// Tranca/destranca o <see cref="LockComponent"/> de <paramref name="target"/> — pode ser o painel
+    /// (grupo) ou uma torreta individual. A IA fura o ID e a exigência de painel: chama Lock/Unlock crus.
+    /// </summary>
+    private void HandleLock(EntityUid target, StationAiTurretLockEvent args, EntityUid popupTarget)
     {
-        if (!TryComp<LockComponent>(controller, out var lockComp))
+        if (!TryComp<LockComponent>(target, out var lockComp))
             return;
 
-        // A IA fura o ID e a exigência de painel: chama Lock/Unlock crus.
         if (args.Lock)
-            _lock.Lock(controller, args.User, lockComp);
+            _lock.Lock(target, args.User, lockComp);
         else
-            _lock.Unlock(controller, args.User, lockComp);
+            _lock.Unlock(target, args.User, lockComp);
 
         _adminLogger.Add(LogType.Action, LogImpact.Medium,
-            $"{ToPrettyString(args.User):user} {(args.Lock ? "trancou" : "destrancou")} o painel de torretas {ToPrettyString(controller):target} pela IA de estação.");
+            $"{ToPrettyString(args.User):user} {(args.Lock ? "trancou" : "destrancou")} {ToPrettyString(target):target} pela IA de estação.");
     }
 }

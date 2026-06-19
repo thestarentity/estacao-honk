@@ -97,6 +97,14 @@ ai-turret-lock = Lock panel
 ai-turret-unlock = Unlock panel
 station-ai-turret-denied = Your laws don't allow arming the turrets to lethal.
 station-ai-turret-set = Turret armament changed.
+
+# Turret control (single turret)
+ai-turret-single-off = This turret: disable
+ai-turret-single-stun = This turret: stun
+ai-turret-single-lethal = This turret: hostile (lethal)
+ai-turret-single-lock = Lock turret
+ai-turret-single-unlock = Unlock turret
+station-ai-turret-single-set = Turret armament changed.
 ai-firelock-close = Close firelock
 ai-firelock-open = Open firelock
 ai-firelocks-trigger = Trigger firelocks (area)
