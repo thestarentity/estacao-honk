@@ -38,8 +38,9 @@ public sealed partial class StationAiShuntSystem : EntitySystem
         SubscribeLocalEvent<StationAiShuntedComponent, StationAiReturnFromShuntEvent>(OnReturnRequest);
         // Destruição do núcleo de origem: IA fica presa na APC (CoreLost).
         SubscribeLocalEvent<StationAiCoreComponent, EntityTerminatingEvent>(OnCoreTerminating);
-        // Destruição da APC enquanto ocupada: IA morre.
-        SubscribeLocalEvent<StationAiApcControllableComponent, EntityTerminatingEvent>(OnHostApcTerminating);
+        // Destruição da APC enquanto ocupada: IA morre. NÃO assinamos EntityTerminatingEvent da APC
+        // aqui — o StationAiApcSystem já assina esse par (comp+evento) e o Robust proíbe duplicata.
+        // O handler de lá chama HandleHostApcTerminating diretamente.
     }
 
     private void OnShuntRequest(EntityUid apc, StationAiApcControllableComponent comp, StationAiApcShuntEvent args)
@@ -163,7 +164,7 @@ public sealed partial class StationAiShuntSystem : EntitySystem
     /// APC destruída enquanto ocupada pela IA: limpa o estado de shunt e deleta o cérebro.
     /// Deletar a entidade-cérebro dispara o fluxo padrão de morte/fantasma do engine.
     /// </summary>
-    private void OnHostApcTerminating(Entity<StationAiApcControllableComponent> apc, ref EntityTerminatingEvent args)
+    public void HandleHostApcTerminating(Entity<StationAiApcControllableComponent> apc)
     {
         if (!apc.Comp.Occupied)
             return;

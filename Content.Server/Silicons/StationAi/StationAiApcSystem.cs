@@ -25,6 +25,7 @@ public sealed partial class StationAiApcSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private StationAiShuntSystem _shunt = default!;
 
     public override void Initialize()
     {
@@ -96,6 +97,10 @@ public sealed partial class StationAiApcSystem : EntitySystem
 
     private void OnApcTerminating(EntityUid uid, StationAiApcControllableComponent comp, ref EntityTerminatingEvent args)
     {
+        // Bloco 2: se a APC hospedava uma IA shuntada, a IA morre junto (assinatura única deste par
+        // comp+evento; o sistema de shunt não pode assinar de novo — Robust proíbe duplicata).
+        _shunt.HandleHostApcTerminating((uid, comp));
+
         if (!comp.Hacked || comp.HackedBy == null)
             return;
 
