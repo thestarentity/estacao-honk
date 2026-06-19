@@ -152,4 +152,5 @@ station-ai-shunt-apc-not-hacked = Esta APC não está hackeada.
 station-ai-shunt-done = Você esconde seu núcleo na APC. Sumiu do mapa, mas tá dormente.
 station-ai-shunt-return = Você puxa seu processo de volta pro núcleo.
 station-ai-shunt-core-lost = Seu núcleo foi destruído. Você está presa nessa APC.
+station-ai-shunt-failed = Não dá pra shuntar daqui agora.
 station-ai-apc-anomalous = Tem algo lá dentro zumbindo do jeito errado.

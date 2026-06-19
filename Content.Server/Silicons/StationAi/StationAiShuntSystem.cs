@@ -76,8 +76,12 @@ public sealed partial class StationAiShuntSystem : EntitySystem
 
         // Tira o cérebro do container do núcleo (dispara OnAiRemove: olho some, núcleo "vazio").
         // TryGetCore só retorna true quando o cérebro está DENTRO do núcleo (container station_ai_mind_slot).
+        // Se chegou aqui a CPU já foi cobrada, então avisa quando não dá pra shuntar (senão some sem explicação).
         if (!_stationAi.TryGetCore(brain, out var core))
+        {
+            _popup.PopupEntity(Loc.GetString("station-ai-shunt-failed"), apc, brain, PopupType.MediumCaution);
             return false;
+        }
 
         // Grava o núcleo de origem antes de mover o cérebro (após o Insert, TryGetCore retorna false).
         var ret = EnsureComp<StationAiShuntReturnComponent>(brain);
@@ -87,6 +91,7 @@ public sealed partial class StationAiShuntSystem : EntitySystem
         if (!_container.Insert(brain, shuntSlot)) // Insert remove do container antigo automaticamente
         {
             RemComp<StationAiShuntReturnComponent>(brain);
+            _popup.PopupEntity(Loc.GetString("station-ai-shunt-failed"), apc, brain, PopupType.MediumCaution);
             return false;
         }
 
@@ -171,6 +176,9 @@ public sealed partial class StationAiShuntSystem : EntitySystem
 
             // Limpa flags da APC e remove componentes de shunt antes de deletar o cérebro.
             CleanupShunt(brain, apc.Owner);
+            // O cérebro é filho da APC (mora no container dela), então o engine já o termina em cascata
+            // nesta mesma passada — é isso que dispara o fantasma (MindContainer terminando). O QueueDel
+            // abaixo é só uma rede de segurança caso o cérebro não esteja mais no container.
             QueueDel(brain);
         }
     }
