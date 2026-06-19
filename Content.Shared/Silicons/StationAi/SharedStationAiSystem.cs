@@ -632,6 +632,12 @@ public abstract partial class SharedStationAiSystem : EntitySystem
         return true;
     }
 
+    /// <summary>Liga/desliga o tell visual sutil da APC ocupada por uma IA shuntada (Bloco 2).</summary>
+    public void SetApcOccupiedVisual(EntityUid apc, bool occupied)
+    {
+        _appearance.SetData(apc, StationAiApcVisuals.Occupied, occupied);
+    }
+
     /// <summary>
     /// BUI validation for ai interactions.
     /// </summary>
