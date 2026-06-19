@@ -63,7 +63,7 @@ public sealed class StationAiBoundUserInterface(EntityUid owner, Enum uiKey) : B
                 tooltip = $"{action.Tooltip} ({(int) cost} CPU)";
                 if (!afford)
                 {
-                    tooltip = $"{action.Tooltip} ({(int) cost} CPU — {Loc.GetString("station-ai-cpu-low")})";
+                    tooltip = $"{action.Tooltip} ({(int) cost} CPU, {Loc.GetString("station-ai-cpu-low")})";
                     bg = new Color(0.25f, 0.25f, 0.25f); // cinza: sem saldo (servidor nega ao clicar)
                 }
             }

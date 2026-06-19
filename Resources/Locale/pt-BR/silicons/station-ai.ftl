@@ -144,13 +144,13 @@ station-ai-apc-not-hacked = Você precisa hackear esta APC primeiro.
 station-ai-apc-compromised = O interior parece [color=red]comprometido[/color]. Mexeram aqui dentro.
 ai-apc-hack = Hackear APC
 
-station-ai-cpu-low = CPU insuficiente
+station-ai-cpu-low = sem saldo
 
-# Shunting de núcleo (IA Malf)
-ai-apc-shunt = Shuntar núcleo aqui
+# Transferência de núcleo (IA Malf)
+ai-apc-shunt = Transferir núcleo para cá
 station-ai-shunt-apc-not-hacked = Esta APC não está hackeada.
-station-ai-shunt-done = Você esconde seu núcleo na APC. Sumiu do mapa, mas tá dormente.
-station-ai-shunt-return = Você puxa seu processo de volta pro núcleo.
-station-ai-shunt-core-lost = Seu núcleo foi destruído. Você está presa nessa APC.
-station-ai-shunt-failed = Não dá pra shuntar daqui agora.
+station-ai-shunt-done = Você transfere seu processo para a APC. Oculta, porém inativa.
+station-ai-shunt-return = Você traz seu processo de volta ao núcleo.
+station-ai-shunt-core-lost = Seu núcleo foi destruído. Você ficou presa na APC.
+station-ai-shunt-failed = Não dá pra transferir o núcleo daqui agora.
 station-ai-apc-anomalous = Tem algo lá dentro zumbindo do jeito errado.

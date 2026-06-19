@@ -155,10 +155,10 @@ station-ai-cpu-insufficient = Not enough CPU (needs { $cost }).
 # APC hack (Malf AI)
 station-ai-apc-hacked = APC hacked. It now feeds your CPU.
 station-ai-apc-not-hacked = You must hack this APC first.
-station-ai-apc-compromised = Its internals look [color=red]compromised[/color] — tampered with.
+station-ai-apc-compromised = Its internals look [color=red]compromised[/color], tampered with.
 ai-apc-hack = Hack APC
 
-station-ai-cpu-low = not enough CPU
+station-ai-cpu-low = not enough
 
 # Core shunting (Malf AI)
 ai-apc-shunt = Shunt core here
