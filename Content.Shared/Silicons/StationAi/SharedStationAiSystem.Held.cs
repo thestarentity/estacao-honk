@@ -118,6 +118,10 @@ public abstract partial class SharedStationAiSystem
 
         ev.Event.User = ev.Actor;
 
+        // Bloco 2: IA shuntada é dormente — nenhuma ação do radial funciona.
+        if (HasComp<StationAiShuntedComponent>(ev.Actor))
+            return;
+
         // Gasto de CPU (autoritativo no servidor; no cliente o gancho base deixa passar).
         if (!TrySpendActionCpu(ev.Actor, ev.Event))
             return;
