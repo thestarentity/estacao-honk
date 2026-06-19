@@ -89,6 +89,9 @@ public sealed partial class StationAiApcSystem : EntitySystem
     {
         if (comp.Hacked && args.IsInDetailsRange)
             args.PushMarkup(Loc.GetString("station-ai-apc-compromised"));
+
+        if (comp.Occupied && args.IsInDetailsRange)
+            args.PushMarkup(Loc.GetString("station-ai-apc-anomalous"));
     }
 
     private void OnApcTerminating(EntityUid uid, StationAiApcControllableComponent comp, ref EntityTerminatingEvent args)

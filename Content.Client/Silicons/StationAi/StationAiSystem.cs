@@ -98,11 +98,18 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         if (args.Sprite == null)
             return;
 
-        // Tell visual: tinge a APC hackeada de VERMELHO forte (antes era um azul-claro fraco, quase
-        // imperceptível). O tint pega TODOS os layers, inclusive a tela/display da APC.
-        // O usuário pode trocar por um layer/estado dedicado na RSI da APC depois.
-        var hacked = _appearance.TryGetData<bool>(ent.Owner, StationAiApcVisuals.Hacked, out var v, args.Component) && v;
-        args.Sprite.Color = hacked ? new Color(1f, 0.2f, 0.2f) : Color.White;
+        // Tell visual: três estados distintos pela tinta do sprite.
+        // Occupied (hospedando IA shuntada): laranja-avermelhado intenso — mais quente e saturado
+        // que o vermelho do Hacked, sutil o suficiente para não chamar atenção de quem não sabe,
+        // mas claramente distinto para quem conhece os dois estados.
+        // Hacked (fonte de CPU, sem IA dentro): vermelho forte.
+        // Nenhum dos dois: cor normal.
+        var occupied = _appearance.TryGetData<bool>(ent.Owner, StationAiApcVisuals.Occupied, out var ov, args.Component) && ov;
+        var hacked   = _appearance.TryGetData<bool>(ent.Owner, StationAiApcVisuals.Hacked,   out var hv, args.Component) && hv;
+
+        args.Sprite.Color = occupied ? new Color(1f, 0.55f, 0.1f)   // laranja-âmbar (hospedando IA)
+                          : hacked   ? new Color(1f, 0.2f,  0.2f)   // vermelho (só hackeada)
+                          : Color.White;
     }
 
     public override void Shutdown()

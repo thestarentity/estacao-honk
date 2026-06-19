@@ -32,5 +32,16 @@ public sealed partial class StationAiSystem
             Tooltip = Loc.GetString(powerOn ? "ai-apc-power-off" : "ai-apc-power-on"),
             Event = new StationAiApcToggleEvent(),
         });
+
+        // Bloco 2: shuntar o núcleo para dentro desta APC (só Malf, APC hackeada e livre).
+        if (LocalAiIsHostile() && ent.Comp.Hacked && !ent.Comp.Occupied)
+        {
+            args.Actions.Add(new StationAiRadial
+            {
+                Sprite = new SpriteSpecifier.Rsi(_aiCustomRsi, "hackapc"), // placeholder; ícone dedicado depois
+                Tooltip = Loc.GetString("ai-apc-shunt"),
+                Event = new StationAiApcShuntEvent(),
+            });
+        }
     }
 }
