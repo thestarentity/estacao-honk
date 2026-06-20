@@ -47,6 +47,18 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
     /// </summary>
     public Action<EntityCoordinates>? OnRadarClick;
 
+    /// <summary>
+    /// Fork: posição do mouse ao pressionar, para distinguir clique de arrasto e não
+    /// teleportar o olho da IA quando o jogador só está arrastando/ajustando o radar.
+    /// </summary>
+    private Vector2 _radarClickStart;
+
+    /// <summary>
+    /// Distância (px) acima da qual o gesto vira arrasto e o clique do radar é ignorado.
+    /// Mesmo limiar usado pelo NavMapControl.
+    /// </summary>
+    private const float RadarClickMaxDrag = 5f;
+
     private List<Entity<MapGridComponent>> _grids = new();
 
     public ShuttleNavControl() : base(64f, 256f, 256f)
@@ -67,6 +79,15 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         _consoleEntity = consoleEntity;
     }
 
+    protected override void KeyBindDown(GUIBoundKeyEventArgs args)
+    {
+        base.KeyBindDown(args);
+
+        // Fork: guarda onde o clique começou para depois distinguir clique de arrasto.
+        if (args.Function == EngineKeyFunctions.UIClick)
+            _radarClickStart = args.PointerLocation.Position;
+    }
+
     protected override void KeyBindUp(GUIBoundKeyEventArgs args)
     {
         base.KeyBindUp(args);
@@ -76,6 +97,10 @@ public sealed partial class ShuttleNavControl : BaseShuttleControl
         {
             return;
         }
+
+        // Fork: se o cursor se moveu demais desde o pressionar, é arrasto — não teleporta o olho.
+        if ((_radarClickStart - args.PointerLocation.Position).Length() > RadarClickMaxDrag)
+            return;
 
         var a = InverseScalePosition(args.RelativePosition);
         var relativeWorldPos = new Vector2(a.X, -a.Y);
