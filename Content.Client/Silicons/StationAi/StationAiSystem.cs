@@ -3,7 +3,6 @@ using Content.Client.Power.APC;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
-using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
 
 namespace Content.Client.Silicons.StationAi;
@@ -113,7 +112,7 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
                     : null;                                   // sem tell
 
         // Nunca tingir o sprite inteiro (resquício do comportamento antigo).
-        args.Sprite.Color = Color.White;
+        _sprite.SetColor((ent.Owner, args.Sprite), Color.White);
 
         // Tinge apenas a camada da tela; sem tell, volta ao branco (deixa a imagem da tela normal).
         if (_sprite.LayerMapTryGet((ent.Owner, args.Sprite), ApcVisualLayers.ChargeState, out var screenLayer, false))
