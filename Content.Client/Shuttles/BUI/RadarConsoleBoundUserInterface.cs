@@ -1,5 +1,7 @@
 using Content.Client.Shuttles.UI;
+using Content.Client.Silicons.StationAi;
 using Content.Shared.Shuttles.BUIStates;
+using Content.Shared.Silicons.StationAi;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
@@ -22,6 +24,16 @@ public sealed class RadarConsoleBoundUserInterface : BoundUserInterface
         base.Open();
 
         _window = this.CreateWindow<RadarConsoleWindow>();
+
+        // Fork: se este radar pertence ao núcleo da IA, clicar move o olho e fecha o mapa.
+        if (EntMan.HasComponent<StationAiCoreComponent>(Owner))
+        {
+            _window.OnRadarClick = coords =>
+            {
+                EntMan.System<StationAiSystem>().MoveEyeTo(coords);
+                Close();
+            };
+        }
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

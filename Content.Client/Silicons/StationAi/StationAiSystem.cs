@@ -1,5 +1,6 @@
 using Content.Shared.Silicons.StationAi;
 using Content.Client.Power.APC;
+using Robust.Shared.Map;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
@@ -122,6 +123,14 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         // (que roda antes de nós) já ajustou a cor da luz pela carga da APC.
         if (tint != null && TryComp<PointLightComponent>(ent.Owner, out var light))
             _lights.SetColor(ent.Owner, tint.Value, light);
+    }
+
+    /// <summary>
+    /// Pede ao servidor para mover o olho da IA até a coordenada clicada num mapa.
+    /// </summary>
+    public void MoveEyeTo(EntityCoordinates coords)
+    {
+        RaiseNetworkEvent(new StationAiMoveEyeEvent(GetNetCoordinates(coords)));
     }
 
     public override void Shutdown()

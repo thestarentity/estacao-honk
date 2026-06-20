@@ -20,4 +20,13 @@ public sealed partial class RadarConsoleWindow : FancyWindow,
     {
         RadarScreen.UpdateState(scc);
     }
+
+    /// <summary>
+    /// Permite que o BUI externo assine cliques no radar sem acessar RadarScreen diretamente.
+    /// </summary>
+    public Action<EntityCoordinates>? OnRadarClick
+    {
+        get => RadarScreen.OnRadarClick;
+        set => RadarScreen.OnRadarClick = value;
+    }
 }
