@@ -1,7 +1,9 @@
 using Content.Shared.Silicons.StationAi;
+using Content.Client.Power.APC;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Player;
 
 namespace Content.Client.Silicons.StationAi;
@@ -12,6 +14,7 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private SharedPointLightSystem _lights = default!;
 
     private StationAiOverlay? _overlay;
 
@@ -31,7 +34,8 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         SubscribeLocalEvent<StationAiOverlayComponent, ComponentInit>(OnAiOverlayInit);
         SubscribeLocalEvent<StationAiOverlayComponent, ComponentRemove>(OnAiOverlayRemove);
         SubscribeLocalEvent<StationAiCoreComponent, AppearanceChangeEvent>(OnAppearanceChange);
-        SubscribeLocalEvent<StationAiApcControllableComponent, AppearanceChangeEvent>(OnApcAppearanceChange);
+        SubscribeLocalEvent<StationAiApcControllableComponent, AppearanceChangeEvent>(OnApcAppearanceChange,
+            after: new[] { typeof(ApcVisualizerSystem) });
     }
 
     private void OnAiOverlayInit(Entity<StationAiOverlayComponent> ent, ref ComponentInit args)
@@ -98,18 +102,27 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         if (args.Sprite == null)
             return;
 
-        // Tell visual: três estados distintos pela tinta do sprite.
-        // Occupied (hospedando IA shuntada): laranja-avermelhado intenso — mais quente e saturado
-        // que o vermelho do Hacked, sutil o suficiente para não chamar atenção de quem não sabe,
-        // mas claramente distinto para quem conhece os dois estados.
-        // Hacked (fonte de CPU, sem IA dentro): vermelho forte.
-        // Nenhum dos dois: cor normal.
+        // Tell visual: só a TELA (e a luz) muda de cor; o corpo da APC fica intacto.
+        // Occupied (hospedando IA shuntada): laranja-âmbar. Hacked (só fonte de CPU): vermelho.
+        // Nenhum dos dois: tela/luz no comportamento padrão da APC.
         var occupied = _appearance.TryGetData<bool>(ent.Owner, StationAiApcVisuals.Occupied, out var ov, args.Component) && ov;
         var hacked   = _appearance.TryGetData<bool>(ent.Owner, StationAiApcVisuals.Hacked,   out var hv, args.Component) && hv;
 
-        args.Sprite.Color = occupied ? new Color(1f, 0.55f, 0.1f)   // laranja-âmbar (hospedando IA)
-                          : hacked   ? new Color(1f, 0.2f,  0.2f)   // vermelho (só hackeada)
-                          : Color.White;
+        Color? tint = occupied ? new Color(1f, 0.55f, 0.1f)   // laranja-âmbar (hospedando IA)
+                    : hacked   ? new Color(1f, 0.2f,  0.2f)   // vermelho (só hackeada)
+                    : null;                                   // sem tell
+
+        // Nunca tingir o sprite inteiro (resquício do comportamento antigo).
+        args.Sprite.Color = Color.White;
+
+        // Tinge apenas a camada da tela; sem tell, volta ao branco (deixa a imagem da tela normal).
+        if (_sprite.LayerMapTryGet((ent.Owner, args.Sprite), ApcVisualLayers.ChargeState, out var screenLayer, false))
+            _sprite.LayerSetColor((ent.Owner, args.Sprite), screenLayer, tint ?? Color.White);
+
+        // Tinge a luz emitida junto com a tela. Sem tell, não mexemos: o visualizador padrão
+        // (que roda antes de nós) já ajustou a cor da luz pela carga da APC.
+        if (tint != null && TryComp<PointLightComponent>(ent.Owner, out var light))
+            _lights.SetColor(ent.Owner, tint.Value, light);
     }
 
     public override void Shutdown()
