@@ -79,6 +79,7 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
     public override void Initialize()
     {
         base.Initialize();
+        InitializeMoveEye();
 
         SubscribeLocalEvent<StationAiCoreComponent, AfterConstructionChangeEntityEvent>(AfterConstructionChangeEntity);
         SubscribeLocalEvent<StationAiCoreComponent, ContainerSpawnEvent>(OnContainerSpawn);
