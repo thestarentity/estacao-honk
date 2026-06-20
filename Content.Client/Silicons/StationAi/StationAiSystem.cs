@@ -34,8 +34,7 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         SubscribeLocalEvent<StationAiOverlayComponent, ComponentInit>(OnAiOverlayInit);
         SubscribeLocalEvent<StationAiOverlayComponent, ComponentRemove>(OnAiOverlayRemove);
         SubscribeLocalEvent<StationAiCoreComponent, AppearanceChangeEvent>(OnAppearanceChange);
-        SubscribeLocalEvent<StationAiApcControllableComponent, AppearanceChangeEvent>(OnApcAppearanceChange,
-            after: new[] { typeof(ApcVisualizerSystem) });
+        SubscribeLocalEvent<StationAiApcControllableComponent, AppearanceChangeEvent>(OnApcAppearanceChange);
     }
 
     private void OnAiOverlayInit(Entity<StationAiOverlayComponent> ent, ref ComponentInit args)
@@ -119,8 +118,10 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         if (_sprite.LayerMapTryGet((ent.Owner, args.Sprite), ApcVisualLayers.ChargeState, out var screenLayer, false))
             _sprite.LayerSetColor((ent.Owner, args.Sprite), screenLayer, tint ?? Color.White);
 
-        // Tinge a luz emitida junto com a tela. Sem tell, não mexemos: o visualizador padrão
-        // (que roda antes de nós) já ajustou a cor da luz pela carga da APC.
+        // Tinge a luz emitida junto com a tela quando há tell. Sem tell, não mexemos para
+        // deixar o visualizador padrão da APC controlar a cor da luz pela carga.
+        // (Não usamos ordenação de evento aqui: o parâmetro after referenciando o
+        // ApcVisualizerSystem quebrava a sincronização de estado do cliente.)
         if (tint != null && TryComp<PointLightComponent>(ent.Owner, out var light))
             _lights.SetColor(ent.Owner, tint.Value, light);
     }
