@@ -101,15 +101,12 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         if (args.Sprite == null)
             return;
 
-        // Tell visual: só a TELA (e a luz) muda de cor; o corpo da APC fica intacto.
-        // Occupied (hospedando IA shuntada): laranja-âmbar. Hacked (só fonte de CPU): vermelho.
-        // Nenhum dos dois: tela/luz no comportamento padrão da APC.
+        // Tell visual: só a TELA muda de cor; o corpo da APC fica intacto. A luz é tratada
+        // no FrameUpdate, porque o ApcVisualizerSystem padrão sobrescreve a cor da luz a
+        // cada mudança de aparência e não dá para ordenar com segurança depois dele.
         var occupied = _appearance.TryGetData<bool>(ent.Owner, StationAiApcVisuals.Occupied, out var ov, args.Component) && ov;
         var hacked   = _appearance.TryGetData<bool>(ent.Owner, StationAiApcVisuals.Hacked,   out var hv, args.Component) && hv;
-
-        Color? tint = occupied ? new Color(1f, 0.55f, 0.1f)   // laranja-âmbar (hospedando IA)
-                    : hacked   ? new Color(1f, 0.2f,  0.2f)   // vermelho (só hackeada)
-                    : null;                                   // sem tell
+        var tint = ApcTellTint(occupied, hacked);
 
         // Nunca tingir o sprite inteiro (resquício do comportamento antigo).
         _sprite.SetColor((ent.Owner, args.Sprite), Color.White);
@@ -117,13 +114,36 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
         // Tinge apenas a camada da tela; sem tell, volta ao branco (deixa a imagem da tela normal).
         if (_sprite.LayerMapTryGet((ent.Owner, args.Sprite), ApcVisualLayers.ChargeState, out var screenLayer, false))
             _sprite.LayerSetColor((ent.Owner, args.Sprite), screenLayer, tint ?? Color.White);
+    }
 
-        // Tinge a luz emitida junto com a tela quando há tell. Sem tell, não mexemos para
-        // deixar o visualizador padrão da APC controlar a cor da luz pela carga.
-        // (Não usamos ordenação de evento aqui: o parâmetro after referenciando o
-        // ApcVisualizerSystem quebrava a sincronização de estado do cliente.)
-        if (tint != null && TryComp<PointLightComponent>(ent.Owner, out var light))
-            _lights.SetColor(ent.Owner, tint.Value, light);
+    /// <summary>
+    /// Cor do tell da APC: laranja-âmbar se hospedando IA shuntada, vermelho se só hackeada,
+    /// null se nenhum dos dois (sem tell).
+    /// </summary>
+    private static Color? ApcTellTint(bool occupied, bool hacked)
+        => occupied ? new Color(1f, 0.55f, 0.1f)    // laranja-âmbar (hospedando IA)
+         : hacked   ? new Color(1f, 0.04f, 0.04f)   // vermelho forte (só hackeada)
+         : null;
+
+    /// <summary>
+    /// Re-aplica a cor da luz das APCs com tell a cada frame. O ApcVisualizerSystem padrão
+    /// redefine a cor da luz pela carga sempre que a aparência muda, e ordenar nosso
+    /// visualizador depois dele travava a sincronização do cliente. Só toca em APCs com tell
+    /// e só quando a cor difere, então o custo é desprezível.
+    /// </summary>
+    public override void FrameUpdate(float frameTime)
+    {
+        base.FrameUpdate(frameTime);
+
+        var query = EntityQueryEnumerator<StationAiApcControllableComponent, PointLightComponent>();
+        while (query.MoveNext(out var uid, out var apc, out var light))
+        {
+            if (ApcTellTint(apc.Occupied, apc.Hacked) is not { } tint)
+                continue;
+
+            if (light.Color != tint)
+                _lights.SetColor(uid, tint, light);
+        }
     }
 
     /// <summary>
