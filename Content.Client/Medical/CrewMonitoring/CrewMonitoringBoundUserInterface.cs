@@ -1,4 +1,6 @@
+using Content.Client.Silicons.StationAi;
 using Content.Shared.Medical.CrewMonitoring;
+using Content.Shared.Silicons.StationAi;
 using Robust.Client.UserInterface;
 
 namespace Content.Client.Medical.CrewMonitoring;
@@ -31,6 +33,16 @@ public sealed class CrewMonitoringBoundUserInterface : BoundUserInterface
 
         _menu = this.CreateWindow<CrewMonitoringWindow>();
         _menu.Set(stationName, gridUid);
+
+        // Fork: se este monitor pertence ao núcleo da IA, clicar no mapa move o olho e fecha.
+        if (EntMan.HasComponent<StationAiCoreComponent>(Owner))
+        {
+            _menu.NavMap.OnMapClick = coords =>
+            {
+                EntMan.System<StationAiSystem>().MoveEyeTo(coords);
+                Close();
+            };
+        }
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

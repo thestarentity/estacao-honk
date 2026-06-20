@@ -41,6 +41,12 @@ public partial class NavMapControl : MapGridControl
     public event Action<NetEntity?>? TrackedEntitySelectedAction;
     public event Action<DrawingHandleScreen>? PostWallDrawingAction;
 
+    /// <summary>
+    /// Fork: disparado num clique limpo (sem arrasto) com a coordenada clicada na grade
+    /// exibida. Usado pela IA para mover o olho. Nulo por padrão — não afeta outros consoles.
+    /// </summary>
+    public Action<EntityCoordinates>? OnMapClick;
+
     // Tracked data
     public Dictionary<EntityCoordinates, (bool Visible, Color Color)> TrackedCoordinates = new();
     public Dictionary<NetEntity, NavMapBlip> TrackedEntities = new();
@@ -199,13 +205,10 @@ public partial class NavMapControl : MapGridControl
 
         if (args.Function == EngineKeyFunctions.UIClick)
         {
-            if (TrackedEntitySelectedAction == null)
+            if (_xform == null || _physics == null)
                 return;
 
-            if (_xform == null || _physics == null || TrackedEntities.Count == 0)
-                return;
-
-            // If the cursor has moved a significant distance, exit
+            // If the cursor has moved a significant distance, exit (é arrasto, não clique)
             if ((StartDragPosition - args.PointerLocation.Position).Length() > MinDragDistance)
                 return;
 
@@ -217,7 +220,17 @@ public partial class NavMapControl : MapGridControl
             var unscaledPosition = (localPosition - MidPointVector) / MinimapScale;
             var worldPosition = Vector2.Transform(new Vector2(unscaledPosition.X, -unscaledPosition.Y) + offset, _transformSystem.GetWorldMatrix(_xform));
 
+            // Fork: coordenada clicada na grade exibida (para mover o olho da IA).
+            if (OnMapClick != null && MapUid != null)
+            {
+                var gridLocal = new Vector2(unscaledPosition.X, -unscaledPosition.Y) + offset;
+                OnMapClick.Invoke(new EntityCoordinates(MapUid.Value, gridLocal));
+            }
+
             // Find closest tracked entity in range
+            if (TrackedEntitySelectedAction == null || TrackedEntities.Count == 0)
+                return;
+
             var closestEntity = NetEntity.Invalid;
             var closestDistance = float.PositiveInfinity;
 
