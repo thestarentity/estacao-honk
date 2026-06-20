@@ -221,10 +221,13 @@ public partial class NavMapControl : MapGridControl
             var worldPosition = Vector2.Transform(new Vector2(unscaledPosition.X, -unscaledPosition.Y) + offset, _transformSystem.GetWorldMatrix(_xform));
 
             // Fork: coordenada clicada na grade exibida (para mover o olho da IA).
+            // Quando há OnMapClick (consoles da IA), o clique SEMPRE move o olho — inclusive
+            // sobre um crachá de tripulante — e não cai na seleção de entidade rastreada.
             if (OnMapClick != null && MapUid != null)
             {
                 var gridLocal = new Vector2(unscaledPosition.X, -unscaledPosition.Y) + offset;
                 OnMapClick.Invoke(new EntityCoordinates(MapUid.Value, gridLocal));
+                return;
             }
 
             // Find closest tracked entity in range

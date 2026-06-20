@@ -25,8 +25,8 @@ public sealed class RadarConsoleBoundUserInterface : BoundUserInterface
 
         _window = this.CreateWindow<RadarConsoleWindow>();
 
-        // Fork: se este radar pertence ao núcleo da IA, clicar move o olho e fecha o mapa.
-        if (EntMan.HasComponent<StationAiCoreComponent>(Owner))
+        // Fork: se este radar pertence à IA (o Owner é o olho/held da IA), clicar move o olho e fecha.
+        if (EntMan.HasComponent<StationAiHeldComponent>(Owner))
         {
             _window.OnRadarClick = coords =>
             {

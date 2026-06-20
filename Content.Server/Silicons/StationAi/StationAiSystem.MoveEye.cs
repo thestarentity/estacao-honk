@@ -14,7 +14,7 @@ public sealed partial class StationAiSystem
 
     private void OnMoveEye(StationAiMoveEyeEvent ev, EntitySessionEventArgs args)
     {
-        // O ator anexado à sessão é o olho da IA (StationAiHeld dentro do núcleo).
+        // O ator anexado à sessão é o olho/held da IA. TryGetCore acha o núcleo a partir dele.
         if (args.SenderSession.AttachedEntity is not { } actor)
             return;
 

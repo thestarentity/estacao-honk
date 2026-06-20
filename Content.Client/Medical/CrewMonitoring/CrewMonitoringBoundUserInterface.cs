@@ -34,10 +34,17 @@ public sealed class CrewMonitoringBoundUserInterface : BoundUserInterface
         _menu = this.CreateWindow<CrewMonitoringWindow>();
         _menu.Set(stationName, gridUid);
 
-        // Fork: se este monitor pertence ao núcleo da IA, clicar no mapa move o olho e fecha.
-        if (EntMan.HasComponent<StationAiCoreComponent>(Owner))
+        // Fork: se este monitor pertence à IA (o Owner é o olho/held da IA), clicar move o olho e fecha.
+        if (EntMan.HasComponent<StationAiHeldComponent>(Owner))
         {
             _menu.NavMap.OnMapClick = coords =>
+            {
+                EntMan.System<StationAiSystem>().MoveEyeTo(coords);
+                Close();
+            };
+
+            // Clicar num tripulante na lista lateral também leva o olho até ele.
+            _menu.OnCrewJump = coords =>
             {
                 EntMan.System<StationAiSystem>().MoveEyeTo(coords);
                 Close();

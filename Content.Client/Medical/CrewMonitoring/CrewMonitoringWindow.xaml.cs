@@ -32,6 +32,12 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
     private bool _tryToScrollToListFocus;
     private Texture? _blipTexture;
 
+    /// <summary>
+    /// Fork: disparado ao clicar num tripulante na lista, com as coordenadas dele.
+    /// Usado pela IA para levar o olho até o tripulante. Nulo por padrão (não afeta o monitor normal).
+    /// </summary>
+    public Action<EntityCoordinates>? OnCrewJump;
+
     public CrewMonitoringWindow()
     {
         RobustXamlLoader.Load(this);
@@ -334,6 +340,10 @@ public sealed partial class CrewMonitoringWindow : FancyWindow
                     NavMap.Focus = _trackedEntity;
 
                     UpdateSensorsTable(_trackedEntity, prevTrackedEntity);
+
+                    // Fork: se a IA está usando o monitor, clicar no tripulante leva o olho até ele.
+                    if (coordinates != null)
+                        OnCrewJump?.Invoke(coordinates.Value);
                 };
             }
         }
