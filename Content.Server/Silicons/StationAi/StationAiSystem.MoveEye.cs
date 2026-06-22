@@ -1,5 +1,4 @@
 using Content.Shared.Silicons.StationAi;
-using Robust.Shared.Map;
 
 namespace Content.Server.Silicons.StationAi;
 
@@ -24,6 +23,12 @@ public sealed partial class StationAiSystem
 
         var coords = GetCoordinates(ev.Target);
         if (!coords.IsValid(EntityManager))
+            return;
+
+        // Segurança: o destino vem do cliente. Sem isto, um cliente modificado poderia teleportar o
+        // olho da IA para qualquer mapa (centcomm, outra estação, etc.). Só permitimos mover o olho
+        // DENTRO do mesmo mapa do núcleo da IA — que é onde o radar/monitor de tripulação opera.
+        if (_xforms.ToMapCoordinates(coords).MapId != Transform(core.Owner).MapID)
             return;
 
         _xforms.SetCoordinates(remote, coords);
