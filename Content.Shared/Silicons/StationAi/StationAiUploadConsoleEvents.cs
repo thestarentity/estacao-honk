@@ -1,3 +1,4 @@
+using Content.Shared.DoAfter;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Silicons.StationAi;
@@ -22,3 +23,10 @@ public enum StationAiUploadConsoleVisuals : byte
 {
     Compromised,
 }
+
+/// <summary>
+/// Evento de DoAfter gerado quando um técnico usa um multitool no console comprometido
+/// para reparar o hack da IA Malf.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed partial class StationAiUploadRepairDoAfterEvent : SimpleDoAfterEvent;

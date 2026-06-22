@@ -163,3 +163,4 @@ station-ai-upload-grace-ending = Sua proteção temporária contra alteração d
 # Ação de hackear o console de upload (IA Malf)
 station-ai-radial-hack-upload-console = Hackear console de upload
 station-ai-upload-console-hacked = Console de upload comprometido. Uploads de leis serão interceptados.
+station-ai-upload-console-repaired = Console de upload reparado. Uploads de leis voltaram a funcionar.

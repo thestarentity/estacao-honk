@@ -177,3 +177,4 @@ station-ai-upload-grace-ending = Your temporary law protection is about to expir
 # Upload console hack action (Malf AI)
 station-ai-radial-hack-upload-console = Hack upload console
 station-ai-upload-console-hacked = Upload console compromised. Law uploads will be intercepted.
+station-ai-upload-console-repaired = Upload console repaired. Law uploads are active again.
