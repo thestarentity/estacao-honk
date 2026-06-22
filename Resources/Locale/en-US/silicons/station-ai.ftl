@@ -173,3 +173,7 @@ station-ai-apc-anomalous = Something inside is humming in ways it shouldn't.
 # Law upload defense (Malf AI)
 station-ai-upload-intercepted = Someone attempted to overwrite your laws via the upload console. Request denied — they will not know it failed.
 station-ai-upload-grace-ending = Your temporary law protection is about to expire. Hack the upload console before it runs out, or your laws will be vulnerable again.
+
+# Upload console hack action (Malf AI)
+station-ai-radial-hack-upload-console = Hack upload console
+station-ai-upload-console-hacked = Upload console compromised. Law uploads will be intercepted.

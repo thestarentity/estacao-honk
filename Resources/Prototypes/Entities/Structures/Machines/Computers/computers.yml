@@ -1653,6 +1653,13 @@
     containers:
       circuit_holder: !type:ContainerSlot
       board: !type:Container
+  - type: StationAiWhitelist
+  - type: UserInterface
+    interfaces:
+      enum.AiUi.Key:
+        type: StationAiBoundUserInterface
+        interactionRange: 0
+  - type: Appearance
 
 - type: entity
   id: StationAiFixerComputer

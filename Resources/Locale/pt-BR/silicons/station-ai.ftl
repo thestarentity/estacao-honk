@@ -159,3 +159,7 @@ station-ai-apc-anomalous = Tem algo lá dentro zumbindo do jeito errado.
 # Defesa contra upload de leis (IA Malf)
 station-ai-upload-intercepted = Alguém tentou sobrescrever suas leis pelo console de upload. Pedido negado. Eles não vão saber que falhou.
 station-ai-upload-grace-ending = Sua proteção temporária contra alteração de leis está quase acabando. Hackeie o console de upload antes que o tempo esgote, ou suas leis ficam vulneráveis de novo.
+
+# Ação de hackear o console de upload (IA Malf)
+station-ai-radial-hack-upload-console = Hackear console de upload
+station-ai-upload-console-hacked = Console de upload comprometido. Uploads de leis serão interceptados.
