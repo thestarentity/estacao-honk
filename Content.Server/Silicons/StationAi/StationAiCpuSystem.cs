@@ -177,6 +177,25 @@ public sealed partial class StationAiCpuSystem : EntitySystem
         return true;
     }
 
+    /// <summary>
+    /// Devolve <paramref name="cost"/> de CPU à IA <paramref name="ai"/> (espelha o
+    /// <see cref="CostMultiplier"/> do <see cref="TryConsume"/>). Usado quando a ação do radial foi
+    /// cobrada antecipadamente em OnRadialMessage mas o handler a RECUSOU — assim a IA não perde CPU
+    /// por uma ação que nunca aconteceu. Clampa no teto. Custo &lt;= 0 ou IA sem CPU: no-op.
+    /// </summary>
+    public void Refund(EntityUid ai, float cost)
+    {
+        if (cost <= 0f)
+            return;
+
+        if (!TryComp<StationAiCpuComponent>(ai, out var cpu))
+            return;
+
+        cpu.Cpu = Math.Min(cpu.MaxCpu, cpu.Cpu + cost * cpu.CostMultiplier);
+        Dirty(ai, cpu);
+        RefreshCpuAlert((ai, cpu));
+    }
+
     /// <summary>Recalcula o alert de HUD a partir da % atual.</summary>
     private void RefreshCpuAlert(Entity<StationAiCpuComponent> ent)
     {

@@ -18,6 +18,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.DeviceNetwork.Components;
 using Content.Shared.DoAfter;
+using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -469,6 +470,15 @@ public sealed partial class StationAiSystem : SharedStationAiSystem
 
     protected override bool TrySpendActionCpu(EntityUid ai, BaseStationAiAction action)
     {
+        // Pilotando um borg (Fase 5A), o ator é o BORG, mas a CPU mora no cérebro da IA (no núcleo).
+        // Resolve para o cérebro, senão as ações do radial sairiam de graça enquanto a IA pilota.
+        if (TryComp<StationAiPilotedBorgComponent>(ai, out var piloted)
+            && TryComp<MindComponent>(piloted.MindId, out var mind)
+            && mind.OwnedEntity is { } brain)
+        {
+            ai = brain;
+        }
+
         return _cpu.TryConsume(ai, action.CpuCost);
     }
 

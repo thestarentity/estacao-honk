@@ -48,6 +48,7 @@ public sealed partial class StationAiBorgSystem : EntitySystem
     [Dependency] private SharedAccessSystem _access = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
     [Dependency] private SiliconLawSystem _laws = default!;
+    [Dependency] private StationAiCpuSystem _cpu = default!;
 
     /// <summary>
     /// Grupo de acesso concedido ao borg enquanto a IA o pilota (abre tudo, como a IA).
@@ -318,12 +319,16 @@ public sealed partial class StationAiBorgSystem : EntitySystem
     {
         if (!_hostile.IsUserUnderHostileLaw(args.User))
         {
+            _cpu.Refund(args.User, args.CpuCost);
             _popup.PopupEntity(Loc.GetString("station-ai-borg-action-denied"), uid, args.User, PopupType.MediumCaution);
             return;
         }
 
         if (!TryComp<BorgTransponderComponent>(uid, out var transponder))
+        {
+            _cpu.Refund(args.User, args.CpuCost);
             return;
+        }
 
         // Reaproveita o "disable" do console de robótica (ejeta o cérebro após um atraso).
         _borg.Disable((uid, transponder, comp));
@@ -337,6 +342,8 @@ public sealed partial class StationAiBorgSystem : EntitySystem
     {
         if (!_hostile.IsUserUnderHostileLaw(args.User))
         {
+            // Ação recusada: devolve a CPU cobrada antecipadamente em OnRadialMessage.
+            _cpu.Refund(args.User, args.CpuCost);
             _popup.PopupEntity(Loc.GetString("station-ai-borg-action-denied"), uid, args.User, PopupType.MediumCaution);
             return;
         }
@@ -344,12 +351,16 @@ public sealed partial class StationAiBorgSystem : EntitySystem
         var now = _timing.CurTime;
 
         // Confirmação por duplo-clique: o primeiro clique arma; o segundo (mesmo ator, dentro da
-        // janela) detona. Evita detonar por engano numa ação irreversível.
+        // janela) detona. Evita detonar por engano numa ação irreversível. O clique que ARMA não
+        // deve custar CPU (a detonação ainda não aconteceu): estorna o custo cobrado neste clique,
+        // então só a confirmação paga os 50 — antes, armar+confirmar cobrava 100, e armar e desistir
+        // perdia 50 à toa.
         if (!TryComp<StationAiDetonateArmedComponent>(uid, out var armed) || armed.Armer != args.User || now > armed.Until)
         {
             armed = EnsureComp<StationAiDetonateArmedComponent>(uid);
             armed.Armer = args.User;
             armed.Until = now + TimeSpan.FromSeconds(DetonateConfirmWindow);
+            _cpu.Refund(args.User, args.CpuCost);
             _popup.PopupEntity(Loc.GetString("station-ai-borg-detonate-arm", ("name", Name(uid))), uid, args.User, PopupType.LargeCaution);
             return;
         }
@@ -367,6 +378,7 @@ public sealed partial class StationAiBorgSystem : EntitySystem
         // Só sob lawset hostil. O cliente já esconde o botão, mas o servidor reconfirma (não confiar no cliente).
         if (!_hostile.IsUserUnderHostileLaw(args.User))
         {
+            _cpu.Refund(args.User, args.CpuCost);
             _popup.PopupEntity(Loc.GetString("station-ai-subvert-denied"), uid, args.User, PopupType.MediumCaution);
             return;
         }
@@ -374,6 +386,7 @@ public sealed partial class StationAiBorgSystem : EntitySystem
         // Já subvertido/emagado? não empilhar leis "obedeça".
         if (_emag.CheckFlag(uid, EmagType.Interaction))
         {
+            _cpu.Refund(args.User, args.CpuCost);
             _popup.PopupEntity(Loc.GetString("station-ai-subvert-already"), uid, args.User, PopupType.Medium);
             return;
         }

@@ -149,6 +149,7 @@ station-ai-cpu-low = sem processamento suficiente
 # Transferência de núcleo (IA Malf)
 ai-apc-shunt = Transferir núcleo para cá
 station-ai-shunt-apc-not-hacked = Esta APC não está hackeada.
+station-ai-shunt-apc-occupied = Esta APC já está ocupada pelo núcleo de uma IA.
 station-ai-shunt-done = Você transfere seu processo para a APC. Oculta, porém inativa.
 station-ai-shunt-return = Você traz seu processo de volta ao núcleo.
 station-ai-shunt-core-lost = Seu núcleo foi destruído. Você ficou presa na APC.

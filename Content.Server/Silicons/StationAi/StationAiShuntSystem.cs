@@ -24,6 +24,7 @@ public sealed partial class StationAiShuntSystem : EntitySystem
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private StationAiCpuSystem _cpu = default!;
 
     /// <summary>Protótipo de ação concedida ao cérebro para voltar ao núcleo. Definido no YAML da Task 6.</summary>
     private static readonly EntProtoId ReturnActionProto = "ActionStationAiReturnFromShunt";
@@ -46,7 +47,10 @@ public sealed partial class StationAiShuntSystem : EntitySystem
     private void OnShuntRequest(EntityUid apc, StationAiApcControllableComponent comp, StationAiApcShuntEvent args)
     {
         var brain = args.User; // a entidade-cérebro (= ev.Actor, dona de leis/CPU)
-        TryShunt(brain, apc);
+        // O custo de CPU (50) foi cobrado antecipadamente em OnRadialMessage. Se o shunt não acontecer
+        // (APC não hackeada/ocupada/sem núcleo), devolve a CPU — senão a IA perderia 50 por nada.
+        if (!TryShunt(brain, apc))
+            _cpu.Refund(brain, args.CpuCost);
     }
 
     private void OnReturnRequest(EntityUid brain, StationAiShuntedComponent comp, StationAiReturnFromShuntEvent args)
@@ -73,7 +77,12 @@ public sealed partial class StationAiShuntSystem : EntitySystem
         }
 
         if (apcComp.Occupied || HasComp<StationAiShuntedComponent>(brain))
+        {
+            // APC já ocupada (por esta IA ou por outra) ou IA já shuntada: avisa em vez de sumir em
+            // silêncio. O chamador estorna a CPU.
+            _popup.PopupEntity(Loc.GetString("station-ai-shunt-apc-occupied"), apc, brain, PopupType.MediumCaution);
             return false;
+        }
 
         // Tira o cérebro do container do núcleo (dispara OnAiRemove: olho some, núcleo "vazio").
         // TryGetCore só retorna true quando o cérebro está DENTRO do núcleo (container station_ai_mind_slot).

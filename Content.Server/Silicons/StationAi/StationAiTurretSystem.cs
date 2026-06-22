@@ -30,6 +30,7 @@ public sealed partial class StationAiTurretSystem : EntitySystem
     [Dependency] private DeployableTurretSystem _turret = default!;
     [Dependency] private LockSystem _lock = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private StationAiCpuSystem _cpu = default!;
 
     /// <summary>Armamento a partir do qual conta como "hostil" (letal) — só sob lawset hostil.</summary>
     private const int LethalArmament = 1;
@@ -63,6 +64,7 @@ public sealed partial class StationAiTurretSystem : EntitySystem
         // Armamento letal (hostil) só sob lawset hostil. O cliente já esconde, o servidor reconfirma.
         if (args.Armament >= LethalArmament && !_hostile.IsUserUnderHostileLaw(args.User))
         {
+            _cpu.Refund(args.User, args.CpuCost);
             _popup.PopupEntity(Loc.GetString("station-ai-turret-denied"), uid, args.User, PopupType.MediumCaution);
             return;
         }
@@ -85,6 +87,7 @@ public sealed partial class StationAiTurretSystem : EntitySystem
         // Armamento letal (hostil) só sob lawset hostil. O cliente já esconde, o servidor reconfirma.
         if (args.Armament >= LethalArmament && !_hostile.IsUserUnderHostileLaw(args.User))
         {
+            _cpu.Refund(args.User, args.CpuCost);
             _popup.PopupEntity(Loc.GetString("station-ai-turret-denied"), popupTarget, args.User, PopupType.MediumCaution);
             return;
         }

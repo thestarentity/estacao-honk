@@ -26,6 +26,7 @@ public sealed partial class StationAiAtmosSystem : EntitySystem
     [Dependency] private SharedDoorSystem _door = default!;
     [Dependency] private AtmosAlarmableSystem _atmosAlarmable = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private StationAiCpuSystem _cpu = default!;
 
     /// <summary>
     /// Raio (em tiles) ao redor do alarme de ar em que o pânico tranca/destranca as airlocks.
@@ -73,6 +74,7 @@ public sealed partial class StationAiAtmosSystem : EntitySystem
         // Pânico (esvaziar o ar) só sob lawset hostil. O cliente já esconde, mas o servidor reconfirma.
         if (args.Mode == AirAlarmMode.Panic && !_hostile.IsUserUnderHostileLaw(args.User))
         {
+            _cpu.Refund(args.User, args.CpuCost);
             _popup.PopupEntity(Loc.GetString("station-ai-atmos-denied"), uid, args.User, PopupType.MediumCaution);
             return;
         }

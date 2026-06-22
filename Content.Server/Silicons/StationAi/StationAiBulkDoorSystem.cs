@@ -44,6 +44,7 @@ public sealed partial class StationAiBulkDoorSystem : EntitySystem
     [Dependency] private StationAiSystem _stationAi = default!;
     [Dependency] private SiliconLawSystem _laws = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private StationAiCpuSystem _cpu = default!;
 
     /// <summary>
     /// Raio (em tiles) da versão "área" das ações, ao redor da porta clicada.
@@ -87,7 +88,9 @@ public sealed partial class StationAiBulkDoorSystem : EntitySystem
 
     private void OnBoltStation(EntityUid uid, DoorBoltComponent comp, StationAiBoltStationEvent args)
     {
-        if (!DenyIfNotHostile(args.User))
+        if (DenyIfNotHostile(args.User))
+            _cpu.Refund(args.User, args.CpuCost); // ação de estação inteira negada: devolve a CPU.
+        else
             SetBolt(args.User, Transform(uid).GridUid, null, 0f, args.Bolted);
     }
 
@@ -132,7 +135,9 @@ public sealed partial class StationAiBulkDoorSystem : EntitySystem
 
     private void OnElectrifyStation(EntityUid uid, ElectrifiedComponent comp, StationAiElectrifyStationEvent args)
     {
-        if (!DenyIfNotHostile(args.User))
+        if (DenyIfNotHostile(args.User))
+            _cpu.Refund(args.User, args.CpuCost);
+        else
             SetElectrify(args.User, Transform(uid).GridUid, null, 0f, args.Electrified);
     }
 
@@ -177,7 +182,9 @@ public sealed partial class StationAiBulkDoorSystem : EntitySystem
 
     private void OnEmergencyStation(EntityUid uid, AirlockComponent comp, StationAiEmergencyAccessStationEvent args)
     {
-        if (!DenyIfNotHostile(args.User))
+        if (DenyIfNotHostile(args.User))
+            _cpu.Refund(args.User, args.CpuCost);
+        else
             SetEmergency(args.User, Transform(uid).GridUid, null, 0f, args.EmergencyAccess);
     }
 

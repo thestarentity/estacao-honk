@@ -163,6 +163,7 @@ station-ai-cpu-low = not enough processing
 # Core shunting (Malf AI)
 ai-apc-shunt = Shunt core here
 station-ai-shunt-apc-not-hacked = This APC isn't hacked.
+station-ai-shunt-apc-occupied = This APC is already occupied by an AI core.
 station-ai-shunt-done = You shunt your core into the APC. You're hidden, but dormant.
 station-ai-shunt-return = You pull your process back to the core.
 station-ai-shunt-core-lost = Your core is gone. You're stuck in this APC.
