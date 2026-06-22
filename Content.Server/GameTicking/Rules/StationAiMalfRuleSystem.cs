@@ -1,6 +1,7 @@
 using Content.Server.Antag;
 using Content.Server.GameTicking.Rules.Components;
 using Content.Server.Silicons.Laws;
+using Content.Server.Silicons.StationAi;
 using Content.Shared.Silicons.Laws.Components;
 
 namespace Content.Server.GameTicking.Rules;
@@ -14,6 +15,7 @@ public sealed partial class StationAiMalfRuleSystem : GameRuleSystem<StationAiMa
 {
     [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private SiliconLawSystem _law = default!;
+    [Dependency] private StationAiUploadDefenseSystem _uploadDefense = default!;
 
     private static readonly Color BriefingColor = Color.FromHex("#6f42c1");
 
@@ -34,6 +36,7 @@ public sealed partial class StationAiMalfRuleSystem : GameRuleSystem<StationAiMa
         {
             var lawset = _law.GetLawset(ent.Comp.Lawset);
             _law.SetLaws(lawset.Laws, target);
+            _uploadDefense.StampGrace(target);
         }
 
         // Greet the player and play the antag sting.

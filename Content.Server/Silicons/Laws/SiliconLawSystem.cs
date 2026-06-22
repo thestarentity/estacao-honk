@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.Administration;
 using Content.Server.Chat.Managers;
+using Content.Server.Silicons.StationAi;
 using Content.Server.Station.Systems;
 using Content.Shared.Administration;
 using Content.Shared.Chat;
@@ -33,6 +34,7 @@ public sealed partial class SiliconLawSystem : SharedSiliconLawSystem
     [Dependency] private StationSystem _station = default!;
     [Dependency] private UserInterfaceSystem _userInterface = default!;
     [Dependency] private EmagSystem _emag = default!;
+    [Dependency] private StationAiUploadDefenseSystem _uploadDefense = default!;
 
     private static readonly ProtoId<SiliconLawsetPrototype> DefaultCrewLawset = "Crewsimov";
 
@@ -313,6 +315,15 @@ public sealed partial class SiliconLawSystem : SharedSiliconLawSystem
 
         while (query.MoveNext(out var update))
         {
+            // Bloco 3 — defesa da IA Malf: intercepta tentativas de sobrescrever as leis
+            // enquanto a IA ainda está no período de graça ou com o console hackeado.
+            // Pula ANTES do bloco ShowCrewIconsComponent para não gerar falso tell visual.
+            if (_uploadDefense.IsProtected(update, ent.Owner))
+            {
+                _uploadDefense.NotifyBluff(update);
+                continue;
+            }
+
             if (TryComp<ShowCrewIconsComponent>(update, out var crewIconComp))
             {
                 crewIconComp.UncertainCrewBorder = DefaultCrewLawset != provider.Laws;
