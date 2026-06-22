@@ -1,4 +1,3 @@
-using Content.Server.Silicons.Laws;
 using Content.Shared.Popups;
 using Content.Shared.Silicons.Laws.Components;
 using Content.Shared.Silicons.StationAi;
