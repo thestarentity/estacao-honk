@@ -1,5 +1,6 @@
 using Content.Shared.Silicons.Laws.Components;
 using Content.Shared.Silicons.StationAi;
+using Content.Shared.Wires;
 using Robust.Client.GameObjects;
 using Robust.Shared.Utility;
 
@@ -7,7 +8,7 @@ namespace Content.Client.Silicons.StationAi;
 
 public sealed partial class StationAiSystem
 {
-    // Cor discretamente avermelhada para indicar que o console de upload foi comprometido.
+    // Cor avermelhada que denuncia a sabotagem — só fica visível com o painel de manutenção aberto.
     private static readonly Color ConsoleCompromisedTint = new Color(1f, 0.3f, 0.3f);
 
     private void InitializeUploadConsole()
@@ -18,9 +19,10 @@ public sealed partial class StationAiSystem
 
     /// <summary>
     /// Aplica (ou remove) o tell visual de console comprometido pela IA Malf.
-    /// Quando <see cref="StationAiUploadConsoleVisuals.Compromised"/> for verdadeiro,
-    /// tinge a camada <c>computerLayerScreen</c> de vermelho discreto; caso contrário,
-    /// restaura a cor padrão (branco).
+    /// O tell só aparece quando o console está comprometido
+    /// (<see cref="StationAiUploadConsoleVisuals.Compromised"/>) E o painel de manutenção
+    /// está aberto (<see cref="WiresVisuals.MaintenancePanelState"/>): de painel fechado o
+    /// console parece intacto, obrigando a tripulação a investigar com a chave de fenda.
     /// </summary>
     private void OnUploadConsoleAppearanceChange(Entity<SiliconLawUpdaterComponent> ent, ref AppearanceChangeEvent args)
     {
@@ -28,8 +30,9 @@ public sealed partial class StationAiSystem
             return;
 
         _appearance.TryGetData<bool>(ent.Owner, StationAiUploadConsoleVisuals.Compromised, out var compromised, args.Component);
+        _appearance.TryGetData<bool>(ent.Owner, WiresVisuals.MaintenancePanelState, out var panelOpen, args.Component);
 
-        var color = compromised ? ConsoleCompromisedTint : Color.White;
+        var color = compromised && panelOpen ? ConsoleCompromisedTint : Color.White;
 
         // LayerSetColor(string key) ignora silenciosamente se a camada não existir — seguro.
         _sprite.LayerSetColor((ent.Owner, args.Sprite), "computerLayerScreen", color);

@@ -1,10 +1,12 @@
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
+using Content.Shared.Examine;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Silicons.Laws.Components;
 using Content.Shared.Silicons.StationAi;
 using Content.Shared.Tools.Systems;
+using Content.Shared.Wires;
 
 namespace Content.Server.Silicons.StationAi;
 
@@ -38,6 +40,7 @@ public sealed partial class StationAiUploadConsoleSystem : EntitySystem
         // então este par (componente, evento) é livre de colisões por construção.
         SubscribeLocalEvent<StationAiUploadHackedComponent, InteractUsingEvent>(OnInteractUsingHacked);
         SubscribeLocalEvent<StationAiUploadHackedComponent, StationAiUploadRepairDoAfterEvent>(OnRepairDoAfter);
+        SubscribeLocalEvent<StationAiUploadHackedComponent, ExaminedEvent>(OnExamineHacked);
     }
 
     private void OnHackUploadConsole(EntityUid uid, SiliconLawUpdaterComponent comp, StationAiHackUploadConsoleEvent args)
@@ -66,6 +69,14 @@ public sealed partial class StationAiUploadConsoleSystem : EntitySystem
         if (args.Handled)
             return;
 
+        // O reparo mexe na fiação atrás do painel de manutenção: exige o painel aberto
+        // (abrir com chave de fenda). Isso obriga a tripulação a investigar antes de consertar.
+        if (!TryComp<WiresPanelComponent>(uid, out var panel) || !panel.Open)
+        {
+            _popup.PopupEntity(Loc.GetString("station-ai-upload-console-panel-closed"), uid, args.User);
+            return;
+        }
+
         // Requer multitool (qualidade Pulsing).
         args.Handled = _tool.UseTool(
             args.Used,
@@ -91,5 +102,17 @@ public sealed partial class StationAiUploadConsoleSystem : EntitySystem
             $"{ToPrettyString(args.User):user} reparou o console de upload de leis {ToPrettyString(uid):target}, removendo o hack da IA Malf.");
 
         _popup.PopupEntity(Loc.GetString("station-ai-upload-console-repaired"), uid, args.User, PopupType.Medium);
+    }
+
+    /// <summary>
+    /// Revela a sabotagem no exame, mas só com o painel de manutenção aberto: de painel
+    /// fechado o console parece intacto e o blefe da IA se mantém.
+    /// </summary>
+    private void OnExamineHacked(EntityUid uid, StationAiUploadHackedComponent comp, ref ExaminedEvent args)
+    {
+        if (!TryComp<WiresPanelComponent>(uid, out var panel) || !panel.Open)
+            return;
+
+        args.PushMarkup(Loc.GetString("station-ai-upload-console-examine-compromised"));
     }
 }

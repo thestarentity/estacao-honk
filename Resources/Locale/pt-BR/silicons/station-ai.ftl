@@ -164,3 +164,5 @@ station-ai-upload-grace-ending = Sua proteção temporária contra alteração d
 station-ai-radial-hack-upload-console = Hackear console de upload
 station-ai-upload-console-hacked = Console de upload comprometido. Uploads de leis serão interceptados.
 station-ai-upload-console-repaired = Console de upload reparado. Uploads de leis voltaram a funcionar.
+station-ai-upload-console-panel-closed = O painel de manutenção está fechado. Abra ele primeiro.
+station-ai-upload-console-examine-compromised = [color=red]A fiação de governança foi grampeada e desviada. Este console foi adulterado.[/color]
