@@ -4,10 +4,10 @@ ammonia-smell = Algo tem um cheiro forte!
 
 perishable-1 = [color=green]O corpo de { CAPITALIZE(POSS-ADJ($target)) } ainda parece fresco.[/color]
 perishable-2 = [color=orangered]O corpo de { CAPITALIZE(POSS-ADJ($target)) } parece um pouco fresco.[/color]
-perishable-3 = { CAPITALIZE(POSS-ADJ($target)) } cadáver não parece muito fresco.
-perishable-1-nonmob = { CAPITALIZE(SUBJECT($target)) } ainda parece fresco.
+perishable-3 = [color=red]{ CAPITALIZE(POSS-ADJ($target)) } cadáver não parece muito fresco.[/color]
+perishable-1-nonmob = [color=green]{ CAPITALIZE(SUBJECT($target)) } ainda parece fresco.[/color]
 perishable-2-nonmob = [color=orangered]{ CAPITALIZE(SUBJECT($target)) } parece um pouco fresco.[/color]
-perishable-3-nonmob = { CAPITALIZE(SUBJECT($target)) } não parece muito fresco.
+perishable-3-nonmob = [color=red]{ CAPITALIZE(SUBJECT($target)) } não parece muito fresco.[/color]
 
 ## Rotting
 

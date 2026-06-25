@@ -11,9 +11,9 @@ analysis-console-info-class = [font="Monospace" size=11]Classe:[/font]
 analysis-console-info-class-value = [font="Monospace" size=11]{ $class }[/font]
 analysis-console-info-locked = [font="Monospace" size=11]Status:[/font]
 analysis-console-info-locked-value = [font="Monospace" size=11][color={ $state ->
-        [0] [red]Bloqueado
-        [1] Lima]Desbloqueado
-       *[2] Plum]Ativo
+        [0] red]Bloqueado
+        [1] lime]Desbloqueado
+       *[2] plum]Ativo
     }[/color][/font]
 analysis-console-info-durability = [font="Monospace" size=11]Durabilidade:[/font]
 analysis-console-info-durability-value = [font="Monospace" size=11][color={ $color }]{ $current }/{ $max }[/color][/font]

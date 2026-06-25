@@ -10,4 +10,4 @@ health-examinable-silicon-Piercing-50 = [color=crimson]{ CAPITALIZE(SUBJECT($tar
 health-examinable-silicon-Heat-15 = [color=orange]{ CAPITALIZE(SUBJECT($target)) } { CONJUGATE-HAVE($target) } queimaduras superficiais em { POSS-ADJ($target) } chassis.[/color]
 health-examinable-silicon-Heat-50 = [color=orange]O chassis { CAPITALIZE(POSS-ADJ($target)) } está significativamente queimado.[/color]
 health-examinable-silicon-Heat-75 = [color=orange]O chassis { CAPITALIZE(POSS-ADJ($target)) } está parcialmente derretido![/color]
-health-examinable-silicon-Shock-50 = { CAPITALIZE(POSS-ADJ($target)) } circuitos parecem parcialmente queimados!
+health-examinable-silicon-Shock-50 = [color=lightgoldenrodyellow]{ CAPITALIZE(POSS-ADJ($target)) } circuitos parecem parcialmente queimados![/color]

@@ -4,7 +4,7 @@ guidebook-microwave-cook-time =
     { $time ->
         [0] Instantâneo
         [1] [bold]1[/bold] segundo
-       *[other] { $time } segundos
+       *[other] [bold]{ $time }[/bold] segundos
     }
 guidebook-microwave-reagent-color-display = [color={ $color }]■[/color]
 guidebook-microwave-reagent-name-display = [bold]{ $reagent }[/bold]

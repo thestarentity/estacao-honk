@@ -26,8 +26,8 @@ plant-holder-component-pest-high-level-message = Está cheio de [color=gray]min�
 plant-holder-component-water-level-message = Água:     [color=cyan]{ $waterLevel }[/color].
 plant-holder-component-nutrient-level-message = Nutriente: [color=orange]{ $nutritionLevel }[/color].
 plant-holder-component-toxins-high-warning = O alerta de [color=red]nível tóxico[/color] está piscando vermelho.
-plant-holder-component-light-improper-warning = O alerta de nível de luz inadequado está piscando.
-plant-holder-component-heat-improper-warning = O alerta de nível de temperatura inadequado está piscando.
+plant-holder-component-light-improper-warning = O [color=yellow]alerta de nível de luz inadequado[/color] está piscando.
+plant-holder-component-heat-improper-warning = O [color=orange]alerta de nível de temperatura inadequado[/color] está piscando.
 plant-holder-component-pressure-improper-warning = O alerta de pressão ambiental inadequada [color=lightblue]está piscando[/color].
 plant-holder-component-gas-missing-warning = O alerta de [color=cyan]ambiente gasoso inadequado[/color] está piscando.
 plant-holder-component-early-sample-message = A planta ainda não cresceu o suficiente para coletar uma amostra.

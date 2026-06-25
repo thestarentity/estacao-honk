@@ -15,6 +15,6 @@ comp-light-replacer-no-lights = Está vazio.
 comp-light-replacer-has-lights = A luz está quebrada. Você pode substituí-la por uma nova.
 comp-light-replacer-light-listing =
     { $amount ->
-        [one] [one]{ $amount }[color=yellow] [/color]{ $name }[color=gray]
-       *[other] [/color]{ $amount }[other] [color=yellow]{ $name }s[/color]
+        [one] [color=yellow]{ $amount }[/color] [color=gray]{ $name }[/color]
+       *[other] [color=yellow]{ $amount }[/color] [color=gray]{ $name }s[/color]
     }

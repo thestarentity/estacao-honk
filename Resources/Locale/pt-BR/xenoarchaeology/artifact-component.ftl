@@ -19,7 +19,7 @@ artifact-activation-artifexium = O líquido se infiltra nos poros do artefato...
 artifact-examine-trigger-desc = [color=gray][italic]Estou em seus pensamentos?[/italic][/color]
 artifact-node-class-1 = [color=#ff2bb1]Hílico[/color]
 artifact-node-class-2 = [color=#ff8b2b]Psíquico[/color]
-artifact-node-class-3 = Pneumático
+artifact-node-class-3 = [color=#a9ff38]Pneumático[/color]
 artifact-node-class-4 = [color=#2bfff8]Arquon[/color]
-artifact-node-class-5 = [Luminary]
-artifact-node-class-6 = [Demiurgo]
+artifact-node-class-5 = [color=#7883ff]Luminar[/color]
+artifact-node-class-6 = [color=#be78ff]Demiurgo[/color]
