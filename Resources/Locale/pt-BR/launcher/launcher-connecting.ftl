@@ -1,6 +1,6 @@
 ### Connecting dialog when you start up the game
 
-connecting-title = Conectando-se à Estação Espacial 14
+connecting-title = Conectando-se à Space Station 14
 connecting-exit = Saída
 connecting-retry = Tentar novamente
 connecting-reconnect = Reconectar

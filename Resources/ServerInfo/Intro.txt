@@ -1,4 +1,4 @@
-Bem-vindo à Estação Espacial 14! Você acabou de começar seu turno a bordo de uma estação espacial da Nanotrasen e, junto com seus colegas de tripulação, deve cooperar, desempenhar seu cargo da melhor forma possível e se divertir (de preferência sem prejudicar os outros).
+Bem-vindo à Space Station 14! Você acabou de começar seu turno a bordo de uma estação espacial da Nanotrasen e, junto com seus colegas de tripulação, deve cooperar, desempenhar seu cargo da melhor forma possível e se divertir (de preferência sem prejudicar os outros).
 
 Por favor, certifique-se de que entende as regras do servidor (F1) e, se tiver dúvidas, consulte este guia, seus colegas no turno presencialmente, pelo rádio ou via discord. Você também pode pedir ajuda aos admins (ahelp) pressionando Escape > ajuda para admin e digitando uma mensagem para qualquer admin online. Faça isso especialmente se testemunhar alguém quebrando as regras.
 
