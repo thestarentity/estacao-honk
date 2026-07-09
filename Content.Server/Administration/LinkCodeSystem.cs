@@ -44,6 +44,26 @@ public sealed partial class LinkCodeSystem : EntitySystem
         }
     }
 
+    /// <summary>Registra um codigo escolhido pelo cliente (a janela do lobby gera e mostra o
+    /// codigo, e pede pro servidor guarda-lo). Devolve o codigo normalizado, ou null se invalido.</summary>
+    public string? RegistrarCodigo(string? code, NetUserId user, string name)
+    {
+        var chave = (code ?? "").Trim().ToUpperInvariant();
+        if (chave.Length < 4 || chave.Length > 24)
+            return null;
+        foreach (var ch in chave)
+        {
+            if (!char.IsLetterOrDigit(ch) && ch != '-')
+                return null;
+        }
+        lock (_lock)
+        {
+            LimparExpirados();
+            _codes[chave] = (user, name, DateTime.UtcNow + Ttl);
+        }
+        return chave;
+    }
+
     /// <summary>Resolve e consome um codigo. Chamado da thread da API HTTP.</summary>
     public bool TryResolver(string? code, out NetUserId user, out string name)
     {

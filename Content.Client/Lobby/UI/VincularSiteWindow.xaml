@@ -1,0 +1,15 @@
+<DefaultWindow
+    xmlns="https://spacestation14.io"
+    Title="Vincular ao site"
+    MinSize="400 220">
+    <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="6">
+        <RichTextLabel Name="StepsLabel" />
+        <Label Text="Seu codigo (vale 10 minutos):" Margin="0 6 0 0" />
+        <BoxContainer Orientation="Horizontal" SeparationOverride="6">
+            <LineEdit Name="CodeEdit" HorizontalExpand="True" Editable="False" />
+            <Button Name="CopyButton" Text="Copiar" />
+        </BoxContainer>
+        <Label Name="StatusLabel" Margin="0 4 0 0" />
+        <Button Name="FecharButton" Text="Fechar" Margin="0 8 0 0" HorizontalAlignment="Center" />
+    </BoxContainer>
+</DefaultWindow>

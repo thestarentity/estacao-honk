@@ -48,6 +48,10 @@ namespace Content.Client.Info
             changelogButton.OnPressed += args => UserInterfaceManager.GetUIController<ChangelogUIController>().ToggleWindow();
             buttons.AddChild(changelogButton);
 
+            var vincularButton = new Button { Text = "Vincular ao site" };
+            vincularButton.OnPressed += _ => new Content.Client.Lobby.UI.VincularSiteWindow().OpenCentered();
+            buttons.AddChild(vincularButton);
+
             void AddInfoButton(string loc, CVarDef<string> cVar)
             {
                 var button = new Button { Text = Loc.GetString(loc) };

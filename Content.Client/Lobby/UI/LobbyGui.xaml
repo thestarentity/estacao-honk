@@ -41,13 +41,6 @@
                                                 StyleClasses="ButtonBig" MinWidth="137" />
                                     </BoxContainer>
                                 </controls:StripeBack>
-                                <controls:StripeBack>
-                                    <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" Margin="3 3 3 3">
-                                        <cc:CommandButton Command="vincularsite"
-                                                          Text="Vincular ao site"
-                                                          StyleClasses="ButtonBig" />
-                                    </BoxContainer>
-                                </controls:StripeBack>
                                 <RichTextLabel Name="PlaytimeComment" Visible="False" Access="Public" HorizontalAlignment="Center" />
                             </BoxContainer>
                         </PanelContainer>
