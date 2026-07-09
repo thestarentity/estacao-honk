@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Content.Shared.Administration;
+using Robust.Server.Player;
+using Robust.Shared.Enums;
 using Robust.Shared.Network;
+using Robust.Shared.Player;
 using Robust.Shared.Random;
 
 namespace Content.Server.Administration;
@@ -19,6 +23,7 @@ namespace Content.Server.Administration;
 public sealed partial class LinkCodeSystem : EntitySystem
 {
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
 
     private static readonly TimeSpan Ttl = TimeSpan.FromMinutes(10);
     // Sem 0/O/1/I para nao confundir quem digita.
@@ -26,6 +31,90 @@ public sealed partial class LinkCodeSystem : EntitySystem
 
     private readonly object _lock = new();
     private readonly Dictionary<string, (NetUserId User, string Name, DateTime Expira)> _codes = new();
+
+    // Contas SS14 que estao vinculadas ao site. O bot manda a lista completa periodicamente.
+    private readonly HashSet<Guid> _vinculados = new();
+    private bool _recebeuLista;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _playerManager.PlayerStatusChanged -= OnPlayerStatusChanged;
+    }
+
+    private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs e)
+    {
+        // So avisa depois que o bot mandou a lista pelo menos uma vez; senao o cliente
+        // receberia "nao vinculado" e depois "vinculado", disparando a confirmacao a toa.
+        if (!_recebeuLista)
+            return;
+        if (e.NewStatus != SessionStatus.Connected && e.NewStatus != SessionStatus.InGame)
+            return;
+        EnviarStatus(e.Session);
+    }
+
+    private void EnviarStatus(ICommonSession session)
+    {
+        bool vinculado;
+        lock (_lock)
+        {
+            vinculado = _vinculados.Contains(session.UserId.UserId);
+        }
+        RaiseNetworkEvent(new LinkSiteStatusEvent(vinculado), session);
+    }
+
+    /// <summary>Diz se a conta esta vinculada ao site.</summary>
+    public bool EstaVinculado(Guid user)
+    {
+        lock (_lock)
+        {
+            return _vinculados.Contains(user);
+        }
+    }
+
+    /// <summary>
+    /// Recebe do bot a lista COMPLETA de contas vinculadas e avisa os clientes cujo status mudou.
+    /// Roda na main thread (chamado pelo endpoint via RunOnMainThread).
+    /// </summary>
+    public void AtualizarVinculados(IEnumerable<Guid> ids)
+    {
+        var novo = new HashSet<Guid>(ids);
+        var primeira = !_recebeuLista;
+        var mudaram = new HashSet<Guid>();
+
+        lock (_lock)
+        {
+            foreach (var g in novo)
+            {
+                if (!_vinculados.Contains(g))
+                    mudaram.Add(g);
+            }
+            foreach (var g in _vinculados)
+            {
+                if (!novo.Contains(g))
+                    mudaram.Add(g);
+            }
+            _vinculados.Clear();
+            foreach (var g in novo)
+                _vinculados.Add(g);
+        }
+
+        _recebeuLista = true;
+
+        foreach (var session in _playerManager.Sessions)
+        {
+            // Na primeira lista, todo mundo recebe o status inicial (o cliente nao mostra
+            // confirmacao no primeiro aviso). Depois, so quem mudou.
+            if (primeira || mudaram.Contains(session.UserId.UserId))
+                EnviarStatus(session);
+        }
+    }
 
     /// <summary>Gera e guarda um codigo novo para o jogador. Chamado da thread do jogo.</summary>
     public string GerarCodigo(NetUserId user, string name)
