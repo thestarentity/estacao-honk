@@ -102,6 +102,9 @@ public sealed partial class ServerApi : IPostInjectInit
         _RegisterAntagEndpoints();
         _RegisterProfileEndpoints();
         _RegisterAntagQueueEndpoints();
+
+        // Auto-vinculo do site (resolve o codigo de vinculo gerado no jogo)
+        _RegisterLinkEndpoints();
     }
 
     public void Initialize()
