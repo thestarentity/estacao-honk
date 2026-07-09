@@ -1,3 +1,4 @@
+using Content.Server.Chat.Managers;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
@@ -26,8 +27,10 @@ public sealed partial class VincularSiteCommand : IConsoleCommand
 
         var sys = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<LinkCodeSystem>();
         var code = sys.GerarCodigo(player.UserId, player.Name);
-        shell.WriteLine(
-            $"Seu codigo de vinculo: {code}\n" +
-            "Abra honkenvironment.online/portal, entre com o Discord e cole esse codigo. Vale 10 minutos.");
+        var msg = $"Seu codigo de vinculo com o site: {code} (vale 10 minutos). " +
+                  "Abra honkenvironment.online/portal, entre com o Discord e cole esse codigo.";
+        // Mostra no chat do jogador (visivel sem abrir o console) e tambem no console.
+        IoCManager.Resolve<IChatManager>().DispatchServerMessage(player, msg);
+        shell.WriteLine(msg);
     }
 }
