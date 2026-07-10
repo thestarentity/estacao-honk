@@ -616,6 +616,22 @@ public sealed partial class ServerApi : IPostInjectInit
 
     private async Task<bool> CheckAccess(IStatusHandlerContext context)
     {
+        // The status host is world-reachable because /status and /info feed the hub and the
+        // launcher. The admin API rides on that same port, so it gates on origin as well as on
+        // the token. Every caller (bot, site) runs on this machine.
+        if (!IsLoopback(context.RemoteEndPoint.Address))
+        {
+            // Same response a bad token gets, so an outsider learns nothing from the difference.
+            await RespondError(
+                context,
+                ErrorCode.AuthenticationInvalid,
+                HttpStatusCode.Unauthorized,
+                "Authorization is invalid");
+
+            _sawmill.Info($"Remote access attempt to admin API from {context.RemoteEndPoint}");
+            return false;
+        }
+
         var auth = context.RequestHeaders.TryGetValue("Authorization", out var authToken);
         if (!auth)
         {
@@ -664,6 +680,15 @@ public sealed partial class ServerApi : IPostInjectInit
         // Invalid auth header, no access
         _sawmill.Info($"Unauthorized access attempt to admin API from {context.RemoteEndPoint}");
         return false;
+    }
+
+    private static bool IsLoopback(IPAddress address)
+    {
+        // A dual-stack socket reports an IPv4 caller as ::ffff:127.0.0.1, which IsLoopback rejects.
+        if (address.IsIPv4MappedToIPv6)
+            address = address.MapToIPv4();
+
+        return IPAddress.IsLoopback(address);
     }
 
     private async Task<Actor?> CheckActor(IStatusHandlerContext context)
