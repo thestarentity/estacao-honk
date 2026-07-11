@@ -6,6 +6,7 @@ name: githook para o Discord
 
 on:
   push:
+  workflow_dispatch:   # permite disparar a mao pelo botao "Run workflow"
 
 jobs:
   avisar:
