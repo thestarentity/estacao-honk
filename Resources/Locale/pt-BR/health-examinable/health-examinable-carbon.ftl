@@ -8,8 +8,14 @@ health-examinable-carbon-Slash-100 = O corpo de { CAPITALIZE(POSS-ADJ($target)) 
 health-examinable-carbon-Slash-200 = { CAPITALIZE(POSS-ADJ($target)) } corpo está completamente rasgado em pedaços!
 health-examinable-carbon-Blunt-8 = [color=#FFA8A8]{ CAPITALIZE(SUBJECT($target)) } { CONJUGATE-HAVE($target) } uma leve contusão.[/color]
 health-examinable-carbon-Blunt-15 = [color=#FF8787]{ CAPITALIZE(SUBJECT($target)) } { CONJUGATE-HAVE($target) } algumas escoriações.[/color]
-health-examinable-carbon-Blunt-30 = [color=#FF6868]{ CAPITALIZE(SUBJECT($target)) } { CONJUGATE-BE($target) } batido.[/color]
-health-examinable-carbon-Blunt-50 = [color=#FF5555]{ CAPITALIZE(SUBJECT($target)) } { CONJUGATE-BE($target) } muito mal ferido.[/color]
+health-examinable-carbon-Blunt-30 = [color=#FF6868]{ CAPITALIZE(SUBJECT($target)) } está { GENDER($target) ->
+    [female] machucada
+   *[other] machucado
+   }.[/color]
+health-examinable-carbon-Blunt-50 = [color=#FF5555]{ CAPITALIZE(SUBJECT($target)) } está muito mal { GENDER($target) ->
+    [female] ferida
+   *[other] ferido
+   }.[/color]
 health-examinable-carbon-Blunt-75 = [color=#FF3636]{ CAPITALIZE(SUBJECT($target)) } { CONJUGATE-HAVE($target) } trauma contuso grave em { POSS-ADJ($target) } corpo.[/color]
 health-examinable-carbon-Blunt-100 = [color=#FF2121]O corpo de { CAPITALIZE(POSS-ADJ($target)) } está desfigurado e foi brutalmente espancado.[/color]
 health-examinable-carbon-Blunt-200 = [color=#FF0000]{ CAPITALIZE(POSS-ADJ($target)) } corpo está absolutamente esmagado a pulpa![/color]
@@ -25,7 +31,10 @@ health-examinable-carbon-Asphyxiation-75 = A cara do { CAPITALIZE(POSS-ADJ($targ
 health-examinable-carbon-Heat-8 = [color=#C8917A]{ CAPITALIZE(SUBJECT($target)) } { CONJUGATE-HAVE($target) } queimadura superficial.[/color]
 health-examinable-carbon-Heat-15 = [color=#D38664]{ CAPITALIZE(SUBJECT($target)) } { CONJUGATE-HAVE($target) } alguns queimaduras de primeiro grau.[/color]
 health-examinable-carbon-Heat-30 = [color=#DF7B50]{ CAPITALIZE(SUBJECT($target)) } { CONJUGATE-HAVE($target) } algumas queimaduras de segundo grau.[/color]
-health-examinable-carbon-Heat-50 = [color=#E87441]{ CAPITALIZE(SUBJECT($target)) } { CONJUGATE-BE($target) } está coberto com queimaduras de segundo grau.[/color]
+health-examinable-carbon-Heat-50 = [color=#E87441]{ CAPITALIZE(SUBJECT($target)) } está { GENDER($target) ->
+    [female] coberta
+   *[other] coberto
+   } com queimaduras de segundo grau.[/color]
 health-examinable-carbon-Heat-75 = { CAPITALIZE(POSS-ADJ($target)) } corpo está coberto com queimaduras de terceiro grau graves.
 health-examinable-carbon-Heat-100 = [color=#FC611E]O corpo de { CAPITALIZE(POSS-ADJ($target)) } está extensamente coberto por queimaduras de quarto grau.[/color]
 health-examinable-carbon-Heat-200 = [color=#CF5825]O corpo de { CAPITALIZE(POSS-ADJ($target)) } está completamente queimado em cinzas![/color]

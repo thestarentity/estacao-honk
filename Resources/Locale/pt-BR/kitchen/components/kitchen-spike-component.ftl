@@ -14,13 +14,13 @@ comp-kitchen-spike-unhook-self = Você se soltou de { THE($hook) }!
 comp-kitchen-spike-unhook-self-other = { CAPITALIZE(THE($victim)) } tirou { REFLEXIVE($victim) } de { THE($hook) }!
 comp-kitchen-spike-unhook-other-self = Você tirou { CAPITALIZE(THE($victim)) } de { THE($hook) }!
 comp-kitchen-spike-unhook-other = { CAPITALIZE(THE($user)) } tirou { CAPITALIZE(THE($victim)) } de { THE($hook) }!
-comp-kitchen-spike-begin-butcher-self = Você começa a butifar { THE($victim) }!
-comp-kitchen-spike-begin-butcher = { CAPITALIZE(THE($user)) } começa a desmembrar { THE($victim) }!
-comp-kitchen-spike-butcher-self = Você mutilou { THE($victim) }!
-comp-kitchen-spike-butcher = { CAPITALIZE(THE($user)) } matou { THE($victim) }!
+comp-kitchen-spike-begin-butcher-self = Você começa a abater { THE($victim) }!
+comp-kitchen-spike-begin-butcher = { CAPITALIZE(THE($user)) } começa a abater { THE($victim) }!
+comp-kitchen-spike-butcher-self = Você abateu { THE($victim) }!
+comp-kitchen-spike-butcher = { CAPITALIZE(THE($user)) } abateu { THE($victim) }!
 comp-kitchen-spike-unhook-verb = Desencaixar
 comp-kitchen-spike-hooked = { CAPITALIZE(THE($victim)) } está nessa lança!
 comp-kitchen-spike-meat-name = { $name } ({ $victim })
 comp-kitchen-spike-victim-examine = { CAPITALIZE(SUBJECT($target)) } parece bem magro.
-comp-kitchen-spike-deconstruct-occupied = Em seguida, [color=red]desenrole o corpo[/color].
+comp-kitchen-spike-deconstruct-occupied = Em seguida, [color=red]desencaixe o corpo[/color].
 comp-kitchen-spike-need-tool-quality = É necessária uma ferramenta com qualidade { $quality } para abater { THE($target) }.

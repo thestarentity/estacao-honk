@@ -3,7 +3,10 @@ lock-comp-on-examined-is-unlocked = O { $entityName } parece estar [color=darkgr
 lock-comp-do-lock-success = Você trava o { $entityName }.
 lock-comp-do-unlock-success = Você desbloqueia o { $entityName }.
 lock-comp-has-user-access-fail = Acesso negado.
-lock-comp-generic-fail = { CAPITALIZE(SUBJECT($target)) } { CONJUGATE-BE($target) } trancado.
+lock-comp-generic-fail = { CAPITALIZE(SUBJECT($target)) } está { GENDER($target) ->
+    [female] trancada
+   *[other] trancado
+   }.
 
 ## ToggleLockVerb
 
