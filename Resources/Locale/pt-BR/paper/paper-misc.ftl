@@ -40,7 +40,7 @@ book-text-agrichemkit-manual =
     Uma pequena garrafa de Nutriente Fácil substitui uma pilha grande de produtos que você normalmente compostaria para manter suas plantas crescendo fortes. E os produtos que você composta são produtos que você não obteve lucro, então mantenha aquele Nutriente Fácil fluindo.
     
     Segundo Experimento: Amônia e Dietilamina
-    Misture 3 partes de hidrogênio para 1 parte de nitrogênio para fazer amônia. É um tratamento saudável e nutritivo para suas plantas que não estão no seu melhor.
+    Misture 3 partes de hidrogênio para 1 parte de nitrogênio e leve ao micro-ondas por 30 segundos para fazer amônia. É um tratamento saudável e nutritivo para suas plantas que não estão no seu melhor.
     Mas se você quiser impressionar os juízes na feira do condado patrocinada pela NanoTrasen, precisará adicionar uma quantidade igual de etanol à sua amônia.
     Isso se misturará em Dietilamina, um fertilizante milagroso que pode fazer as plantas crescerem mais rápido E viverem mais tempo! Mantenha as plantas que você ama com você por mais tempo graças à Dietilamina.
     

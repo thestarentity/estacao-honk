@@ -1,7 +1,7 @@
 hijack-beacon-announcement-sender = Estação Comercial Automatizada
 hijack-beacon-announcement-activated = Atenção! Um tentativa de invasão na firewall da Estação de Comércio Automatizado foi detectada! Estimado { $time } segundos até a quebra da firewall!
 hijack-beacon-announcement-deactivated = A violação de firewall falhou. A integridade da firewall foi parcialmente restaurada. Tenha um bom dia!
-hijack-beacon-announcement-success = Desconectado com sucesso o firewall da Estação de Comércio Automatizado. { $fine } spessos foram transferidos da conta da estação para [%ERROR%]. Sua garantia da estação de comércio agora está anulada. Este incidente foi registrado.
+hijack-beacon-announcement-success = Firewall da Estação de Comércio Automatizada desativado com sucesso. { $fine } spesos foram transferidos dos fundos da estação para [%ERROR%]. A garantia da sua estação de comércio está anulada. Este incidente foi reportado.
 hijack-beacon-examine-await-activate = O sinalizador está [color=green]pronto para ativação[/color].
 hijack-beacon-examine-await-cooldown = O sinalizador está [color=red]em cooldown[/color].
 hijack-beacon-examine-await-hijack-complete = O sinalizador está [color=red]gasto[/color].

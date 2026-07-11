@@ -12,3 +12,6 @@ ent-BoxHoloparasite = caixa de holoparasita
 
 ent-BoxHoloclown = caixa de holoclown
     .desc = Uma caixa contendo um injetor de holopalhaço.
+
+ent-GuardianDeck = baralho de guardião
+    .desc = Um baralho de cartas de tarô de guardião, capaz de vincular um guardião pessoal ao seu corpo.

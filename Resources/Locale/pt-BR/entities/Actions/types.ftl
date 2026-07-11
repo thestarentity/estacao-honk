@@ -70,3 +70,6 @@ ent-ActionToggleWaggingVulpkanin = Cauda balançando
     .desc = Comece ou pare de balançar sua cauda.
 ent-ActionChangeVoiceMaskImplant = Definir nome
     .desc = Mude o nome que os outros ouvem para algo diferente.
+
+ent-ActionToggleNightVision = Alternar visão noturna
+    .desc = Liga e desliga a visão noturna.

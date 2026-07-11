@@ -325,14 +325,13 @@ ui-options-net-pvs-leave-tooltip = Isso limita a taxa na qual o cliente remover�
 
 cmd-options-desc = Abre o menu de opções, opcionalmente com uma aba específica selecionada.
 cmd-options-help = Uso: opções [aba]
+
 ## Accessibility menu
 
-ui-options-accessability-header-visuals = Visuais
-ui-options-accessability-header-content = Ajustes de acessibilidade
 ui-options-enable-color-name = Ativar nomes de personagens com cores
 ui-options-colorblind-friendly = Modo amigável para pessoas com daltonismo
-ui-options-reduced-motion = Reduzir movimento de efeitos visuais
-ui-options-disable-ai-static = Desative o efeito estático sobre a sobreposição da câmera do AI
+ui-options-reduced-motion = Reduzir efeitos visuais em geral
+ui-options-disable-ai-static = Estática da câmera da IA
 ui-options-screen-shake-intensity = Intensidade do balanço da tela
 ui-options-chat-window-opacity = Opacidade da janela de chat
 ui-options-speech-bubble-text-opacity = Opacidade do texto da bolha de fala
@@ -373,3 +372,23 @@ ui-options-admin-overlay-ghost-fade-distance = Alcance de desvanecimento da sobr
 ui-options-admin-overlay-ghost-hide-distance = Distância para ocultar o overlay de fantasma
 ui-options-admin-strip-overlay-title = Sobreposição de Strip
 ui-options-admin-strip-overlay-setting = Mostrar sobreposição de strip por padrão
+ui-options-chat-follow-button = Como fantasma, mostrar um botão de seguir ao lado das mensagens do chat
+ui-options-accessibility-header-reduced-motion = Movimento Reduzido
+ui-options-accessibility-header-visuals = Visual
+ui-options-accessibility-header-content = Conteúdo
+ui-options-reduced-motion-tooltip = Ative para mostrar sprites alternativos com menos movimento para alguns itens.
+ui-options-disable-ai-static-tooltip = Substitui o efeito de estática da câmera da IA por um gradiente simples.
+ui-options-disable-blurry-vision = Visão embaçada
+ui-options-disable-blurry-vision-tooltip = Substitui o movimento do shader de embaçamento por um efeito estático.
+ui-options-disable-drunk-overlay = Efeito de embriaguez
+ui-options-disable-drunk-overlay-tooltip = Substitui o movimento do shader de embriaguez por um deslocamento estático.
+ui-options-disable-flash-effect = Flash
+ui-options-disable-flash-effect-tooltip = Substitui o efeito de "flash" por um equivalente com menos movimento.
+ui-options-disable-heat-distortion = Distorção de calor
+ui-options-disable-heat-distortion-tooltip = Diminui o movimento do shader de distorção de calor.
+ui-options-disable-nv-noise = Efeito de visão noturna
+ui-options-disable-nv-noise-tooltip = Desativa o ruído do efeito de visão noturna.
+ui-options-disable-rainbow-overlay = Efeito arco-íris
+ui-options-disable-rainbow-overlay-tooltip = Substitui o movimento do shader de arco-íris por um deslocamento estático.
+ui-options-disable-singulo-warp = Singularidade
+ui-options-disable-singulo-warp-tooltip = Desativa o efeito de distorção de tela da singularidade.

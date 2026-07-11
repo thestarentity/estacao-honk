@@ -1,6 +1,4 @@
-humanoid-profile-editor-randomize-everything-button = Randomizar tudo
 humanoid-profile-editor-name-label = Nome:
-humanoid-profile-editor-name-random-button = Aleatório
 humanoid-profile-editor-appearance-tab = Aparência
 humanoid-profile-editor-clothing = Mostrar roupas
 humanoid-profile-editor-clothing-show = Mostrar
@@ -56,3 +54,18 @@ humanoid-profile-editor-trait-count-hint = Pontos disponíveis: [{ $current }/{ 
 trait-category-disabilities = Deficiências
 trait-category-speech = Traços de fala
 trait-category-quirks = Peculiaridades
+humanoid-profile-editor-randomize = Aleatorizar
+humanoid-profile-editor-randomize-unlocked-button = Aleatorizar desbloqueados
+humanoid-profile-editor-randomize-name-button = Nome
+humanoid-profile-editor-randomize-species-button = Espécie
+humanoid-profile-editor-randomize-age-button = Idade
+humanoid-profile-editor-randomize-sex-button = Sexo
+humanoid-profile-editor-randomize-skin-button = Cor da pele
+humanoid-profile-editor-randomize-eye-button = Cor dos olhos
+humanoid-profile-editor-voice-label = Voz:
+humanoid-profile-editor-randomizer-lock-tooltip = Impede que o valor seja aleatorizado
+# Vozes
+humanoid-profile-editor-voice-masculine = Masculina
+humanoid-profile-editor-voice-feminine = Feminina
+humanoid-profile-editor-voice-neutral = Neutra
+humanoid-profile-editor-voice-none = Voz sem nome

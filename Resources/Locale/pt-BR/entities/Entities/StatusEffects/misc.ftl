@@ -4,10 +4,12 @@ ent-StatusEffectSSDSleeping = sono forçado
 
 ent-StatusEffectDrowsiness = sonolência
 
-ent-StatusEffectSeeingRainbow = hallucinações
+ent-StatusEffectSeeingRainbow = alucinações
 
 ent-StatusEffectWoozy = tonto
 
 ent-StatusEffectDrunk = bêbado
 
 ent-StatusEffectBlindness = cegueira temporária
+
+ent-StatusEffectFlashed = ofuscado

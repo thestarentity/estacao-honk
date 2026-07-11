@@ -147,3 +147,5 @@ admin-trick-pause-map-description = Pausar o mapa selecionado. Note que isso nã
 admin-trick-snap-joints-description = Remova todos os engates físicos de um objeto. Infelizmente, não fixa todos os ossos do corpo.
 admin-trick-minigun-fire-description = Faz o alvo atirar como uma metralhadora (muito rápido).
 admin-trick-set-bullet-amount-description = Defina rapidamente a quantidade de balas não geradas em uma arma.
+admin-smite-make-stinky-name = Deixar Fedido
+admin-smite-make-stinky-description = Deixa o alvo fedido, fazendo com que libere amônia. Eca!

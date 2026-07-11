@@ -1,20 +1,10 @@
 shared-solution-container-component-on-examine-main-text =
-    Contém { INDEFINITE($desc) } [color={ $color }]{ $desc }[/color] { $chemCount ->
+    Contém { INDEFINITE($desc) } [color={ $color }]{ $desc } { $colorName }[/color] { $chemCount ->
         [1] químico.
        *[other] mistura de químicos.
     }
 examinable-solution-has-recognizable-chemicals = Você pode reconhecer { $recognizedString } na solução.
 examinable-solution-recognized = [color={ $color }]{ $chemical }[/color]
-examinable-solution-on-examine-volume = A solução contida está { $fillLevel ->
-    [exact] armazenando [color=white]{ $current }/{ $max }u[/color].
-   *[other] [bold]{ -solution-vague-fill-level(fillLevel: $fillLevel) }[/bold].
-}
-
-examinable-solution-on-examine-volume-no-max = A solução contida está { $fillLevel ->
-    [exact] armazenando [color=white]{ $current }u[/color].
-   *[other] [bold]{ -solution-vague-fill-level(fillLevel: $fillLevel) }[/bold].
-}
-
 examinable-solution-on-examine-volume-puddle =
     A poça é { $fillLevel ->
         [exact] [color=white]{ $current }u[/color].

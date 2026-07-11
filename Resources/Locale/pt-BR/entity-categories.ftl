@@ -6,3 +6,4 @@ entity-category-name-mapping = Mapeamento
 entity-category-name-donotmap = Não mapear
 entity-category-name-status-effects = Efeitos de Status
 entity-category-suffix-donotmap = Não mapear
+entity-category-name-xeno-artifact-effects = Efeitos de Artefato Xeno

@@ -24,3 +24,4 @@ bwoink-system-player-reconnecting = reconectou.
 bwoink-system-player-banned = foi banido por: { $banReason }
 bwoink-message-admin-only = (Apenas Admin)
 bwoink-message-silent = (S)
+bwoink-message-name-link = (?)

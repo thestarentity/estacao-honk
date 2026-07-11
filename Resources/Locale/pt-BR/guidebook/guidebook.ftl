@@ -6,3 +6,4 @@ guidebook-parser-error = Erro do Parser
 guidebook-error-message = Ocorreu um erro ao carregar o guia. Por favor, tente novamente mais tarde.
 guidebook-monkey-unspin = Desenrosque o Macaco
 guidebook-monkey-disco = Macaco de Disco
+guidebook-toc-header = Sumário

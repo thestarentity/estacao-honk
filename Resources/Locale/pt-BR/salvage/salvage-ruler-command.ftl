@@ -1,2 +1,2 @@
-salvage-ruler-command-description = Meça as grades nesse mapa para obter um AABB total do mundo. Use para especificações dos limites de resgate.
-salvage-ruler-command-help-text = Use: { $command }
+cmd-salvageruler-desc = Mede os grids deste mapa para obter a AABB total do mundo. Use para especificar limites de salvamento.
+cmd-salvageruler-help = Uso: { $command }

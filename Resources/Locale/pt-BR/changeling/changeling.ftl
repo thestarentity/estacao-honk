@@ -38,3 +38,8 @@ changeling-biodegrade-used-popup-self = Nós vomitamos ácido sobre nosso { $res
 changeling-sting-success = Nós silenciosamente picamos { THE($target) }!
 # other
 changeling-paused-map-name = Mapa de armazenamento de identidade de changeling
+# último recurso
+changeling-takeover-not-dead = Este corpo ainda vive! Não podemos infestá-lo vivo.
+changeling-takeover-is-changeling = Este corpo rejeita nossas tentativas de tomá-lo!
+changeling-takeover-start-others = { CAPITALIZE(THE($user)) } começa a rastejar para dentro do cadáver!
+changeling-takeover-success-self = Infestamos o corpo com sucesso e assumimos a sua forma.

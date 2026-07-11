@@ -1,11 +1,11 @@
 # Command
-highlights-captain = Capitão, "Cap", Ponte de Comando
-highlights-head-of-personnel = Chefe de Pessoal, "HoP", Serviço, Ponte de Comando
-highlights-chief-engineer = Engenheiro-Chefe, "CE", Engenharia, Engenheiro, "Engi", Ponte de Comando, Comando
-highlights-chief-medical-officer = Chefe Médico, "CMO", Enfermaria, Médico, "Med", Ponte de Comando, Comando
-highlights-head-of-security = Chefe de Segurança, "HoS", Armazém de Armas, Segurança, "Sec", Ponte de Comando, Comando
-highlights-quartermaster = Quartermaster, "QM", Carga, Suprimento, Ponte de Comando, Comando
-highlights-research-director = Diretor de Pesquisa, "RD", Ciência, "Sci", "RND", "R&D", Ponte de Comando, Comando
+highlights-captain = Capitão, "Cap", "Ponte", "Comando"
+highlights-head-of-personnel = Chefe de Pessoal, "HoP", Serviço, "Ponte", "Comando"
+highlights-chief-engineer = Engenheiro-Chefe, "CE", Engenharia, Engenheiro, "Engi", "Ponte", "Comando"
+highlights-chief-medical-officer = Chefe Médico, "CMO", Enfermaria, Médico, "Med", "Ponte", "Comando"
+highlights-head-of-security = Chefe de Segurança, "HoS", Armazém de Armas, Segurança, "Sec", "Ponte", "Comando"
+highlights-quartermaster = Quartermaster, "QM", Carga, Suprimento, "Ponte", "Comando"
+highlights-research-director = Diretor de Pesquisa, "RD", Ciência, "Sci", "RND", "R&D", "Ponte", "Comando"
 # Security
 highlights-detective = Detetive, "Det", Armazém, Segurança, "Sec"
 highlights-security-cadet = Cadete de Segurança, Secoff, Cadete, Armazém de Armas, Segurança, "Sec"

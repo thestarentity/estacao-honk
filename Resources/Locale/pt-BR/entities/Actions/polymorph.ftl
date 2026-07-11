@@ -15,3 +15,6 @@ ent-ActionPolymorphJauntII = Pulo Éter II
 
 ent-ActionPolymorphJauntIII = Pulo Éterico III
     .desc = Você ainda é tangível?
+
+ent-ActionRevertPolymorphConfirm = Reverter
+    .desc = Volte para sua forma original.

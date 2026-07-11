@@ -35,3 +35,6 @@ ent-TomDrumsInstrument = tambor de tom
 
 ent-DawInstrument = estação de trabalho de áudio digital
     .desc = Tecnologia musical de ponta, direto dos anos 90.
+
+ent-BigDrumsInstrument = bateria
+    .desc = Ba dum tss!

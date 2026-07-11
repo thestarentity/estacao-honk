@@ -40,3 +40,6 @@ ent-HypopenBox = caixa de hipopen
     .desc = Uma pequena caixa contendo um hipopen. A embalagem se desintegra ao ser aberta, deixando nenhuma evidência para trás.
 ent-WehMedipen = auto-injetor Weh
     .desc = Um medipen não reutilizável contendo múltiplas doses de weh.
+
+ent-WehMedipenTiny = autoinjetor de weh
+    .desc = Um medipen não recarregável contendo uma dose de weh.

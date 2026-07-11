@@ -1,0 +1,6 @@
+admin-quick-link-playerpanel = (PP)
+admin-quick-link-playerpanel-tooltip = Painel do jogador...
+admin-quick-link-message = (MSG)
+admin-quick-link-message-tooltip = Enviar mensagem...
+admin-quick-link-follow = (F)
+admin-quick-link-follow-tooltip = Seguir entidade

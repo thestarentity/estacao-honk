@@ -13,3 +13,4 @@ construction-category-clothing = Vestimenta
 construction-category-favorites = Favoritos
 construction-add-favorite-button = Adicionar aos favoritos
 construction-remove-from-favorite-button = Remover dos favoritos
+construction-category-atmospherics = Atmosférica

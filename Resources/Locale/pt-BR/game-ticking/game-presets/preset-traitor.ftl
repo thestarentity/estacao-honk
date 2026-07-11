@@ -41,3 +41,4 @@ traitor-role-uplink-implant =
 traitor-role-codewords-short = { $codewords }.
 traitor-role-uplink-code-short = O seu código de uplink é { $code }. Defina-o como o toque de seu PDA para acessar seu uplink.
 traitor-role-uplink-implant-short = Seu uplink foi implantado. Acesse-o no menu de ações.
+objective-issuer-unknown = [color=white]Desconhecido[/color]

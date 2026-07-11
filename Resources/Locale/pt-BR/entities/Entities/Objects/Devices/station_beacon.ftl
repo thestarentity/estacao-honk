@@ -293,3 +293,8 @@ ent-DefaultStationBeaconVox = sinalizador da estação
 
 ent-DefaultStationBeaconWardensOffice = sinalizador da estação
     .desc = Um pequeno dispositivo que transmite informações para mapas da estação. Pode ser configurado.
+
+ent-BaseStationBeacon = sinalizador da estação
+    .desc = Um pequeno dispositivo que transmite informações para mapas da estação. Pode ser configurado.
+ent-TeleportStationBeacon = sinalizador da estação
+    .desc = Um pequeno dispositivo que transmite informações para mapas da estação. Pode ser configurado.

@@ -53,3 +53,4 @@ shell-argument-number-invalid = O argumento { $index } deve ser um número váli
 # Hints
 shell-argument-username-hint = <username>
 shell-argument-username-optional-hint = [username]
+shell-invalid-bool-value = Booleano inválido: '{ $value }'

@@ -129,53 +129,53 @@ entity-effect-guidebook-status-effect =
     { $type ->
         [update]
             { $chance ->
-                [1] Causas
+                [1] Causa
                *[other] causar
-            } { LOC($key) } por pelo menos { NATURALFIXED($time, 3) } { MANY("second", $time) } sem acúmulo
+            } { $key } por pelo menos { NATURALFIXED($time, 3) } { MANY("segundo", $time) } sem acúmulo
         [add]
             { $chance ->
-                [1] Causas
+                [1] Causa
                *[other] causar
-            } { LOC($key) } por pelo menos { NATURALFIXED($time, 3) } { MANY("second", $time) } com acúmulo
+            } { $key } por pelo menos { NATURALFIXED($time, 3) } { MANY("segundo", $time) } com acúmulo
         [set]
             { $chance ->
-                [1] Causas
+                [1] Causa
                *[other] causar
-            } { LOC($key) } por pelo menos { NATURALFIXED($time, 3) } { MANY("second", $time) } sem acúmulo
+            } { $key } por pelo menos { NATURALFIXED($time, 3) } { MANY("segundo", $time) } sem acúmulo
        *[remove]
             { $chance ->
                 [1] Remove
-               *[other] Remover
-            } { NATURALFIXED($time, 3) } { MANY("second", $time) } de { LOC($key) }
+               *[other] remover
+            } { NATURALFIXED($time, 3) } { MANY("segundo", $time) } de { $key }
     } { $delay ->
         [0] imediatamente
-       *[other] após um atraso de { NATURALFIXED($delay, 3) } segundo
+       *[other] após um atraso de { NATURALFIXED($delay, 3) } segundos
     }
 entity-effect-guidebook-status-effect-indef =
     { $type ->
         [update]
             { $chance ->
-                [1] Causas
+                [1] Causa
                *[other] causar
-            } permanente { LOC($key) }
+            } { $key } permanente
         [add]
             { $chance ->
-                [1] Causas
+                [1] Causa
                *[other] causar
-            } permanente { LOC($key) }
+            } { $key } permanente
         [set]
             { $chance ->
-                [1] Causas
+                [1] Causa
                *[other] causar
-            } permanente { LOC($key) }
+            } { $key } permanente
        *[remove]
             { $chance ->
                 [1] Remove
-               *[other] Remover
-            } { LOC($key) }
+               *[other] remover
+            } { $key }
     } { $delay ->
         [0] imediatamente
-       *[other] após um atraso de { NATURALFIXED($delay, 3) } segundo
+       *[other] após um atraso de { NATURALFIXED($delay, 3) } segundos
     }
 entity-effect-guidebook-knockdown =
     { $type ->
@@ -453,10 +453,10 @@ entity-effect-guidebook-artifact-durability-restore = Restaura { $restored } de 
 entity-effect-guidebook-plant-attribute =
     { $chance ->
         [1] Ajusta
-       *[other] Ajustar
-    } { $attribute } por { $positive ->
-        [true] [color=red]{ $amount }[/color]
-       *[false] [color=green]{ $amount }[/color]
+       *[other] ajustar
+    } { $attribute } em { $positive ->
+        [false] [color=red]{ $amount }[/color]
+       *[true] [color=green]{ $amount }[/color]
     }
 entity-effect-guidebook-plant-cryoxadone =
     { $chance ->
@@ -498,3 +498,8 @@ entity-effect-guidebook-plant-mutate-chemicals =
         [1] Mutante
        *[other] mutar
     }uma planta para produzir { $name }
+entity-effect-guidebook-add-reagent-to-bloodstream =
+    { $chance ->
+        [1] Injeta
+       *[other] injetar
+    } { $quantity } de { $reagent } diretamente na corrente sanguínea

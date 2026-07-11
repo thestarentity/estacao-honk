@@ -36,3 +36,8 @@ ent-WeaponLauncherAdmemeImmovableRodSlow = lançador de haste imóvel
 
 ent-WeaponLauncherHydraLethal = Hidra
     .desc = PLOOP... FSSSSSS...
+
+ent-WeaponTetherGunEmpty = arma de amarração
+    .desc = Manipula a gravidade em torno de objetos para lançá-los a altas velocidades.
+ent-WeaponForceGunEmpty = arma de força
+    .desc = Manipula a gravidade em torno de objetos para lançá-los a altas velocidades.

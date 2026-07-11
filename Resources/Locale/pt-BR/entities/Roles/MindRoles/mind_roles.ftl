@@ -31,3 +31,5 @@ ent-MindRoleXenoborg = Cargo de Xenoborg
 ent-MindRoleInitialInfected = Papel Inicialmente Infectado
 ent-MindRoleZombie = Papel de Zumbi
 ent-MindRoleChangeling = Papel de Troca de Forma
+
+ent-MindRoleMalfAi = IA Malf
