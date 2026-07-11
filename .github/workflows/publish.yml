@@ -52,12 +52,9 @@ jobs:
         PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
         GITHUB_REPOSITORY: ${{ vars.GITHUB_REPOSITORY }}
 
-    - name: Publish changelog (Discord)
-      continue-on-error: true
-      run: Tools/actions_changelogs_since_last_run.py
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        DISCORD_WEBHOOK_URL: ${{ secrets.CHANGELOG_DISCORD_WEBHOOK }}
+    # O passo "Publish changelog (Discord)" do upstream foi removido em 2026-07-11:
+    # postava o changelog do JOGO num webhook, algo que o Honk ja faz pelo bot
+    # (/changelog). O aviso de commits para o Discord agora e o githook-discord.yml.
 
     - name: Publish changelog (RSS)
       continue-on-error: true
