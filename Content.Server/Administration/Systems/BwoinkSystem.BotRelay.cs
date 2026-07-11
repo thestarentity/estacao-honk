@@ -1,5 +1,4 @@
 using Robust.Shared.Network;
-using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Administration.Systems
@@ -30,8 +29,6 @@ namespace Content.Server.Administration.Systems
             var escaped = FormattedMessage.EscapeText(text);
             var bwoinkText = $"[color=red]{FormattedMessage.EscapeText(senderName)}[/color]: {escaped}";
             var msg = new BwoinkTextMessage(userId, SystemUserId, bwoinkText, playSound: true);
-
-            LogBwoink(msg);
 
             // Notifica o jogador
             RaiseNetworkEvent(msg, session.Channel);
