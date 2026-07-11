@@ -1,27 +1,17 @@
-# Avisa o canal #githook do Discord (ver Tools/githook_discord.py).
+# Avisa o canal #githook do Discord a cada push (ver Tools/githook_discord.py).
 # O segredo DISCORD_GITHOOK_WEBHOOK (a URL do webhook do canal) fica em
 # Settings > Secrets and variables > Actions do repositorio. Sem ele, o passo sai
 # em silencio: forks de terceiros nao tem o segredo, e tudo bem.
-#
-# Avisa em dois casos:
-#   - push: os commits que entraram.
-#   - workflow_run concluido: so quando FALHOU (build/publicacao quebrada).
 name: githook para o Discord
 
 on:
   push:
-  workflow_run:
-    workflows: ["*"]
-    types: [completed]
 
 jobs:
   avisar:
     runs-on: ubuntu-latest
-    # nao roda em fork de quem abre PR (nao tem o segredo, e evita barulho); e nunca
-    # avisa sobre si mesmo (senao a falha deste proprio workflow viraria um loop)
-    if: >
-      github.repository_owner == 'thestarentity'
-      && github.event.workflow_run.name != 'githook para o Discord'
+    # nao roda em fork de quem abre PR (nao tem o segredo, e evita barulho)
+    if: github.repository_owner == 'thestarentity'
     steps:
       - uses: actions/checkout@v4
       - name: Avisar o Discord

@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
-"""Avisa o canal #githook do Discord sobre o que acontece no GitHub.
+"""Avisa o canal #githook do Discord quando alguem envia commits para o GitHub.
 
-Roda dentro do GitHub Actions (workflow githook-discord.yml). Le o evento que o
-GitHub deixa em GITHUB_EVENT_PATH, monta um aviso curto em portugues e posta no
-webhook do Discord daquele servidor (secret DISCORD_GITHOOK_WEBHOOK).
-
-Trata dois tipos de evento, escolhidos por serem os que um dev solo quer saber:
-  - push: os commits que entraram (uma linha por commit).
-  - workflow_run concluido em FALHA: um build/publicacao quebrou. Sucesso nao
-    vira aviso (barulho); so a falha, que exige acao.
+Roda dentro do GitHub Actions (workflow githook-discord.yml). Le o evento de push
+que o GitHub deixa em GITHUB_EVENT_PATH, monta um aviso curto em portugues e posta
+no webhook do Discord daquele servidor (secret DISCORD_GITHOOK_WEBHOOK).
 
 Nao depende de nada da VPS nem do bot ligado: roda no proprio GitHub. Sem o secret,
 sai em silencio (o fork publico de quem faz PR nao tem o segredo, e tudo bem).
 
+So o PUSH vira aviso. Ja tentamos avisar falha de workflow, mas os workflows de
+build do upstream falham SEMPRE neste fork (a API de admin fica no .gitignore, entao
+o repo publico nao compila), e isso virava spam a cada push. Um aviso por push.
+
 Formato proposital: portugues, sem emoji no texto de estrutura e sem travessao, como
-o resto do projeto.
+o resto do projeto. Cada commit vira uma linha "hash mensagem (autor)".
 """
 import json
 import os
@@ -24,9 +23,6 @@ import urllib.request
 MAX_COMMITS = 10           # o resto vira "e mais N commits"
 MAX_MSG = 100              # corta a primeira linha da mensagem do commit
 
-COR_PUSH = 0x2B3137
-COR_FALHA = 0xED4245       # vermelho: um workflow quebrou
-
 
 def _curta(texto: str, limite: int) -> str:
     texto = (texto or "").splitlines()[0].strip() if texto else ""
@@ -34,39 +30,8 @@ def _curta(texto: str, limite: int) -> str:
 
 
 def montar(evento: dict) -> dict | None:
-    """Evento do GitHub -> corpo JSON para o webhook do Discord, ou None se nao
-    houver o que anunciar. Decide o tipo pelo formato do evento."""
-    if "workflow_run" in evento:
-        return _montar_workflow(evento)
-    return _montar_push(evento)
-
-
-def _montar_workflow(evento: dict) -> dict | None:
-    """Um workflow do Actions terminou. So avisamos quando FALHOU: sucesso e ruido."""
-    run = evento.get("workflow_run") or {}
-    if run.get("status") != "completed":
-        return None
-    if (run.get("conclusion") or "").lower() not in ("failure", "timed_out"):
-        return None
-    repo = (evento.get("repository") or {}).get("name") or "repositorio"
-    nome = run.get("name") or evento.get("workflow") or "workflow"
-    branch = run.get("head_branch") or "?"
-    url = run.get("html_url") or ""
-    quem = (run.get("actor") or {}).get("login") or "?"
-    return {
-        "username": "GitHub",
-        "embeds": [{
-            "title": f"Falhou: {nome} em {repo} ({branch})",
-            "url": url,
-            "description": "Um workflow do GitHub Actions terminou com erro. "
-                           "Abra o log para ver o que quebrou.",
-            "footer": {"text": f"disparado por {quem}"},
-            "color": COR_FALHA,
-        }],
-    }
-
-
-def _montar_push(evento: dict) -> dict | None:
+    """Evento de push do GitHub -> corpo JSON para o webhook do Discord, ou None se
+    nao houver o que anunciar (ex.: push que so apaga uma branch)."""
     commits = evento.get("commits") or []
     if not commits:
         return None
@@ -98,7 +63,7 @@ def _montar_push(evento: dict) -> dict | None:
             "url": compare,
             "description": "\n".join(linhas),
             "footer": {"text": f"enviado por {quem}"},
-            "color": COR_PUSH,
+            "color": 0x2B3137,
         }],
     }
 
